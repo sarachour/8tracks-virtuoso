@@ -35,26 +35,7 @@ function onPlay(){
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    var login = document.getElementById('login');
-    var createstream = document.getElementById('createstream');
-	var playstream = document.getElementById('playstream');
-	var player = document.getElementById('player');
-	$(function() {
-    $( "button" )
-      .button()
-      .click(function( event ) {
-        event.preventDefault();
-      });
-  	});
-  	$(function() {
-  	$( "input:text, input:password" )
-      .spinner()
-      .click(function( event ) {
-        event.preventDefault();
-      });
-  	});
-    // onClick's logic below:
-    login.addEventListener('click', onLogin);
-    createstream.addEventListener('click', onCreate);
-    playstream.addEventListener('click', onPlay);
+    $("#login").click(onLogin);
+    $("#createstream").click(onCreate);
+    $("#playstream").click(onPlay);
 });
