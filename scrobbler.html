@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Scrobbler</title>
+    <style>
+      body {
+        min-width: 357px;
+        overflow-x: hidden;
+      }
+
+      img {
+        margin: 5px;
+        border: 2px solid black;
+        vertical-align: middle;
+        width: 75px;
+        height: 75px;
+      }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+     --> 
+    <script src="jquery.js"></script>
+    <script src="scrobbler.js"></script>
+    <script src="scrobbler.ui.js"></script>
+  </head>
+  <body>
+  <b>Login:</b><br>
+  <input type="text" id="username" name="username"/><br>
+  <input type="password" id="password" name="password"/><br>
+  <button name="button" id="login">login</button><br>
+  <button name="button" id="createstream">create stream</button><br>
+  <button name="button" id="playstream">play stream</button><br>
+  
+  <h1>Mix Title</h1>
+  <h2>Track Title</h2>
+  <h3>Artist</h3>
+  <img id="albumart"></img>
+  <audio controls id="player">
+	Your browser does not support the audio element.
+   </audio>
+
+  </body>
+</html>
