@@ -31,6 +31,8 @@ function onPlay(){
 		$( "#player" ).attr( "src", trackinfo.track_file_stream_url );
 		$( "#albumart" ).attr( "src", scrobbler.play_mix.cover );
 
+		chrome.extension.sendMessage({action: "play"})
+
 	});
 }
 
