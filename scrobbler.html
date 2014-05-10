@@ -22,25 +22,36 @@
       -
       - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
      --> 
-    <script src="jquery.js"></script>
+    <link rel="stylesheet" href="light-theme/jquery-ui-1.10.4.custom.min.css" />
+    <script src="jquery-1.10.2.js"></script>
+    <script src="jquery-ui-1.10.4.min.js"></script>
     <script src="scrobbler.js"></script>
     <script src="scrobbler.ui.js"></script>
   </head>
   <body>
-  <b>Login:</b><br>
-  <input type="text" id="username" name="username"/><br>
-  <input type="password" id="password" name="password"/><br>
-  <button name="button" id="login">login</button><br>
-  <button name="button" id="createstream">create stream</button><br>
-  <button name="button" id="playstream">play stream</button><br>
   
-  <h1>Mix Title</h1>
-  <h2>Track Title</h2>
-  <h3>Artist</h3>
-  <img id="albumart"></img>
-  <audio controls id="player">
-	Your browser does not support the audio element.
-   </audio>
+  <b>Login:</b><br>
+  <input type="text" id="username" name="username" class="login-info"/><br>
+  <input type="password" id="password" name="password" class="login-info"/><br> 
+  <button name="button" id="login" class="login-info">login</button><br>
+   <button name="button" id="createstream" class="playback-info">create stream</button><br>
+  <button name="button" id="playstream" class="playback-info">play stream</button><br>
 
-  </body>
+  <table border="1">
+  <tr><td><img class="playback-info" id="albumart"></img></td>
+  <td>
+    <table border="1">
+    <tr><td><strong id="mix-title" class="playback-info">Mix Title</strong></td></tr>
+    <tr><td><strong id="track-title" class="playback-info">Track Title</strong></td></tr>
+    <tr><td><strong id="track-artist" class="playback-info">Artist</strong></td></tr>
+    <tr><td>
+      <audio class="playback-info" autoplay="autoplay" controls id="player">
+    	Your browser does not support the audio element.
+       </audio>
+    </td></tr>
+    </table>
+  </td>
+  </tr>
+</table>
+</body>
 </html>

@@ -21,25 +21,16 @@ function onCreate(){
 	});
 }
 function onPlay(){
-	scrobbler.getMix("electrominimalicious", function(mixdata){
-			console.log(mixdata);
-			id = mixdata.mix.id;
-			console.log("id: "+id);
-			scrobbler.playMix(id, function(data){
-				var player = document.getElementById('player');
-				trackinfo = data.set.track;
-				console.log("playing mix");
-				console.log(data);
-				console.log(player);
+	scrobbler.playMix("electrominimalicious", function(data){
+		console.log(data);
+		trackinfo = data.set.track;
 
-				name = trackinfo.name;
-				performer = trackinfo.performer;
-				skip_allowed = trackinfo.skip_allowed;
-				at_end = trackinfo.at_end;
-				release = trackinfo.release_name;
-				url = trackinfo.url
-				player.src = trackinfo.track_file_stream_url;
-			});
+		$("#mix-title").html(scrobbler.play_mix.name);
+		$("#track-title").html(trackinfo.name);
+		$("#track-artist").html(trackinfo.performer);
+		$( "#player" ).attr( "src", trackinfo.track_file_stream_url );
+		$( "#albumart" ).attr( "src", scrobbler.play_mix.cover );
+
 	});
 }
 
@@ -48,6 +39,20 @@ document.addEventListener('DOMContentLoaded', function() {
     var createstream = document.getElementById('createstream');
 	var playstream = document.getElementById('playstream');
 	var player = document.getElementById('player');
+	$(function() {
+    $( "button" )
+      .button()
+      .click(function( event ) {
+        event.preventDefault();
+      });
+  	});
+  	$(function() {
+  	$( "input:text, input:password" )
+      .spinner()
+      .click(function( event ) {
+        event.preventDefault();
+      });
+  	});
     // onClick's logic below:
     login.addEventListener('click', onLogin);
     createstream.addEventListener('click', onCreate);

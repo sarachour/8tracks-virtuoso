@@ -5,7 +5,9 @@ function Scrobbler(){
 	this.API_KEY = "5f1ed8e86c7f6792bdd581ce587e996ce8b00ae2"
 	this.play_token = localStorage["play_token"]
 	this.user_token = localStorage["user_token"]
+	this.play_mix = localStorage.play_mix;
 
+	console.log(this.play_mix);
 	this.test = function(cbk){
 		url = "http://8tracks.com/mixes.xml";
 		console.log("testing");
@@ -74,23 +76,29 @@ function Scrobbler(){
 	}
 	this.playMix = function(mix_id, cbk){
 			that = this;
-			url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
-			localStorage["playing_mix"] = mix_id;
-			$.get(
-				url,
-				{
-				api_key : that.API_KEY,
-				user_token : that.user_token,
-				api_version: 3,
-				mix_id: mix_id},
-				function(data) {
-				   cbk(data);
+			
+			this.getMix(mix_id, function(data){
+				url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
+				that.play_mix = {};
+				that.play_mix.name = data.mix.name;
+				that.play_mix.id = data.mix.id;
+				that.play_mix.cover = data.mix.cover_urls.sq100;
+				localStorage["play_mix"] = that.play_mix;
+				$.get(
+					url,
+					{
+					api_key : that.API_KEY,
+					user_token : that.user_token,
+					api_version: 3,
+					mix_id: data.mix.id},
+					function(data) {
+					   cbk(data);
 
-				}
-			);	
+					}
+				);	
+			})
+			
 	}
 
 }
 scrobbler = new Scrobbler();
-//scrobbler.login("themuse10","themuse10");
-//scrobbler.getMix("electrominimalicious");
