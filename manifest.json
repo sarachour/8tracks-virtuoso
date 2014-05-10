@@ -13,7 +13,7 @@
     "default_popup": "scrobbler.html"
   },
   "background": {
-    "scripts": ["scrobbler.music.js"],
+    "scripts": ["musicplayer.js"],
     "persistent": true
-  },
+  }
 }
