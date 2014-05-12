@@ -2,7 +2,8 @@ function MusicPlayer(){
 	this.init = function(){
 		this.player = $('<audio>', {
 	      autoPlay : 'autoplay',
-	      controls : 'controls'
+	      controls : 'controls',
+	      id : "player"
 	    });
 	    this.track_info = null;
 	    this.mix_info = null;
@@ -28,7 +29,7 @@ function MusicPlayer(){
 		  		sendResponse(mthat.getTrackInfo());
 		  }
 		});
-		this.player.bind("end", function () {
+		this.player.bind("ended", function () {
 	        alert("song has ended");
 	        that.nextTrack();
 	    });
@@ -60,9 +61,9 @@ function MusicPlayer(){
 		});
 	}
 	this.play = function(src){
-		console.log(src);
 		this.player.attr("src", src);
-		this.player.load();
+		$("#player").trigger("play");
+		//$("#player").play();
 		//this.player.play();
 	}
 	this.mix = function(mixname){
@@ -81,12 +82,12 @@ function MusicPlayer(){
 		});
 	}
 	this.resume = function(){
-		this.player.play();
-		chrome.extension.sendMessage({action: "pause"})
+		console.log("playing");
+		this.player.trigger("play");
 	}
 	this.pause = function(){
-		this.player.pause();
-		chrome.extension.sendMessage({action: "pause"})
+		console.log("pausing");
+		this.player.trigger("pause");
 	}
 	this.nextTrack = function(){
 		that = this;

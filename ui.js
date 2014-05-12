@@ -18,18 +18,6 @@ function UserInterface(){
 		console.log("playing stream")
 		that = this;
 		chrome.extension.sendMessage({action: "mix", name: "electrominimalicious" });
-		if(this.timer == null){
-			this.timer = window.setInterval(function(){
-				chrome.extension.sendMessage({action: "getTrackInfo"}, function(data){
-					console.log("updating..");
-					$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
-					if($('#player_prog').slider("option", "value") >= 100){
-						window.clearInterval(that.timer);
-						that.timer == null;
-					}
-			    });
-			}, 100);
-		}
 
 	}
 	this.onPause = function(){
@@ -47,6 +35,18 @@ function UserInterface(){
 			$( "#albumart" ).attr( "src", data.mix_cover );
 			$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
 	    });
+	    if(this.timer == null){
+			this.timer = window.setInterval(function(){
+				chrome.extension.sendMessage({action: "getTrackInfo"}, function(data){
+					console.log("updating..");
+					$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
+					if($('#player_prog').slider("option", "value") >= 100){
+						window.clearInterval(that.timer);
+						that.timer == null;
+					}
+			    });
+			}, 100);
+		}
 	}
 	this.init();
 }
@@ -62,6 +62,19 @@ chrome.extension.onMessage.addListener(
 document.addEventListener('DOMContentLoaded', function() {
     $("#login").click(userInterface.onLogin);
     $("#playstream").click(userInterface.onPlay);
+    $("#player_play").click(function(){
+    	console.log("clicked: "+$("#player_play").hasClass("playing"));
+    	if($("#player_play").hasClass("playing")){
+    		$("#player_play").removeClass("playing");
+    		userInterface.onPause();
+    		$("#player_play").attr("src", "images/play.png");
+    	}
+    	else{
+    		$("#player_play").addClass("playing");
+    		$("#player_play").attr("src", "images/pause.png");
+    		userInterface.onResume();
+    	}
+    });
     $( "#player_prog" ).slider({range: "min"});
     userInterface.updateView();    
 });
