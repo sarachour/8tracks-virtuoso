@@ -25,13 +25,16 @@ function MusicPlayer(){
 		  else if(request.action == "skip"){
 		  		mthat.skip();
 		  }
+		  else if(request.action == "setTime"){
+		  		mthat.setTime(request.percent);
+		  }
 		  else if(request.action == "getTrackInfo"){
 		  		sendResponse(mthat.getTrackInfo());
 		  }
 		});
 		this.player.bind("ended", function () {
 	        alert("song has ended");
-	        that.nextTrack();
+	        mthat.nextTrack();
 	    });
 		console.log("init");
 	}
@@ -75,9 +78,6 @@ function MusicPlayer(){
 			mplayer.mix_info = mixdata.mix;
 			mplayer.track_info = data.set.track;
 			mplayer.play(data.set.track.track_file_stream_url);
-			console.log(mixdata);
-			console.log(data);
-			console.log(mplayer.player)
 			chrome.extension.sendMessage({action: "update"})
 		});
 	}
@@ -90,10 +90,21 @@ function MusicPlayer(){
 		this.player.trigger("pause");
 	}
 	this.nextTrack = function(){
-		that = this;
-		eightTracks.nextTrack(function(data){
-			that.play(data.trackinfo.track_file_stream_url )
+		mplayer = this;
+		console.log(this.mix_info);
+		eightTracks.nextTrack(this.mix_info.id, function(data){
+			console.log(data);
+			mplayer.track_info = data.set.track;
+			mplayer.play(data.set.track.track_file_stream_url );
+			chrome.extension.sendMessage({action: "update"})
 		});
+	}
+	this.setTime = function(pct){
+		newtime = pct*parseFloat(this.player[0].duration);
+		console.log("set time: "+newtime + "="+pct + "*" + this.player[0].duration);
+		this.pause();
+		this.player[0].currentTime = newtime
+		this.resume();
 	}
 	this.init();
 

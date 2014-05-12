@@ -104,16 +104,24 @@ function EightTracks(){
 			})
 			
 	}
-	this.nextTrack = function(cbk){
+	this.nextTrack = function(mid, cbk){
 		url = "http://8tracks.com/sets/"+this.play_token+"/next.json"
 		that = this;
+		if(this.isUndefined(this.user_token)){
+			console.log("ERROR: no user token.");
+			return;
+		}
+		if(this.isUndefined(this.play_token)){
+			console.log("ERROR: no play token.");
+			return;
+		}
 		$.get(
 			url,
 			{
 			api_key : that.API_KEY,
 			user_token : that.user_token,
 			api_version: 3,
-			mix_id: that.play_mix.id},
+			mix_id: mid},
 			function(data) {
 				cbk(data);
 			}

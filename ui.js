@@ -75,6 +75,13 @@ document.addEventListener('DOMContentLoaded', function() {
     		userInterface.onResume();
     	}
     });
-    $( "#player_prog" ).slider({range: "min"});
+    $( "#player_prog" ).slider({
+    	range: "min",
+    	slide: function(event, ui) { 
+    		pct = ui.value/100.0; 
+    		console.log("ui:"+pct)
+    		chrome.extension.sendMessage({action: "setTime", percent:pct})
+    	}
+    });
     userInterface.updateView();    
 });
