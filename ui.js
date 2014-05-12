@@ -12,13 +12,6 @@ function UserInterface(){
 	}
 
 	this.onPlay = function(){
-		/*
-		$("#mix-title").html(scrobbler.play_mix.name);
-		$("#track-title").html(trackinfo.name);
-		$("#track-artist").html(trackinfo.performer);
-		//$( "#player" ).attr( "src", trackinfo.track_file_stream_url );
-		$( "#albumart" ).attr( "src", scrobbler.play_mix.cover );
-		*/
 		console.log("playing stream")
 		that = this;
 		chrome.extension.sendMessage({action: "mix", name: "electrominimalicious" });
@@ -57,6 +50,6 @@ chrome.extension.onMessage.addListener(
 document.addEventListener('DOMContentLoaded', function() {
     $("#login").click(userInterface.onLogin);
     $("#playstream").click(userInterface.onPlay);
-    userInterface.updateView();
-    
+    $( "#player_prog" ).slider({range: "min"});
+    userInterface.updateView();    
 });

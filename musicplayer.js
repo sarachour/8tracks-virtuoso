@@ -54,7 +54,7 @@ function MusicPlayer(){
 		return data;
 	}
 	this.login = function(uname, pass){
-		scrobbler.login(uname, pass, function(data){
+		eightTracks.login(uname, pass, function(data){
 			console.log("logged in");
 			console.log(data);
 		});
@@ -67,10 +67,10 @@ function MusicPlayer(){
 	}
 	this.mix = function(mixname){
 		mplayer = this;
-		scrobbler.createPlaybackStream(function(data){
+		eightTracks.createPlaybackStream(function(data){
 			console.log("created playback stream.");
 		});
-		scrobbler.playMix(mixname, function(mixdata, data){
+		eightTracks.playMix(mixname, function(mixdata, data){
 			mplayer.mix_info = mixdata.mix;
 			mplayer.track_info = data.set.track;
 			mplayer.play(data.set.track.track_file_stream_url);
@@ -90,7 +90,7 @@ function MusicPlayer(){
 	}
 	this.nextTrack = function(){
 		that = this;
-		scrobbler.nextTrack(function(data){
+		eightTracks.nextTrack(function(data){
 			that.play(data.trackinfo.track_file_stream_url )
 		});
 	}

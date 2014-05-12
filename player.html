@@ -21,6 +21,14 @@
       - Policy documentation[1] for details and explanation.
       -
       - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
+
+      <table style="height:50px; width:100%; border:dotted #CC3300;"><tr>
+  <td style="width:10%;" ><img top="20%" id="player_play" src="images/play.png"/></td>
+  <td style="width:70%;"><div style="width:80%; left:10%;" id="player_prog"></div></td>
+  <td style="width:10%;" ><img id="player_volume" src="images/highvolume.png"></td>
+  <td style="width:10%;"><img id="player_skip" src="images/ffwd.png"/></td>
+  </tr></table>
+  
      --> 
     <link rel="stylesheet" href="light-theme/jquery-ui-1.10.4.custom.min.css" />
     <script src="jquery-1.10.2.js"></script>
@@ -42,14 +50,27 @@
     <tr><td><strong id="mix-title" class="playback-info">Mix Title</strong></td></tr>
     <tr><td><strong id="track-title" class="playback-info">Track Title</strong></td></tr>
     <tr><td><strong id="track-artist" class="playback-info">Artist</strong></td></tr>
-    <tr><td>
-      <audio class="playback-info" autoplay="autoplay" controls id="player">
-    	Your browser does not support the audio element.
-       </audio>
-    </td></tr>
     </table>
   </td>
   </tr>
-</table>
+</table><br>
+
+  
+  <table style="height:50px; width:100%; border:dotted #CC3300;">
+  <tr>
+  <td style="width:10%;"><div style="width:50px; height:50px;  border:dotted #CC3300;">
+    <img id="player_play" style="max-width:100%; max-height:100%;margin:auto;display:block;" src="images/play.png"/>
+  </div></td>
+  <td style="width:70%;">
+    <div style="width:80%; left:10%;" id="player_prog"></div>
+  </td>
+  <td style="width:10%;"><div style="width:25px; height:25px;  border:dotted #CC3300;">
+    <img id="player_volume" style="max-width:100%; max-height:100%;margin:auto;display:block;" src="images/highvolume.png"/>
+  </div></td>
+  <td style="width:10%;"><div style="width:25px; height:25px;  border:dotted #CC3300;">
+    <img id="player_skip" style="max-width:100%; max-height:100%;margin:auto;display:block;" src="images/ffwd.png"/>
+  </div></td>
+  </tr>
+  </table>
 </body>
 </html>

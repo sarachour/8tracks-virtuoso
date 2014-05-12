@@ -1,7 +1,7 @@
 
 //curl --header "X-Api-Key=c7a7a9bf65499f2adb75cc9620ad7364106b86fa" http://8tracks.com/mixes.xml
 //curl http://8tracks.com/mixes/1.json?api_key=1234567890
-function Scrobbler(){
+function EightTracks(){
 	
 	this.init = function(){
 		this.API_KEY = "5f1ed8e86c7f6792bdd581ce587e996ce8b00ae2"
@@ -139,4 +139,4 @@ function Scrobbler(){
 	this.init();
 
 }
-scrobbler = new Scrobbler();
+eightTracks = new EightTracks();
