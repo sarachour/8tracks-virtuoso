@@ -35,12 +35,10 @@ function MusicPlayer(){
 		console.log("init");
 	}
 	this.getTrackInfo = function(){
-		console.log("attempting track info+"+ this.mix_info + ", " +this.track_info);
 		data = {};
 		if(this.mix_info == null || this.track_info == null){
 			return data;
 		}
-		console.log("getting track info");
 		//console.log(this.mix_info);
 		//console.log(this.track_info);
 		data.mix_name = this.mix_info.name;
@@ -48,7 +46,11 @@ function MusicPlayer(){
 		data.track_name = this.track_info.name;
 		data.track_artist = this.track_info.performer;
 		data.track_album = this.track_info.release_name;
-		console.log(data);
+		data.track_buy = this.track_info.buy_link;
+		data.track_favorite = this.track_info.faved_by_current_user;
+		data.track_duration = this.player[0].duration;
+		data.track_time = this.player[0].track_time;
+		//data.player = this.player;
 		return data;
 	}
 	this.login = function(uname, pass){
@@ -72,13 +74,19 @@ function MusicPlayer(){
 			mplayer.mix_info = mixdata.mix;
 			mplayer.track_info = data.set.track;
 			mplayer.play(data.set.track.track_file_stream_url);
+			console.log(mixdata);
+			console.log(data);
+			console.log(mplayer.player)
+			chrome.extension.sendMessage({action: "update"})
 		});
 	}
 	this.resume = function(){
 		this.player.play();
+		chrome.extension.sendMessage({action: "pause"})
 	}
 	this.pause = function(){
 		this.player.pause();
+		chrome.extension.sendMessage({action: "pause"})
 	}
 	this.nextTrack = function(){
 		that = this;

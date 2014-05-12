@@ -21,9 +21,7 @@ function UserInterface(){
 		*/
 		console.log("playing stream")
 		that = this;
-		chrome.extension.sendMessage({action: "mix", name: "electrominimalicious" }, function(){
-			that.updateView();
-		})
+		chrome.extension.sendMessage({action: "mix", name: "electrominimalicious" });
 
 	}
 	this.onPause = function(){
@@ -34,10 +32,14 @@ function UserInterface(){
 	}
 	this.updateView = function(){
 		chrome.extension.sendMessage({action: "getTrackInfo"}, function(data){
+			console.log(data);
 	    	$("#mix-title").html(data.mix_name);
 			$("#track-title").html(data.track_name);
 			$("#track-artist").html(data.track_artist);
 			$( "#albumart" ).attr( "src", data.mix_cover );
+			$("#player_container")
+				.attr("duration", data.track_duration)
+				.attr("currentTime", data.track_time);
 	    });
 		
 		
@@ -45,6 +47,13 @@ function UserInterface(){
 }
 userInterface = new UserInterface();
 
+chrome.extension.onMessage.addListener(
+	function(request, sender, sendResponse) {
+			  if(request.action == "update"){
+			  		userInterface.updateView();
+			  }
+	}
+)
 document.addEventListener('DOMContentLoaded', function() {
     $("#login").click(userInterface.onLogin);
     $("#playstream").click(userInterface.onPlay);
