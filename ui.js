@@ -1,43 +1,53 @@
 
-function onLogin(){
-	var uname = document.getElementById('username');
-	var pass = document.getElementById('password');
-	if(uname == undefined || pass == undefined){
-		console.log("Login failed: username, pass values do not exist.");
-		return;
+function UserInterface(){
+	this.onLogin = function(){
+		var uname = document.getElementById('username');
+		var pass = document.getElementById('password');
+		if(uname == undefined || pass == undefined){
+			console.log("Login failed: username, pass values do not exist.");
+			return;
+		}
+		chrome.extension.sendMessage({action: "login", username: uname.value, password: pass.value })
+		
 	}
-	uname = uname.value;
-	pass = pass.value;
-	console.log(uname, pass)
-	scrobbler.login(uname, pass, function(data){
-		console.log("logged in");
-		console.log(data);
-		});
-}
-function onCreate(){
-	scrobbler.createPlaybackStream(function(data){
-		console.log("created stream");
-		console.log(data);
-	});
-}
-function onPlay(){
-	scrobbler.playMix("electrominimalicious", function(data){
-		console.log(data);
-		trackinfo = data.set.track;
 
+	this.onPlay = function(){
+		/*
 		$("#mix-title").html(scrobbler.play_mix.name);
 		$("#track-title").html(trackinfo.name);
 		$("#track-artist").html(trackinfo.performer);
 		//$( "#player" ).attr( "src", trackinfo.track_file_stream_url );
 		$( "#albumart" ).attr( "src", scrobbler.play_mix.cover );
+		*/
+		console.log("playing stream")
+		that = this;
+		chrome.extension.sendMessage({action: "mix", name: "electrominimalicious" }, function(){
+			that.updateView();
+		})
 
-		chrome.extension.sendMessage({action: "play", source: trackinfo.track_file_stream_url })
-
-	});
+	}
+	this.onPause = function(){
+		chrome.extension.sendMessage({action: "pause"})
+	}
+	this.onResume = function(){
+		chrome.extension.sendMessage({action: "resume"})
+	}
+	this.updateView = function(){
+		chrome.extension.sendMessage({action: "getTrackInfo"}, function(data){
+	    	$("#mix-title").html(data.mix_name);
+			$("#track-title").html(data.track_name);
+			$("#track-artist").html(data.track_artist);
+			$( "#albumart" ).attr( "src", data.mix_cover );
+	    });
+		
+		
+	}
 }
+userInterface = new UserInterface();
 
 document.addEventListener('DOMContentLoaded', function() {
-    $("#login").click(onLogin);
-    $("#createstream").click(onCreate);
-    $("#playstream").click(onPlay);
+    $("#login").click(userInterface.onLogin);
+    $("#playstream").click(userInterface.onPlay);
+    userInterface.updateView();
+    
 });
