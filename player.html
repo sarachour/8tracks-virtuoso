@@ -43,32 +43,34 @@
   <button name="button" id="login" class="login-info">login</button><br>
   <button name="button" id="playstream" class="playback-info">play stream</button><br>
 
-  <table border="1">
-  <tr><td><img class="playback-info" id="albumart"></img></td>
-  <td>
-    <table border="1">
-    <tr><td><strong id="mix-title" class="playback-info">Mix Title</strong></td></tr>
-    <tr><td><strong id="track-title" class="playback-info">Track Title</strong></td></tr>
-    <tr><td><strong id="track-artist" class="playback-info">Artist</strong></td></tr>
-    </table>
-  </td>
-  </tr>
-</table><br>
+
 
   
-  <table style="height:50px; width:100%;">
+  <table style="width:100%;">
+  <tr><td/><td style="text-align: center;"><strong id="mix-title" class="playback-info">Mix Title</strong></td></tr>
+  <tr><td/><td style="text-align: center;"><strong id="track-title" class="playback-info">Track Title</strong></td></tr>
+  <tr><td/><td style="text-align: center;"><strong id="track-artist" class="playback-info">Artist</strong></td></tr>
   <tr>
+    <td></td>
+    <td style="text-align:center; vertical-align:center;">
+    <div style="width:250px; height:250px; display: block; margin-left: auto; margin-right: auto;">
+      <img style="width:100%; height:100%;margin:auto;display:block;border:0px solid;" class="playback-info" id="albumart"></img></td>
+    </div>
+    </td>
+    <td/><td/>
+  </tr>
+  <tr style="height:50px;">
   <td style="width:10%;"><div style="width:50px; height:50px;">
-    <img id="player_play" style="max-width:100%; max-height:100%;margin:auto;display:block;" src="images/play.png"/>
+    <img id="player_play" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/play.png"/>
   </div></td>
   <td style="width:70%;">
     <div style="width:80%; left:10%;" id="player_prog"></div>
   </td>
   <td style="width:10%;"><div style="width:25px; height:25px;">
-    <img id="player_volume" style="max-width:100%; max-height:100%;margin:auto;display:block;" src="images/highvolume.png"/>
+    <img id="player_volume" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/highvolume.png"/>
   </div></td>
   <td style="width:10%;"><div style="width:25px; height:25px;">
-    <img id="player_skip" style="max-width:100%; max-height:100%;margin:auto;display:block;" src="images/ffwd.png"/>
+    <img id="player_skip" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/ffwd.png"/>
   </div></td>
   </tr>
   </table>

@@ -49,7 +49,7 @@ function MusicPlayer(){
 		data.track_buy = this.track_info.buy_link;
 		data.track_favorite = this.track_info.faved_by_current_user;
 		data.track_duration = this.player[0].duration;
-		data.track_time = this.player[0].track_time;
+		data.track_time = this.player[0].currentTime;
 		//data.player = this.player;
 		return data;
 	}
