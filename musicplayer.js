@@ -22,6 +22,9 @@ function MusicPlayer(){
 		  else if(request.action == "pause"){
 		  		mthat.pause();
 		  }
+		  else if(request.action == "nextMix"){
+		  		mthat.nextMix();
+		  }
 		  else if(request.action == "skip"){
 		  		mthat.skip();
 		  }
@@ -33,7 +36,6 @@ function MusicPlayer(){
 		  }
 		});
 		this.player.bind("ended", function () {
-	        alert("song has ended");
 	        mthat.nextTrack();
 	    });
 		console.log("init");
@@ -54,6 +56,7 @@ function MusicPlayer(){
 		data.track_favorite = this.track_info.faved_by_current_user;
 		data.track_duration = this.player[0].duration;
 		data.track_time = this.player[0].currentTime;
+		data.skip_ok = this.other_info.skip_ok;
 		//data.player = this.player;
 		return data;
 	}
@@ -69,6 +72,26 @@ function MusicPlayer(){
 		//$("#player").play();
 		//this.player.play();
 	}
+	this.SET_TRACK_INFO = function(data){
+		mplayer = this;
+		console.log(data);
+		mplayer.track_info = data.set.track;
+		mplayer.other_info = {
+			isBeginning: data.set.at_beginning,
+			isEnd: data.set.at_end,
+			isLastTrack: data.set.at_last_track,
+			isSkipOk: data.set.skip_allowed,
+		};
+		mplayer.play(data.set.track.track_file_stream_url );
+		chrome.extension.sendMessage({action: "update"})
+	}
+	this.nextMix = function(){
+		mplayer = this;
+		eightTracks.playNextMix(this.mix_info.id, function(mixdata, data){
+			mplayer.mix_info = mixdata.next_mix;
+			mplayer.SET_TRACK_INFO(data);
+		});
+	}
 	this.mix = function(mixname){
 		mplayer = this;
 		eightTracks.createPlaybackStream(function(data){
@@ -76,9 +99,13 @@ function MusicPlayer(){
 		});
 		eightTracks.playMix(mixname, function(mixdata, data){
 			mplayer.mix_info = mixdata.mix;
-			mplayer.track_info = data.set.track;
-			mplayer.play(data.set.track.track_file_stream_url);
-			chrome.extension.sendMessage({action: "update"})
+			mplayer.SET_TRACK_INFO(data);
+		});
+	}
+	this.skip = function(){
+		console.log("skipping");
+		eightTracks.skipTrack(this.mix_info.id, function(){
+			mplayer.SET_TRACK_INFO(data);
 		});
 	}
 	this.resume = function(){
@@ -92,16 +119,22 @@ function MusicPlayer(){
 	this.nextTrack = function(){
 		mplayer = this;
 		console.log(this.mix_info);
-		eightTracks.nextTrack(this.mix_info.id, function(data){
-			console.log(data);
-			mplayer.track_info = data.set.track;
-			mplayer.play(data.set.track.track_file_stream_url );
-			chrome.extension.sendMessage({action: "update"})
-		});
+		if(this.other_info.isEnd == true || this.other_info.isLastTrack == true){
+			alert("boohoo last track");
+			eightTracks.playNextMix(this.mix_info.id, function(mixdata, data){
+				mplayer.mix_info = mixdata.next_mix;
+				mplayer.SET_TRACK_INFO(data);
+			});
+		}
+		else{
+			eightTracks.nextTrack(this.mix_info.id, function(data){
+				mplayer.SET_TRACK_INFO(data);
+			});
+		}
+		
 	}
 	this.setTime = function(pct){
 		newtime = pct*parseFloat(this.player[0].duration);
-		console.log("set time: "+newtime + "="+pct + "*" + this.player[0].duration);
 		this.pause();
 		this.player[0].currentTime = newtime
 		this.resume();

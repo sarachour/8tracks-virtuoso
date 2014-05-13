@@ -76,6 +76,47 @@ function EightTracks(){
 		);	
 		
 	}
+	this.getNextMix = function(id, cbk){
+		//http://8tracks.com/sets/111696185/next_mix.xml?mix_id=14
+		url = "http://8tracks.com/sets/"+this.play_token+"/next_mix.json";
+		$.get(
+			url,
+			{
+			api_key : that.API_KEY,
+			mix_id:id,
+			api_version: 3},
+			function(data) {
+			   cbk(data);
+			}
+		);	
+	}
+	this.playNextMix = function(id, cbk){
+			that = this;
+			if(this.isUndefined(this.user_token)){
+				console.log("ERROR: no user token.");
+				return;
+			}
+			if(this.isUndefined(this.play_token)){
+				console.log("ERROR: no play token.");
+				return;
+			}
+			
+			this.getNextMix(id, function(mixdata){
+				url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
+				console.log(mixdata)
+				$.get(
+					url,
+					{
+					api_key : that.API_KEY,
+					user_token : that.user_token,
+					api_version: 3,
+					mix_id: mixdata.next_mix.id},
+					function(data) {
+						cbk(mixdata, data);
+					}
+				);	
+			})
+	}
 	this.playMix = function(mix_id, cbk){
 			that = this;
 			if(this.isUndefined(this.user_token)){
@@ -128,7 +169,7 @@ function EightTracks(){
 		);	
 
 	}
-	this.skipTrack = function(cbk){
+	this.skipTrack = function(mixid, cbk){
 		url = "http://8tracks.com/sets/"+this.play_token+"/skip.json"
 		that = this;
 		$.get(
@@ -137,7 +178,7 @@ function EightTracks(){
 			api_key : that.API_KEY,
 			user_token : that.user_token,
 			api_version: 3,
-			mix_id: that.play_mix.id},
+			mix_id: mixid},
 			function(data) {
 				cbk(data);
 			}

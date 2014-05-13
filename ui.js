@@ -34,8 +34,15 @@ function UserInterface(){
 			$("#track-artist").html(data.track_artist);
 			$( "#albumart" ).attr( "src", data.mix_cover );
 			$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
+			if(data.skip_ok){
+				$("#player_skip").attr("src", "images/ffwd.png");
+			}
+			else{
+				$("#player_skip").attr("src", "images/ffwd-disable.png");
+			}
 	    });
 	    if(this.timer == null){
+	    	that = this;
 			this.timer = window.setInterval(function(){
 				chrome.extension.sendMessage({action: "getTrackInfo"}, function(data){
 					console.log("updating..");
@@ -45,7 +52,7 @@ function UserInterface(){
 						that.timer == null;
 					}
 			    });
-			}, 100);
+			}, 1000);
 		}
 	}
 	this.init();
@@ -75,6 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
     		userInterface.onResume();
     	}
     });
+    $("#player_skip").click(function(){
+    	console.log("skipping [ui]");
+    	chrome.extension.sendMessage({action: "skip"})
+    })
+    $("#player_volume").click(function(){
+    	var position = {left: 0, top: 0};
+		$(".box-overlay").css( { position: "absolute", left: position.left, top: position.top } );
+	});
     $( "#player_prog" ).slider({
     	range: "min",
     	slide: function(event, ui) { 
