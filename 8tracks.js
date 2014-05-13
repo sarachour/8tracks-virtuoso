@@ -62,9 +62,9 @@ function EightTracks(){
 				}
 			)
 	}
-	this.getMix = function(id, cbk){
+	this.getMix = function(id, artist, cbk){
 		that = this;
-		url = "http://8tracks.com/dp/"+id+".json"
+		url = "http://8tracks.com/"+artist+"/"+id+".json"
 		$.get(
 			url,
 			{
@@ -117,7 +117,7 @@ function EightTracks(){
 				);	
 			})
 	}
-	this.playMix = function(mix_id, cbk){
+	this.playMix = function(mix_name, mix_artist, cbk){
 			that = this;
 			if(this.isUndefined(this.user_token)){
 				console.log("ERROR: no user token.");
@@ -128,7 +128,7 @@ function EightTracks(){
 				return;
 			}
 			
-			this.getMix(mix_id, function(mixdata){
+			this.getMix(mix_name, mix_artist, function(mixdata){
 				url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
 				console.log(mixdata.mix)
 				$.get(

@@ -6,7 +6,8 @@
   "version": "1.0",
 
   "permissions": [
-	  "storage"
+	  "storage",
+     "tabs"
 	],
   "browser_action": {
     "default_icon": "icon.png",

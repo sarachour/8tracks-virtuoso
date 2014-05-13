@@ -40,6 +40,18 @@ function UserInterface(){
 			else{
 				$("#player_skip").attr("src", "images/ffwd-disable.png");
 			}
+			if(!data.hasOwnProperty("mix_name")){
+				//autoload
+				chrome.tabs.getSelected(null,function(tab) {
+				    var tablink = tab.url;
+				    if(tablink.indexOf("8tracks.com") > -1){
+				    	tabarr = tablink.split("/");
+				    	mixname = tabarr[tabarr.length-1];
+				    	artistname = tabarr[tabarr.length-2];
+				    	chrome.extension.sendMessage({action: "mix", name: mixname, artist: artistname});
+				    }
+				});
+			}
 	    });
 	    if(this.timer == null){
 	    	that = this;
@@ -66,6 +78,8 @@ chrome.extension.onMessage.addListener(
 			  }
 	}
 )
+
+
 document.addEventListener('DOMContentLoaded', function() {
     $("#login").click(userInterface.onLogin);
     $("#playstream").click(userInterface.onPlay);

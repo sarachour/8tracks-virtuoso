@@ -37,19 +37,32 @@
   </head>
   <body>
   
-  <b>Login:</b><br>
-  <input type="text" id="username" name="username" class="login-info"/><br>
-  <input type="password" id="password" name="password" class="login-info"/><br> 
-  <button name="button" id="login" class="login-info">login</button><br>
-  <button name="button" id="playstream" class="playback-info">play stream</button><br>
-
-
+  <table border="1" width="100%" height="25px">
+  <tr>
+  <td><strong>Login: </strong></td>
+  <td style="text-align:center; vertical-align:center;">
+    <div style="display: block; margin-left: auto; margin-right: auto;">
+      <input placeholder="username" type="text" id="username" name="username" class="login-info"/>
+    </div>
+  </td>
+ <td style="text-align:center; vertical-align:center;">
+  <div style="display: block; margin-left: auto; margin-right: auto;">
+    <input placeholder="password" type="password" id="password" name="password" class="login-info"/>
+  </div>
+</td>
+</tr>
+</table>
 
   
   <table style="width:100%;">
-  <tr><td/><td style="text-align: center;"><strong id="mix-title" class="playback-info">Mix Title</strong></td></tr>
-  <tr><td/><td style="text-align: center;"><strong id="track-title" class="playback-info">Track Title</strong></td></tr>
-  <tr><td/><td style="text-align: center;"><strong id="track-artist" class="playback-info">Artist</strong></td></tr>
+  <tr><td/>
+  <td style="text-align: center; vertical-align:center;">
+    <h2 style="margin:auto;" id="track-title" class="playback-info">Track Title</h2>
+  </td></tr>
+  <tr><td/><td style="text-align: center; vertical-align:center;">
+    <h3 style="margin:auto;" id="track-artist" class="playback-info">Artist</h3>
+  </td></tr>
+  <tr><td/><td style="text-align: center; vertical-align:center;"><strong id="mix-title" class="playback-info">Mix Title</strong></td></tr>
   <tr>
     <td></td>
     <td style="text-align:center; vertical-align:center;">

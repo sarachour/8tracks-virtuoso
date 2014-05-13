@@ -7,11 +7,12 @@ function MusicPlayer(){
 	    });
 	    this.track_info = null;
 	    this.mix_info = null;
+	    this.is_paused = false;
 	    mthat = this;
 		chrome.extension.onMessage.addListener(
 		function(request, sender, sendResponse) {
 		  if(request.action == "mix"){
-		  		mthat.mix(request.name);
+		  		mthat.mix(request.name, request.artist);
 		  }
 		  else if(request.action == "login"){
 		  		mthat.login(request.username, request.password);
@@ -57,6 +58,7 @@ function MusicPlayer(){
 		data.track_duration = this.player[0].duration;
 		data.track_time = this.player[0].currentTime;
 		data.skip_ok = this.other_info.skip_ok;
+		data.is_paused = this.is_paused;
 		//data.player = this.player;
 		return data;
 	}
@@ -92,12 +94,12 @@ function MusicPlayer(){
 			mplayer.SET_TRACK_INFO(data);
 		});
 	}
-	this.mix = function(mixname){
+	this.mix = function(mixname, mixartist){
 		mplayer = this;
 		eightTracks.createPlaybackStream(function(data){
 			console.log("created playback stream.");
 		});
-		eightTracks.playMix(mixname, function(mixdata, data){
+		eightTracks.playMix(mixname, mixartist, function(mixdata, data){
 			mplayer.mix_info = mixdata.mix;
 			mplayer.SET_TRACK_INFO(data);
 		});
@@ -111,10 +113,12 @@ function MusicPlayer(){
 	this.resume = function(){
 		console.log("playing");
 		this.player.trigger("play");
+		this.is_paused = false;
 	}
 	this.pause = function(){
 		console.log("pausing");
 		this.player.trigger("pause");
+		this.is_paused = true;
 	}
 	this.nextTrack = function(){
 		mplayer = this;
