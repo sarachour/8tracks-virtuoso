@@ -31,6 +31,7 @@
   
      --> 
     <link rel="stylesheet" href="light-theme/jquery-ui-1.10.4.custom.min.css" />
+    <link rel="stylesheet" href="light-theme/style.css" />
     <script src="scripts/lib/jquery-1.10.2.js"></script>
     <script src="scripts/lib/jquery-ui-1.10.4.min.js"></script>
     <script src="scripts/lib/zero-clipboard.js"></script>
@@ -58,54 +59,30 @@
   
   <table style="width:100%;">
   <tr>
-  <td/>
-  <td style="text-align: center; vertical-align:center;">
-    <h2 style="margin:auto;" id="track-title" class="playback-info">Track Title</h2>
-  </td></tr>
+    <td/>
+    <td class="cell-text"><h2 id="track-title" class="header-text">Track Title</h2></td></tr>
   <tr>
-    <td style="width:10%;"><div style="width:25px; height:25px;">
-    <img id="player_love" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/heart-off.png"/>
-  </div></td>
-    <td style="text-align: center; vertical-align:center;">
-    <h3 style="margin:auto;" id="track-artist" class="playback-info">Artist</h3>
-  </td>
-  <td/>
-  <td style="width:10%;"><div style="width:25px; height:25px;">
-    <img id="player_goto" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/goto.png"/>
-  </div></td>
+    <td style="width=10%"><div class="div-icon"><img class="image-icon" id="player_love" src="images/heart-off.png"/></div></td>
+    <td class="cell-text"><h3 style="margin:auto;" id="track-artist" class="header-text">Artist</h3></td>
+    <td/>
+    <td style="width:10%;"><div class="div-icon"><img id="player_goto" class="image-icon" src="images/goto.png"/></div></td>
   </tr>
   <tr>
-    <td style="width:10%;"><div style="width:25px; height:25px;">
-    <img id="player_sync" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/sync.png"/>
-  </div></td>
-    <td style="text-align: center; vertical-align:center;"><strong id="mix-title" class="playback-info">Mix Title</strong></td>
-    <td/><td style="width:10%;">
-    <div style="width:25px; height:25px;">
-    <img id="player_purchase" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/buy.png"/>
-    </div></td>
+    <td style="width:10%;"><div class="div-icon"><img id="player_sync" class="image-icon" src="images/sync.png"/></div></td>
+    <td class="cell-text"><strong id="mix-title" class="header-text">Mix Title</strong></td>
+    <td/>
+    <td style="width:10%;"><div class="div-icon"><img id="player_purchase" class="image-icon" src="images/buy.png"/></div></td>
   </tr>
   <tr>
     <td></td>
-    <td style="text-align:center; vertical-align:center;">
-    <div style="width:250px; height:250px; display: block; margin-left: auto; margin-right: auto;">
-      <img style="width:100%; height:100%;margin:auto;display:block;border:0px solid;border-radius: 15px;" class="playback-info" id="albumart"></img></td>
-    </div>
-    </td>
+    <td class="cell-text"><div class="div-cover"><img class="image-cover" id="albumart"></img></td></div></td>
     <td/><td/>
   </tr>
   <tr style="height:50px;">
-  <td style="width:10%;"><div style="width:50px; height:50px;">
-    <img id="player_play" class="playing" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/pause.png"/>
-  </div></td>
-  <td style="width:70%;">
-    <div style="width:80%; left:10%;" id="player_prog"></div>
-  </td>
-  <td style="width:10%;"><div style="width:25px; height:25px;">
-    <img id="player_volume" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/highvolume.png"/>
-  </div></td>
-  <td style="width:10%;"><div style="width:25px; height:25px;">
-    <img id="player_skip" style="max-width:100%; max-height:100%;margin:auto;display:block;border:0px solid;" src="images/ffwd.png"/>
-  </div></td>
+    <td style="width:10%;"><div class="div-icon-med"><img id="player_play" class="playing image-icon" src="images/pause.png"/></div></td>
+    <td style="width:70%;"><div style="width:80%; left:10%;" id="player_prog"></div></td>
+    <td style="width:10%;"><div class="div-icon"><img id="player_volume" class="image-icon" src="images/highvolume.png"/></div></td>
+    <td style="width:10%;"><div class="div-icon"><img id="player_skip" class="image-icon" src="images/ffwd.png"/></div></td>
   </tr>
   </table>
 </body>
