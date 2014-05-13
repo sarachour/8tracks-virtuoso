@@ -11,10 +11,11 @@
 	],
   "browser_action": {
     "default_icon": "icon.png",
-    "default_popup": "player.html"
+    "default_popup": "index.html"
   },
   "background": {
-    "scripts": ["jquery-1.10.2.js", "8tracks.js", "musicplayer.js"],
+    "scripts": ["scripts/jquery-1.10.2.js", "scripts/spotify.js", 
+      "scripts/playlist.js", "scripts/8tracks.js", "scripts/musicplayer.js"],
     "persistent": true
   }
 }
