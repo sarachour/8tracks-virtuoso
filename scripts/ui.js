@@ -39,7 +39,7 @@ function UserInterface(){
 	}
 	this.updateView = function(){
 		uthat = this;
-		chrome.extension.sendMessage({action: "getTrackInfo"}, function(data){
+		chrome.extension.sendMessage({action: "get-track-info"}, function(data){
 			console.log(data);
 	    	$("#mix-title").html(data.mix_name);
 			$("#track-title").html(data.track_name);
@@ -61,10 +61,20 @@ function UserInterface(){
 	    		$("#player_play").attr("src", "images/pause.png");
 	    	}
 	    	if(data.track_favorite){
+	    		$("#player_star_track").addClass("favorite");
 	    		$("#player_star_track").attr("src", "images/star-on.png");
 	    	}
 	    	else{
+	    		$("#player_star_track").removeClass("favorite");
 	    		$("#player_star_track").attr("src", "images/star.png");
+	    	}
+	    	if(data.mix_like){
+	    		$("#player_like_mix").addClass("like");
+	    		$("#player_like_mix").attr("src", "images/heart-on.png");
+	    	}
+	    	else{
+	    		$("#player_like_mix").removeClass("like");
+	    		$("#player_like_mix").attr("src", "images/heart.png");
 	    	}
 			if(!data.hasOwnProperty("mix_name")){
 				//autoload
@@ -74,7 +84,7 @@ function UserInterface(){
 	    if(this.timer == null){
 	    	that = this;
 			this.timer = window.setInterval(function(){
-				chrome.extension.sendMessage({action: "getTrackInfo"}, function(data){
+				chrome.extension.sendMessage({action: "get-track-info"}, function(data){
 					console.log("updating..");
 					$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
 					if($('#player_prog').slider("option", "value") >= 100){
@@ -102,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function() {
     $("#login").click(userInterface.onLogin);
     $("#playstream").click(userInterface.onPlay);
     $("#player_play").click(function(){
-    	console.log("clicked: "+$("#player_play").hasClass("playing"));
     	if($("#player_play").hasClass("playing")){
     		$("#player_play").removeClass("playing");
     		userInterface.onPause();
@@ -115,23 +124,37 @@ document.addEventListener('DOMContentLoaded', function() {
     	}
     });
     $("#player_skip").click(function(){
-    	console.log("skipping [ui]");
     	chrome.extension.sendMessage({action: "skip"})
     })
     $("#player_sync").click(function(){
-    	console.log("syncing [ui]");
     	userInterface.sync();
     })
     $("#player_volume").click(function(){
     	var position = {left: 0, top: 0};
 		$(".box-overlay").css( { position: "absolute", left: position.left, top: position.top } );
 	});
+	$("#player_like_mix").click(function(){
+		if($("#player_like_mix").hasClass("like")){
+    		chrome.extension.sendMessage({action: "unlike-mix"})
+    	}
+    	else{
+    		chrome.extension.sendMessage({action: "like-mix"})
+    	}	
+	})
+	$("#player_star_track").click(function(){
+		if($("#player_star_track").hasClass("favorite")){
+    		chrome.extension.sendMessage({action: "unfavorite-track"})
+    	}
+    	else{
+    		chrome.extension.sendMessage({action: "favorite-track"})
+    	}	
+	})
     $( "#player_prog" ).slider({
     	range: "min",
     	slide: function(event, ui) { 
     		pct = ui.value/100.0; 
     		console.log("ui:"+pct)
-    		chrome.extension.sendMessage({action: "setTime", percent:pct})
+    		chrome.extension.sendMessage({action: "set-time", percent:pct})
     	}
     });
     /*

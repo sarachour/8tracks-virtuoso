@@ -185,6 +185,54 @@ function EightTracks(){
 		);	
 
 	}
+	this._likeMix = function(islike, mixid, cbk){
+		if(islike)
+			url = "http://8tracks.com/mixes/"+mixid+"/like.json"
+		else
+			url = "http://8tracks.com/mixes/"+mixid+"/unlike.json"
+		that = this;
+		$.get(
+			url,
+			{
+			api_key : that.API_KEY,
+			user_token : that.user_token,
+			api_version: 3},
+			function(data) {
+				console.log(data);
+				cbk(data);
+			}
+		);	
+	}
+	this._favoriteTrack = function(isfav, trackid, cbk){
+		if(isfav)
+			url = "http://8tracks.com/tracks/"+trackid+"/fav.json"
+		else
+			url = "http://8tracks.com/tracks/"+trackid+"/unfav.json"
+		that = this;
+		$.get(
+			url,
+			{
+			api_key : that.API_KEY,
+			user_token : that.user_token,
+			api_version: 3},
+			function(data) {
+				console.log(data);
+				cbk(data);
+			}
+		);	
+	}
+	this.likeMix = function(mixid, cbk){
+		this._likeMix(true, mixid, cbk);
+	}
+	this.unlikeMix = function(mixid, cbk){
+		this._likeMix(false, mixid, cbk);
+	}
+	this.favoriteTrack = function(trackid, cbk){
+		this._favoriteTrack(true, trackid, cbk);
+	}
+	this.unfavoriteTrack = function(trackid, cbk){
+		this._favoriteTrack(false, trackid, cbk);
+	}
 	this.init();
 
 }

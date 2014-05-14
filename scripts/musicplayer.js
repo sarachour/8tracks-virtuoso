@@ -24,17 +24,29 @@ function MusicPlayer(){
 		  else if(request.action == "pause"){
 		  		mthat.pause();
 		  }
-		  else if(request.action == "nextMix"){
+		  else if(request.action == "next-mix"){
 		  		mthat.nextMix();
 		  }
 		  else if(request.action == "skip"){
 		  		mthat.skip();
 		  }
-		  else if(request.action == "setTime"){
+		  else if(request.action == "set-time"){
 		  		mthat.setTime(request.percent);
 		  }
-		  else if(request.action == "getTrackInfo"){
+		  else if(request.action == "get-track-info"){
 		  		sendResponse(mthat.getTrackInfo());
+		  }
+		  else if(request.action == "like-mix"){
+		  		mthat.likeMix();
+		  }
+		  else if(request.action == "unlike-mix"){
+		  		mthat.unlikeMix();
+		  }
+		  else if(request.action == "favorite-track"){
+		  		mthat.favoriteTrack();
+		  }
+		  else if(request.action == "unfavorite-track"){
+		  		mthat.unfavoriteTrack();
 		  }
 		});
 		this.player.bind("ended", function () {
@@ -47,10 +59,11 @@ function MusicPlayer(){
 		if(this.mix_info == null || this.track_info == null){
 			return data;
 		}
-		//console.log(this.mix_info);
-		//console.log(this.track_info);
+		console.log(this.mix_info);
+		console.log(this.track_info);
 		data.mix_name = this.mix_info.name;
 		data.mix_cover = this.mix_info.cover_urls.sq250;
+		data.mix_like = this.mix_info.liked_by_current_user;
 		data.track_name = this.track_info.name;
 		data.track_artist = this.track_info.performer;
 		data.track_album = this.track_info.release_name;
@@ -121,11 +134,40 @@ function MusicPlayer(){
 		this.player.trigger("pause");
 		this.is_paused = true;
 	}
+	this.likeMix = function(){
+		mplayer = this;
+		eightTracks.likeMix(mplayer.mix_info.id, function(data){
+			mplayer.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
+			chrome.extension.sendMessage({action: "update"})
+		});
+	}
+	this.unlikeMix = function(){
+		mplayer = this;
+		eightTracks.likeMix(mplayer.mix_info.id, function(data){
+			mplayer.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
+			chrome.extension.sendMessage({action: "update"})
+		});
+	}
+	this.favoriteTrack = function(){
+		mplayer = this;
+		eightTracks.favoriteTrack(mplayer.track_info.id, function(data){
+			mplayer.track_info.faved_by_current_user = data.track.faved_by_current_user;
+			chrome.extension.sendMessage({action: "update"})
+
+		})
+	}
+	this.unfavoriteTrack = function(){
+		mplayer = this;
+		eightTracks.unfavoriteTrack(mplayer.track_info.id, function(data){
+			mplayer.track_info.faved_by_current_user = data.track.faved_by_current_user;
+			chrome.extension.sendMessage({action: "update"})
+
+		})
+	}
 	this.nextTrack = function(){
 		mplayer = this;
 		console.log(this.mix_info);
 		if(this.other_info.isEnd == true || this.other_info.isLastTrack == true){
-			alert("boohoo last track");
 			eightTracks.playNextMix(this.mix_info.id, function(mixdata, data){
 				mplayer.mix_info = mixdata.next_mix;
 				mplayer.SET_TRACK_INFO(data);
