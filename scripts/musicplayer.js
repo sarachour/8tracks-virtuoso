@@ -61,6 +61,12 @@ function MusicPlayer(){
 		}
 		console.log(this.mix_info);
 		console.log(this.track_info);
+		data.mix_description = this.mix_info.description;
+		data.mix_likes_count = this.mix_info.likes_count;
+		data.mix_plays_count = this.mix_info.plays_count;
+		data.mix_tag_list = this.mix_info.tag_list_cache;
+		data.mix_tracks_count = this.mix_info.tracks_count;
+		data.mix_url = "http://www.8tracks.com"+this.mix_info.path;
 		data.mix_name = this.mix_info.name;
 		data.mix_cover = this.mix_info.cover_urls.sq250;
 		data.mix_like = this.mix_info.liked_by_current_user;

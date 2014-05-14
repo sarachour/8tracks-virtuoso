@@ -44,6 +44,13 @@ function UserInterface(){
 	    	$("#mix-title").html(data.mix_name);
 			$("#track-title").html(data.track_name);
 			$("#track-artist").html(data.track_artist);
+
+			$("#mix-tags").html(data.mix_tag_list);
+			$("#mix-likes").html(data.mix_likes_count);
+			$("#mix-plays").html(data.mix_plays_count);
+			$("#mix-tracks").html(data.mix_tracks_count);
+			$("#mix-description").html(data.mix_description);
+
 			$( "#albumart" ).attr( "src", data.mix_cover );
 			$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
 			if(data.skip_ok){
@@ -110,7 +117,7 @@ chrome.extension.onMessage.addListener(
 
 document.addEventListener('DOMContentLoaded', function() {
     $("#login").click(userInterface.onLogin);
-    
+
     $("#playstream").click(userInterface.onPlay);
 
     $("#player_play").click(function(){
