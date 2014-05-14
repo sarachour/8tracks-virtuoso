@@ -110,7 +110,9 @@ chrome.extension.onMessage.addListener(
 
 document.addEventListener('DOMContentLoaded', function() {
     $("#login").click(userInterface.onLogin);
+    
     $("#playstream").click(userInterface.onPlay);
+
     $("#player_play").click(function(){
     	if($("#player_play").hasClass("playing")){
     		$("#player_play").removeClass("playing");

@@ -69,6 +69,7 @@ function EightTracks(){
 			url,
 			{
 			api_key : that.API_KEY,
+			user_token : that.user_token,
 			api_version: 3},
 			function(data) {
 			   cbk(data);
@@ -77,12 +78,14 @@ function EightTracks(){
 		
 	}
 	this.getNextMix = function(id, cbk){
+		that= this;
 		//http://8tracks.com/sets/111696185/next_mix.xml?mix_id=14
 		url = "http://8tracks.com/sets/"+this.play_token+"/next_mix.json";
 		$.get(
 			url,
 			{
 			api_key : that.API_KEY,
+			user_token : that.user_token,
 			mix_id:id,
 			api_version: 3},
 			function(data) {

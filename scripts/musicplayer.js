@@ -89,7 +89,6 @@ function MusicPlayer(){
 		//this.player.play();
 	}
 	this.SET_TRACK_INFO = function(data){
-		console.log(data);
 		this.track_info = data.set.track;
 		this.other_info = {
 			isBeginning: data.set.at_beginning,
@@ -143,7 +142,7 @@ function MusicPlayer(){
 	}
 	this.unlikeMix = function(){
 		mplayer = this;
-		eightTracks.likeMix(mplayer.mix_info.id, function(data){
+		eightTracks.unlikeMix(mplayer.mix_info.id, function(data){
 			mplayer.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
 			chrome.extension.sendMessage({action: "update"})
 		});
