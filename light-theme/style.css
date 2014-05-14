@@ -1,3 +1,4 @@
+.ui-widget{font-size:12px;}
 .image-cover {
     background-color: #000000;
     width:100%; 
@@ -19,8 +20,33 @@
 	text-align:center; 
 	vertical-align:center;
 }
-.header-text {
+.cell-rounded {
+	text-align:center; 
+	vertical-align:center;
+	border-radius: 10px; 
+	padding:20px;
+}
+.header-lg-text {
 	margin: auto; 
+	font-family:"Lucida Grande";
+	font-variant:small-caps;
+	color:#414141;
+	font-size:30px;
+}
+.header-med-text {
+	margin: auto; 
+	font-family:"Lucida Grande";
+	font-style:oblique;
+	font-variant:small-caps;
+	color:black;
+	font-size:18px;
+}
+.header-sm-text {
+	margin: auto; 
+	font-family:"Lucida Grande";
+	color:#8D8D8D;
+	font-variant:small-caps;
+	font-size:12px;
 }
 
 .div-icon {
@@ -31,10 +57,18 @@
 .div-icon-med {
     width:50px; 
 	height:50px;
+
+}
+
+.div-player{
+	border-radius: 10px; 
+	background-color: #D8D8D8;
 }
 
 .div-cover {
     width:250px; 
 	height:250px;
-	padding:10px;
+	border-radius: 10px; 
+	background-color: #111111;
+	padding:5px;
 }

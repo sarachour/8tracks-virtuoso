@@ -61,10 +61,10 @@ function UserInterface(){
 	    		$("#player_play").attr("src", "images/pause.png");
 	    	}
 	    	if(data.track_favorite){
-	    		$("#player_love").attr("src", "images/heart.png");
+	    		$("#player_star_track").attr("src", "images/star-on.png");
 	    	}
 	    	else{
-	    		$("#player_love").attr("src", "images/heart-off.png");
+	    		$("#player_star_track").attr("src", "images/star.png");
 	    	}
 			if(!data.hasOwnProperty("mix_name")){
 				//autoload
@@ -134,5 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
     		chrome.extension.sendMessage({action: "setTime", percent:pct})
     	}
     });
+    /*
+    $( "#more-info" ).accordion({
+    	collapsible: true,
+    	autoHeight: false,
+    	heightStyle: "content"
+    });
+    */
     userInterface.updateView();    
 });

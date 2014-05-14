@@ -41,35 +41,45 @@
   
   <table style="border-radius: 10px;" bgcolor="#131313" width="100%" height="25px">
   <tr>
-  <td style="text-align:center; vertical-align:center;"><strong ><font color="#EEEEEE">Spotify</font></strong></td>
+  <td style="text-align:center; vertical-align:center;"><strong ><font color="#EEEEEE">Login</font></strong></td>
   <td style="text-align:center; vertical-align:center;">
     <div style="display: block; margin-left: auto; margin-right: auto;">
       <input style="border-radius: 10px;" placeholder="username" type="text" id="username" name="username" class="login-info"/>
     </div>
   </td>
- <td style="text-align:center; vertical-align:center;">
+ <td class="cell-text">
   <div style="display: block; margin-left: auto; margin-right: auto;">
     <input style="border-radius: 10px;" placeholder="password" type="password" id="password" name="password" class="login-info"/>
   </div>
 </td>
+<td>
+<button>Go</button>
+</td>
 </tr>
 </table>
 <br>
-<br>
-  
+  <table style="width:100%;">
+    <tr class="cell-rounded" >
+      <td style="width:25px;">
+        <div class="div-icon"><img class="image-icon" id="player_love_mix" src="images/heart.png"/></div>
+      </td>
+      <td class="cell-text">
+        <h2 id="mix-title" class="header-lg-text">Track Title</h2>
+      </td>
+    </tr>
+  </table>
+    
+  <br>
   <table style="width:100%;">
   <tr>
-    <td/>
-    <td class="cell-text"><h2 id="track-title" class="header-text">Track Title</h2></td></tr>
-  <tr>
-    <td style="width=10%"><div class="div-icon"><img class="image-icon" id="player_love" src="images/heart-off.png"/></div></td>
-    <td class="cell-text"><h3 style="margin:auto;" id="track-artist" class="header-text">Artist</h3></td>
+    <td style="width=10%"><div class="div-icon"><img class="image-icon" id="player_star_track" src="images/star.png"/></div></td>
+    <td class="cell-text"><h3 style="margin:auto;" id="track-title" class="header-med-text">Artist</h3></td>
     <td/>
     <td style="width:10%;"><div class="div-icon"><img id="player_goto" class="image-icon" src="images/goto.png"/></div></td>
   </tr>
   <tr>
     <td style="width:10%;"><div class="div-icon"><img id="player_sync" class="image-icon" src="images/sync.png"/></div></td>
-    <td class="cell-text"><strong id="mix-title" class="header-text">Mix Title</strong></td>
+    <td class="cell-text"><strong id="track-artist" class="header-sm-text">Mix Title</strong></td>
     <td/>
     <td style="width:10%;"><div class="div-icon"><img id="player_purchase" class="image-icon" src="images/buy.png"/></div></td>
   </tr>
@@ -78,9 +88,22 @@
     <td class="cell-text"><div class="div-cover"><img class="image-cover" id="albumart"></img></td></div></td>
     <td/><td/>
   </tr>
+  <tr>
+  <td/>
+  <td>
+  <!--
+  <div id="more-info">
+    <font>more info</font>
+    <div>
+      more info
+    </div>
+  </div>
+  -->
+  </td>
+  </tr>
   <tr style="height:50px;">
     <td style="width:10%;"><div class="div-icon-med"><img id="player_play" class="playing image-icon" src="images/pause.png"/></div></td>
-    <td style="width:70%;"><div style="width:80%; left:10%;" id="player_prog"></div></td>
+    <td style="width:70%;"><div  style="width:80%; left:10%;" id="player_prog"></div></td>
     <td style="width:10%;"><div class="div-icon"><img id="player_volume" class="image-icon" src="images/highvolume.png"/></div></td>
     <td style="width:10%;"><div class="div-icon"><img id="player_skip" class="image-icon" src="images/ffwd.png"/></div></td>
   </tr>

@@ -21,14 +21,14 @@ function Playlist(){
 	}
 	this.getSpotifyPlaylist = function(){
 		playlist = "";
-		for(song : this.songs){
+		for(var song in this.songs){
 			playlist += song.spotify.track_id + "\n";
 		}
 		return playlist;
 	}
 	this.getNormalPlaylist = function(){
 		playlist = "";
-		for(song : this.songs){
+		for(var song in this.songs){
 			playlist += song.artist + ","+song.name + "\n";
 		}
 		return playlist;
