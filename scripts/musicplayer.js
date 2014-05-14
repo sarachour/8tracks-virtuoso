@@ -48,6 +48,18 @@ function MusicPlayer(){
 		  else if(request.action == "unfavorite-track"){
 		  		mthat.unfavoriteTrack();
 		  }
+		  else if(request.action == "playlist-text"){
+		  	sendResponse({"playlist": mthat.playlist.getPlain()});
+		  }
+		  else if(request.action == "playlist-spotify"){
+		  	sendResponse({"playlist": mthat.playlist.getSpotify()});
+		  }
+		  else if(request.action == "playlist-lastfm"){
+		  	sendResponse({"playlist": mthat.playlist.getLastfm()});
+		  }
+		  else if(request.action == "playlist-itunes"){
+		  	sendResponse({"playlist": mthat.playlist.getItunes()});
+		  }
 		});
 		this.player.bind("ended", function () {
 	        mthat.nextTrack();
@@ -61,6 +73,7 @@ function MusicPlayer(){
 		}
 		console.log(this.mix_info);
 		console.log(this.track_info);
+		data.mix_rank = this.mix_info.certification; //gold, silver, platinum
 		data.mix_description = this.mix_info.description;
 		data.mix_likes_count = this.mix_info.likes_count;
 		data.mix_plays_count = this.mix_info.plays_count;

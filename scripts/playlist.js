@@ -5,7 +5,7 @@ function Playlist(){
 		songdata = {};
 		songdata.artist = artist;
 		songdata.name = name;
-		playlist = this;
+		plist = this;
 		this.spotify.search(artist, name, function(data){
 			console.log(data);
 			if(data.tracks.length > 0){
@@ -13,24 +13,31 @@ function Playlist(){
 				songdata.spotify = {};
 				songdata.spotify.track_id = track.href;
 				console.log(songdata);
-				playlist.songs.push[songdata];
+				plist.songs.push(songdata);
 			}
 		})
 		
 
 	}
-	this.getSpotifyPlaylist = function(){
+	this.getSpotify = function(){
 		playlist = "";
-		for(var song in this.songs){
+		this.songs.forEach(function(song){
 			playlist += song.spotify.track_id + "\n";
-		}
+		})
 		return playlist;
 	}
-	this.getNormalPlaylist = function(){
+	this.getItunes = function(){
+		return "ITunes";
+	}
+	this.getLastFm = function(){
+		return "LASTFM";
+	}
+	this.getPlain = function(){
 		playlist = "";
-		for(var song in this.songs){
-			playlist += song.artist + ","+song.name + "\n";
-		}
+		this.songs.forEach(function(song){
+			console.log(song);
+			playlist += song.artist + "\t"+song.name + "\n";
+		});
 		return playlist;
 	}
 
