@@ -88,9 +88,13 @@ function UserInterface(){
 			$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
 			if(data.skip_ok){
 				$("#player_skip").attr("src", "images/ffwd.png");
+				$("#player_skip").click(function(){
+			    	chrome.extension.sendMessage({action: "skip"})
+			    })
 			}
 			else{
 				$("#player_skip").attr("src", "images/ffwd-disable.png");
+				$("#player_skip").click(function(){})
 			}
 			if(data.is_paused){
 	    		$("#player_play").removeClass("playing");
@@ -175,9 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     		userInterface.onResume();
     	}
     });
-    $("#player_skip").click(function(){
-    	chrome.extension.sendMessage({action: "skip"})
-    })
+    
     $("#player_sync").click(function(){
     	userInterface.sync();
     })
