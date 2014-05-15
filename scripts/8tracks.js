@@ -65,7 +65,9 @@ function EightTracks(){
 			function(data) {
 			   cbk(data);
 			}
-		);	
+		).fail(function(){ 
+  			cbk({});
+		});;	
 		
 	}
 	this.getNextMix = function(id, cbk){

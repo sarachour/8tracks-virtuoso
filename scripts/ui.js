@@ -2,22 +2,11 @@
 function UserInterface(){
 	this.init = function(){
 		this.timer = null;
+		this.findOpenMixes();
 		if(localStorage.hasOwnProperty("ui_openTab"))
 			this.openTab = parseInt(localStorage.ui_openTab);
 		else this.openTab = null;
 		console.log(this.openTab);
-	}
-	this.onPlay = function(){
-		console.log("playing stream")
-		that = this;
-		chrome.extension.sendMessage({action: "mix", name: "electrominimalicious" });
-
-	}
-	this.onPause = function(){
-		chrome.extension.sendMessage({action: "pause"})
-	}
-	this.onResume = function(){
-		chrome.extension.sendMessage({action: "resume"})
 	}
 	this.sync = function(){
 		chrome.tabs.getSelected(null,function(tab) {
@@ -32,17 +21,58 @@ function UserInterface(){
 	}
 	//var RTM_URL_RE_ = /http?\:\/\/www.8tracks.com\//; 
 
-	this.getRegexTab = function(url_regex, callback) { 
+	this.getMixesInfo = function(mixinfo, callback){
+		var i=0; max=0;
+		var info = [];
+		console.log("mixes inf")
+		for(var key in mixes){
+			var mix = mixes[key];
+			max++;
+			console.log("getting: "+mix.name);
+			eightTracks.getMix(mix.name, mix.artist, function(data){
+				console.log(data);
+				if(data.hasOwnProperty("mix")){
+					info.push(data.mix);
+				}
+				if(i == max-1){
+					callback(info);
+				}
+				i++;
+			});
+		} 
+	}
+	this.findOpenMixes = function(callback){
+		mixes = {};
+		var that = this;
 		chrome.tabs.getAllInWindow(undefined, function(tabs) { 
-			for (var i = 0, tab; tab = tabs[i]; i++) { 
-				if (tab.url && url_regex.test(tab.url)) { 
-					callback(tab); 
-					called = true;
+			for (var i = 0; i < tabs.length; i++) { 
+				tab = tabs[i];
+				tablink = tab.url;
+				if (tablink && tablink.indexOf("8tracks.com") > -1) { 
+
+					tabarr = tablink.split("/");
+			    	mixname = tabarr[tabarr.length-1];
+			    	artistname = tabarr[tabarr.length-2];
+			    	mixes[mixname + ":"+ artistname] = {name: mixname, artist: artistname};
 				} 
-			} 
+			}
+			console.log(mixes);
+			that.getMixesInfo(mixes, function(boo){
+				console.log("FINAL DATA.");
+				console.log(boo);
+			})
+			
+			//retrieve album art
+			
 		})
-		if(!called) callback(null); 
-	} 
+
+		
+		//get all info
+	}
+	this.findSimilarMixes = function(){
+
+	}
+
 	this.openURL = function(newurl){
 		var findid = this.openTab;
 		if(findid == null){
@@ -72,7 +102,6 @@ function UserInterface(){
 	this.updateView = function(){
 		var that = this;
 		chrome.extension.sendMessage({action: "get-track-info"}, function(data){
-			console.log(data);
 	    	$("#mix-title").html(data.mix_name);
 			$("#track-title").html(data.track_name);
 			$("#track-artist").html(data.track_artist);
@@ -170,13 +199,13 @@ document.addEventListener('DOMContentLoaded', function() {
     $("#player_play").click(function(){
     	if($("#player_play").hasClass("playing")){
     		$("#player_play").removeClass("playing");
-    		userInterface.onPause();
+    		chrome.extension.sendMessage({action: "pause"});
     		$("#player_play").attr("src", "images/play.png");
     	}
     	else{
     		$("#player_play").addClass("playing");
     		$("#player_play").attr("src", "images/pause.png");
-    		userInterface.onResume();
+    		chrome.extension.sendMessage({action: "resume"});
     	}
     });
     
