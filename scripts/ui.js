@@ -2,22 +2,27 @@
 function UserInterface(){
 	this.init = function(){
 		this.timer = null;
-		this.findOpenMixes();
 		if(localStorage.hasOwnProperty("ui_openTab"))
 			this.openTab = parseInt(localStorage.ui_openTab);
 		else this.openTab = null;
 		console.log(this.openTab);
 	}
 	this.sync = function(){
-		chrome.tabs.getSelected(null,function(tab) {
-		    var tablink = tab.url;
-		    if(tablink.indexOf("8tracks.com") > -1){
-		    	tabarr = tablink.split("/");
-		    	mixname = tabarr[tabarr.length-1];
-		    	artistname = tabarr[tabarr.length-2];
-		    	chrome.extension.sendMessage({action: "mix", name: mixname, artist: artistname});
-		    }
+		chrome.tabs.getAllInWindow(undefined, function(tabs) { 
+			for(var i=0; i < tabs.length; i++){
+				tab = tabs[i];
+				var tablink = tab.url;
+			    if(tablink.indexOf("8tracks.com") > -1){
+			    	tabarr = tablink.split("/");
+			    	mixname = tabarr[tabarr.length-1];
+			    	artistname = tabarr[tabarr.length-2];
+			    	chrome.extension.sendMessage({action: "mix", name: mixname, artist: artistname});
+			    	return;
+			    }
+			}
+
 		});
+		
 	}
 	//var RTM_URL_RE_ = /http?\:\/\/www.8tracks.com\//; 
 
@@ -57,16 +62,23 @@ function UserInterface(){
 				} 
 			}
 			console.log(mixes);
-			that.getMixesInfo(mixes, function(boo){
+			that.getMixesInfo(mixes, function(data){
 				console.log("FINAL DATA.");
-				console.log(boo);
+				console.log(data);
+				for(var i=0; i < data.length && i < 10; i++){
+					var tile_name = "#tile_"+(i+1);
+					var mix = data[i];
+					console.log(tile_name);
+					$(tile_name).attr("src", mix.cover_urls.sq56);
+					$(tile_name).click(function(){
+						console.log(mix.id);
+					}).data("mix-id",mix.id)
+				}
 			})
 			
 			//retrieve album art
 			
 		})
-
-		
 		//get all info
 	}
 	this.findSimilarMixes = function(){
