@@ -9,15 +9,14 @@ function OptionsInterface(){
 		document.execCommand('copy',true);
 	}
 	this.on8TracksLogin = function(){
-		var uname = document.getElementById('tracks-username');
-		var pass = document.getElementById('tracks-password');
+		var uname = document.getElementById('tracks-username').value;
+		var pass = document.getElementById('tracks-password').value;
 		var that = this;
-		console.log("logging in..");
-		if(uname == undefined || pass == undefined){
+		if(uname == "" || pass == ""){
 			console.log("Login failed: username, pass values do not exist.");
 			return;
 		}
-		eightTracks.login(uname.value, pass.value, function(){
+		eightTracks.login(uname, pass, function(){
 			//reload persistant data
 			chrome.extension.sendMessage({action: "reload"})
 			that.updateView();
@@ -37,7 +36,10 @@ function OptionsInterface(){
 		
 	}
 	this.onSaveMusicTrackPrefs = function(){
-
+		val = $("#playlist_type").val();
+		localStorage.playlist_track_type = val;
+		chrome.extension.sendMessage({action: "reload"})
+		console.log(val);
 	}
 	this.onSavePreferences = function(){
 		this.on8TracksLogin();

@@ -94,12 +94,16 @@ function MusicPlayer(){
 	}
 	this.reload = function(){
 		eightTracks.reload();
+		this.playlist.reload();
 	}
 	this.play = function(src){
 		this.player.attr("src", src);
 		$("#player").trigger("play");
 		//$("#player").play();
 		//this.player.play();
+	}
+	this.ADD_TRACK_TO_PLAYLIST = function(){
+		this.playlist.add(this.track_info.performer, this.track_info.name, this.track_info.faved_by_current_user);
 	}
 	this.SET_TRACK_INFO = function(data){
 		this.track_info = data.set.track;
@@ -110,7 +114,7 @@ function MusicPlayer(){
 			isSkipOk: data.set.skip_allowed,
 		};
 		this.play(this.track_info.track_file_stream_url );
-		this.playlist.add(this.track_info.performer, this.track_info.name);
+		this.ADD_TRACK_TO_PLAYLIST();
 		chrome.extension.sendMessage({action: "update"})
 	}
 	this.nextMix = function(){
@@ -159,6 +163,7 @@ function MusicPlayer(){
 		var mplayer = this;
 		eightTracks.favoriteTrack(mplayer.track_info.id, function(data){
 			mplayer.track_info.faved_by_current_user = data.track.faved_by_current_user;
+			mplayer.ADD_TRACK_TO_PLAYLIST();
 			chrome.extension.sendMessage({action: "update"})
 
 		})
@@ -167,6 +172,7 @@ function MusicPlayer(){
 		var mplayer = this;
 		eightTracks.unfavoriteTrack(mplayer.track_info.id, function(data){
 			mplayer.track_info.faved_by_current_user = data.track.faved_by_current_user;
+			mplayer.ADD_TRACK_TO_PLAYLIST();
 			chrome.extension.sendMessage({action: "update"})
 
 		})
