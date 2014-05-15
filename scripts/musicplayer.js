@@ -195,7 +195,15 @@ function MusicPlayer(){
 		}
 		else{
 			eightTracks.nextTrack(this.mix_info.id, function(data){
-				mplayer.SET_TRACK_INFO(data);
+				if(data == null){
+					eightTracks.playNextMix(mplayer.mix_info.id, function(mixdata, data){
+						mplayer.mix_info = mixdata.next_mix;
+						mplayer.SET_TRACK_INFO(data);
+					});
+				}
+				else{
+					mplayer.SET_TRACK_INFO(data);
+				}
 			});
 		}
 		

@@ -183,7 +183,9 @@ function EightTracks(){
 			function(data) {
 				cbk(data);
 			}
-		);	
+		).fail(function(){ 
+  			cbk(null);
+		});	
 		
 		//TODO report
 		//http://8tracks.com/sets/111696185/report.json?track_id=[track_id]&mix_id=[mix_id]
