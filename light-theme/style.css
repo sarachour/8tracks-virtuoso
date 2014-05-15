@@ -131,3 +131,11 @@ tr.vert-space > td
 {
   padding-bottom: 1em;
 }
+
+.sound-controls {
+    height:125px;
+    font-style: normal;
+    font-size:8pt;
+    display:none;
+
+}

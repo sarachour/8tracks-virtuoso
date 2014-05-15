@@ -36,6 +36,9 @@ function MusicPlayer(){
 		  else if(request.action == "set-time"){
 		  		that.setTime(request.percent);
 		  }
+		  else if(request.action == "set-volume"){
+		  		that.setVolume(request.percent);
+		  }
 		  else if(request.action == "get-track-info"){
 		  		sendResponse(that.getTrackInfo());
 		  }
@@ -87,8 +90,9 @@ function MusicPlayer(){
 		data.track_favorite = this.track_info.faved_by_current_user;
 		data.track_duration = this.player[0].duration;
 		data.track_time = this.player[0].currentTime;
-		data.skip_ok = this.other_info.skip_ok;
+		data.skip_ok = this.other_info.isSkipOk;
 		data.is_paused = this.is_paused;
+		data.player_volume = this.player[0].volume;
 		//data.player = this.player;
 		return data;
 	}
@@ -195,6 +199,9 @@ function MusicPlayer(){
 			});
 		}
 		
+	}
+	this.setVolume = function(pct){
+		this.player[0].volume = pct;
 	}
 	this.setTime = function(pct){
 		newtime = pct*parseFloat(this.player[0].duration);

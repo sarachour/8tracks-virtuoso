@@ -84,6 +84,7 @@ function UserInterface(){
 			$("#mix-description").html(data.mix_description);
 
 			$( "#albumart" ).attr( "src", data.mix_cover );
+			$("#player_volume_slider").slider('value', data.track_time/data.player_volume*100.0);
 			$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
 			if(data.skip_ok){
 				$("#player_skip").attr("src", "images/ffwd.png");
@@ -184,10 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {
     $("#player_sync").click(function(){
     	userInterface.sync();
     })
-    $("#player_volume").click(function(){
-    	var position = {left: 0, top: 0};
-		$(".box-overlay").css( { position: "absolute", left: position.left, top: position.top } );
-	});
 	$("#player_like_mix").click(function(){
 		if($("#player_like_mix").hasClass("like")){
     		chrome.extension.sendMessage({action: "unlike-mix"})
@@ -208,9 +205,19 @@ document.addEventListener('DOMContentLoaded', function() {
     	range: "min",
     	slide: function(event, ui) { 
     		pct = ui.value/100.0; 
-    		console.log("ui:"+pct)
     		chrome.extension.sendMessage({action: "set-time", percent:pct})
     	}
     });
+    $( "#player_volume_slider" ).slider({
+    	range: "min",
+    	orientation: "vertical",
+    	slide: function(event, ui) { 
+    		pct = ui.value/100.0; 
+    		chrome.extension.sendMessage({action: "set-volume", percent:pct})
+    	}
+    });
+    $("#player_volume").click(function () {
+		$("#player_volume_controls").show("slow");
+	});
     userInterface.updateView();    
 });
