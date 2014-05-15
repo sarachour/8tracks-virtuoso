@@ -122,13 +122,13 @@ function UserInterface(){
 	    		that.openURL(data.track_buy);
 	    	})
 	    	if(data.mix_rank == "gold"){
-	    		$("#mix_rank").attr("src", "images/star.png");
+	    		$("#mix_rank").attr("src", "images/gold.png");
 	    	}
 	    	else if(data.mix_rank == "silver"){
-	    		$("#mix_rank").attr("src", "images/star.png");
+	    		$("#mix_rank").attr("src", "images/silver.png");
 	    	}
 	    	else if(data.mix_rank == "bronze"){
-	    		$("#mix_rank").attr("src", "images/star.png");
+	    		$("#mix_rank").attr("src", "images/bronze.png");
 	    	}
 			if(!data.hasOwnProperty("mix_name")){
 				//autoload
