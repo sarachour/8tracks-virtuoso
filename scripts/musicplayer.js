@@ -137,7 +137,7 @@ function MusicPlayer(){
 		});
 	}
 	this.skip = function(){
-		eightTracks.skipTrack(this.mix_info.id, function(){
+		eightTracks.skipTrack(this.mix_info.id, function(data){
 			mplayer.SET_TRACK_INFO(data);
 		});
 	}
