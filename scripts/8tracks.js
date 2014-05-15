@@ -5,23 +5,13 @@ function EightTracks(){
 	
 	this.init = function(){
 		this.API_KEY = "5f1ed8e86c7f6792bdd581ce587e996ce8b00ae2"
-		this.play_token = localStorage.play_token
+		//this.play_token = localStorage.play_token
 		this.user_token = localStorage.user_token
 		console.log("init")
 		console.log(localStorage)
 	}
 	this.isUndefined = function(x){return (x == undefined);}
-	this.test = function(cbk){
-		url = "http://8tracks.com/mixes.xml";
-		console.log("testing");
-		$.get(
-			"http://8tracks.com/mixes.xml",
-			{api_key : this.API_KEY},
-			function(data) {
-			   cbk(data);
-			}
-		);	
-	}
+
 	this.login = function(uname, pass, cbk){
 		sthat = this;
 		if(!this.isUndefined(this.user_token)){
@@ -42,28 +32,32 @@ function EightTracks(){
 			}
 		);
 	}
-	this.createPlaybackStream = function(cbk){
+	this.createPlaybackStream = function(cbk, forceCreate){
 		url = "http://8tracks.com/sets/new.json"
-		sthat = this;
+		var that = this;
+		/*
 		if(!this.isUndefined(this.play_token)){
 			console.log("play token exists in storage");
 			return;
 		}
+		*/
 		$.get(
 			url,
 			{
-			api_key : sthat.API_KEY,
-			user_token : sthat.user_token,
-			api_version: 3},
+			api_key : that.API_KEY,
+			user_token : that.user_token,
+			api_version: 3
+		},
 				function(data){
-					sthat.play_token = data.play_token;
-					localStorage.play_token = data.play_token;
+					that.play_token = data.play_token;
+					//localStorage.play_token = data.play_token;
+					console.log(that.play_token);
 					cbk(data);
 				}
 			)
 	}
 	this.getMix = function(id, artist, cbk){
-		that = this;
+		var that = this;
 		url = "http://8tracks.com/"+artist+"/"+id+".json"
 		$.get(
 			url,
@@ -78,7 +72,7 @@ function EightTracks(){
 		
 	}
 	this.getNextMix = function(id, cbk){
-		that= this;
+		var that= this;
 		//http://8tracks.com/sets/111696185/next_mix.xml?mix_id=14
 		url = "http://8tracks.com/sets/"+this.play_token+"/next_mix.json";
 		$.get(
@@ -92,9 +86,10 @@ function EightTracks(){
 			   cbk(data);
 			}
 		);	
+
 	}
-	this.playNextMix = function(id, cbk){
-			that = this;
+	this.playNextMix = function(mid, cbk){
+			var that = this;
 			if(this.isUndefined(this.user_token)){
 				console.log("ERROR: no user token.");
 				return;
@@ -104,7 +99,7 @@ function EightTracks(){
 				return;
 			}
 			
-			this.getNextMix(id, function(mixdata){
+			this.getNextMix(mid, function(mixdata){
 				url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
 				console.log(mixdata)
 				$.get(
@@ -118,10 +113,11 @@ function EightTracks(){
 						cbk(mixdata, data);
 					}
 				);	
-			})
+			});
+		
 	}
 	this.playMix = function(mix_name, mix_artist, cbk){
-			that = this;
+			var that = this;
 			if(this.isUndefined(this.user_token)){
 				console.log("ERROR: no user token.");
 				return;
@@ -148,9 +144,24 @@ function EightTracks(){
 			})
 			
 	}
+	this.report = function(mid, tid){
+		var rurl = "http://8tracks.com/sets/"+this.play_token+"/next.json"
+		$.get(
+			rurl,
+			{
+			api_key : that.API_KEY,
+			user_token : that.user_token,
+			api_version: 3,
+			mix_id: mid,
+			track_id: tid},
+			function(data) {
+				
+			}
+		);	
+	}
 	this.nextTrack = function(mid, cbk){
 		url = "http://8tracks.com/sets/"+this.play_token+"/next.json"
-		that = this;
+		var that = this;
 		if(this.isUndefined(this.user_token)){
 			console.log("ERROR: no user token.");
 			return;
@@ -170,11 +181,14 @@ function EightTracks(){
 				cbk(data);
 			}
 		);	
+		
+		//TODO report
+		//http://8tracks.com/sets/111696185/report.json?track_id=[track_id]&mix_id=[mix_id]
 
 	}
 	this.skipTrack = function(mixid, cbk){
 		url = "http://8tracks.com/sets/"+this.play_token+"/skip.json"
-		that = this;
+		var that = this;
 		$.get(
 			url,
 			{
@@ -193,7 +207,7 @@ function EightTracks(){
 			url = "http://8tracks.com/mixes/"+mixid+"/like.json"
 		else
 			url = "http://8tracks.com/mixes/"+mixid+"/unlike.json"
-		that = this;
+		var that = this;
 		$.get(
 			url,
 			{
@@ -211,7 +225,7 @@ function EightTracks(){
 			url = "http://8tracks.com/tracks/"+trackid+"/fav.json"
 		else
 			url = "http://8tracks.com/tracks/"+trackid+"/unfav.json"
-		that = this;
+		var that = this;
 		$.get(
 			url,
 			{
