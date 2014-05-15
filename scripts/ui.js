@@ -2,6 +2,10 @@
 function UserInterface(){
 	this.init = function(){
 		this.timer = null;
+		if(localStorage.hasOwnProperty("ui_openTab"))
+			this.openTab = parseInt(localStorage.ui_openTab);
+		else this.openTab = null;
+		console.log(this.openTab);
 	}
 	this.onPlay = function(){
 		console.log("playing stream")
@@ -26,8 +30,47 @@ function UserInterface(){
 		    }
 		});
 	}
+	//var RTM_URL_RE_ = /http?\:\/\/www.8tracks.com\//; 
+
+	this.getRegexTab = function(url_regex, callback) { 
+		chrome.tabs.getAllInWindow(undefined, function(tabs) { 
+			for (var i = 0, tab; tab = tabs[i]; i++) { 
+				if (tab.url && url_regex.test(tab.url)) { 
+					callback(tab); 
+					called = true;
+				} 
+			} 
+		})
+		if(!called) callback(null); 
+	} 
+	this.openURL = function(newurl){
+		var findid = this.openTab;
+		if(findid == null){
+			chrome.tabs.create({url: newurl}, function(tab){
+				this.openTab = tab.id;
+				localStorage.ui_openTab= this.openTab;
+			});
+			return;
+		}
+		chrome.tabs.get(findid, function(tab){
+			if(tab != undefined){
+				chrome.tabs.update(tab.id, {url: newurl, selected: true}); 
+				return;
+			}
+			else{
+				chrome.tabs.create({url: newurl}, function(tab){
+				this.openTab = tab.id;
+				localStorage.ui_openTab= this.openTab;
+			}); 
+				return;
+			}
+		})
+		
+	}
+
+
 	this.updateView = function(){
-		uthat = this;
+		var that = this;
 		chrome.extension.sendMessage({action: "get-track-info"}, function(data){
 			console.log(data);
 	    	$("#mix-title").html(data.mix_name);
@@ -72,9 +115,24 @@ function UserInterface(){
 	    		$("#player_like_mix").removeClass("like");
 	    		$("#player_like_mix").attr("src", "images/heart.png");
 	    	}
+	    	$("#player_goto").click(function(){
+	    		that.openURL(data.mix_url);
+	    	})
+	    	$("#player_purchase").click(function(){
+	    		that.openURL(data.track_buy);
+	    	})
+	    	if(data.mix_rank == "gold"){
+	    		$("#mix_rank").attr("src", "images/star.png");
+	    	}
+	    	else if(data.mix_rank == "silver"){
+	    		$("#mix_rank").attr("src", "images/star.png");
+	    	}
+	    	else if(data.mix_rank == "bronze"){
+	    		$("#mix_rank").attr("src", "images/star.png");
+	    	}
 			if(!data.hasOwnProperty("mix_name")){
 				//autoload
-				uthat.sync();
+				that.sync();
 			}
 	    });
 	    if(this.timer == null){
@@ -154,12 +212,5 @@ document.addEventListener('DOMContentLoaded', function() {
     		chrome.extension.sendMessage({action: "set-time", percent:pct})
     	}
     });
-    /*
-    $( "#more-info" ).accordion({
-    	collapsible: true,
-    	autoHeight: false,
-    	heightStyle: "content"
-    });
-    */
     userInterface.updateView();    
 });

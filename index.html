@@ -15,21 +15,6 @@
         height: 75px;
       }
     </style>
-
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
-
-      <table style="height:50px; width:100%; border:dotted #CC3300;"><tr>
-  <td style="width:10%;" ><img top="20%" id="player_play" src="images/play.png"/></td>
-  <td style="width:70%;"><div style="width:80%; left:10%;" id="player_prog"></div></td>
-  <td style="width:10%;" ><img id="player_volume" src="images/highvolume.png"></td>
-  <td style="width:10%;"><img id="player_skip" src="images/ffwd.png"/></td>
-  </tr></table>
-  
-     --> 
     <link rel="stylesheet" href="light-theme/jquery-ui-1.10.4.custom.min.css" />
     <link rel="stylesheet" href="light-theme/style.css" />
     <script src="scripts/lib/jquery-1.10.2.js"></script>
@@ -70,6 +55,7 @@
          <img class="image-cover" id="albumart"></img>
          <div class="fadey-text">
           <span>
+          <div class="div-icon-inline"><img class="image-icon" id="mix-rank" src="images/heart-on.png"/></div>
           <strong class="body-sm-text"  id="mix-likes"></strong>
           <div class="div-icon-inline"><img class="image-icon" src="images/heart-on.png"/></div>
           &nbsp
