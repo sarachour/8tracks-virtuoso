@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "8Tracks Music Player",
-  "description": "play 8tracks mixes. Supports exporting liked, played tracks to spotify.",
-  "version": "1.0",
+  "name": "8Tracks Virtuoso",
+  "description": "An unobtrusive and powerful player for listening to 8tracks mixes. Also supports exporting tracks to Spotify and plaintext.",
+  "version": "0.01a",
 
   "permissions": [
 	  "storage",

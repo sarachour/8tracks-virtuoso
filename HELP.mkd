@@ -1,0 +1,63 @@
+# Getting Started
+## Controls Overview
+
+## Logging into 8Tracks
+
+1. Right click on the Virtuoso icon and select "Options"
+
+
+* Fill in your 8Tracks login information in the username, password boxes.
+	* Notice there is a red dot next to "8Tracks Login". This means that Virtuoso does not have your login info.
+	
+* Select 'Save Preferences'. 
+	* The red dot next to "8Tracks Login" should change from red to green.
+	
+* You are now logged in!
+
+## Playing a Mix
+
+1. Open an 8tracks mix in a chrome tab.
+2. Open the Virtuoso player. 
+3. Virtuoso will automatically start playing the mix.
+	* *If Virtuoso is already playing a mix*: press the 'refresh' button in the player to load the mix in the chrome tab.
+	
+## Exporting Play Histories
+Users may export the tracks they listened to and liked out of 8tracks using Virtuoso's export functionality.
+
+### Exporting to Spotify
+
+1. Right click on the Virtuoso icon and select "Options"
+
+* Click on the Spotify icon.
+* Open Spotify and select a playlist.
+* Paste into the playlist. The tracks from your play history will be added.
+
+### Exporting to Plaintext
+
+1. Right click on the Virtuoso icon and select "Options"
+
+* Click on the paper icon next to "Plain Text"
+* Open a Spreadsheet editor or text file.
+* Paste into the document/spreadsheet.
+
+### Clearing Play History
+1. Right click on the Virtuoso icon and select "Options"
+
+* Click on the "Clear Tracked Songs" button.
+
+### Track only Favorited Songs
+1. Right click on the Virtuoso icon and select "Options"
+
+* Click on the 'Track' drop down and select 'Favorited Songs'
+
+* Click 'Save Preferences' 
+
+### Stop Tracking Play History
+1. Right click on the Virtuoso icon and select "Options"
+
+* Click on the 'Track' drop down and select 'None'
+
+* Click 'Save Preferences' 
+
+
+
