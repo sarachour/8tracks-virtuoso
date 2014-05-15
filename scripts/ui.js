@@ -3,23 +3,6 @@ function UserInterface(){
 	this.init = function(){
 		this.timer = null;
 	}
-	this.setClipboard = function(text){
-		console.log(text);
-		$("#clipboard").text(text);
-		$("#clipboard").select();
-		document.execCommand('copy',true);
-	}
-	this.onLogin = function(){
-		var uname = document.getElementById('username');
-		var pass = document.getElementById('password');
-		if(uname == undefined || pass == undefined){
-			console.log("Login failed: username, pass values do not exist.");
-			return;
-		}
-		chrome.extension.sendMessage({action: "login", username: uname.value, password: pass.value })
-		
-	}
-
 	this.onPlay = function(){
 		console.log("playing stream")
 		that = this;
@@ -121,29 +104,6 @@ chrome.extension.onMessage.addListener(
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    $("#login").click(userInterface.onLogin);
-
-    $("#export_spotify").click(function(){
-    	console.log("clicky");
-    	chrome.extension.sendMessage({action: "playlist-spotify"}, function(resp){
-    		userInterface.setClipboard(resp.playlist);
-    	})
-    })
-    $("#export_itunes").click(function(){
-    	chrome.extension.sendMessage({action: "playlist-itunes"}, function(resp){
-    		userInterface.setClipboard(resp.playlist);
-    	})
-    })
-    $("#export_lastfm").click(function(){
-    	chrome.extension.sendMessage({action: "playlist-lastfm"}, function(resp){
-    		userInterface.setClipboard(resp.playlist);
-    	})
-    })
-    $("#export_text").click(function(){
-    	chrome.extension.sendMessage({action: "playlist-text"}, function(resp){
-    		userInterface.setClipboard(resp.playlist);
-    	})
-    })
 
 
     $("#playstream").click(userInterface.onPlay);

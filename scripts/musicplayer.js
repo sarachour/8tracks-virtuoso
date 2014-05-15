@@ -18,9 +18,6 @@ function MusicPlayer(){
 		  if(request.action == "mix"){
 		  		that.mix(request.name, request.artist);
 		  }
-		  else if(request.action == "login"){
-		  		that.login(request.username, request.password);
-		  }
 		  else if(request.action == "resume"){
 		  		that.resume();
 		  }
@@ -32,6 +29,9 @@ function MusicPlayer(){
 		  }
 		  else if(request.action == "skip"){
 		  		that.skip();
+		  }
+		  else if(request.action == "reload"){
+		  		that.reload();
 		  }
 		  else if(request.action == "set-time"){
 		  		that.setTime(request.percent);
@@ -51,17 +51,14 @@ function MusicPlayer(){
 		  else if(request.action == "unfavorite-track"){
 		  		that.unfavoriteTrack();
 		  }
+		  else if(request.action == "playlist-clear"){
+		  	that.playlist.clear();
+		  }
 		  else if(request.action == "playlist-text"){
 		  	sendResponse({"playlist": that.playlist.getPlain()});
 		  }
 		  else if(request.action == "playlist-spotify"){
 		  	sendResponse({"playlist": that.playlist.getSpotify()});
-		  }
-		  else if(request.action == "playlist-lastfm"){
-		  	sendResponse({"playlist": that.playlist.getLastfm()});
-		  }
-		  else if(request.action == "playlist-itunes"){
-		  	sendResponse({"playlist": that.playlist.getItunes()});
 		  }
 		});
 		this.player.bind("ended", function () {
@@ -95,11 +92,8 @@ function MusicPlayer(){
 		//data.player = this.player;
 		return data;
 	}
-	this.login = function(uname, pass){
-		eightTracks.login(uname, pass, function(data){
-			console.log("logged in");
-			console.log(data);
-		});
+	this.reload = function(){
+		eightTracks.reload();
 	}
 	this.play = function(src){
 		this.player.attr("src", src);

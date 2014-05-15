@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head><title>8Tracks Player Preferences</title>
+
+<link rel="stylesheet" href="light-theme/jquery-ui-1.10.4.custom.min.css" />
+<link rel="stylesheet" href="light-theme/style.css" />
+<script src="scripts/lib/jquery-1.10.2.js"></script>
+<script src="scripts/lib/jquery-ui-1.10.4.min.js"></script>
+<script src="scripts/8tracks.js"></script>
+<script src="scripts/options.js"></script>
+<textarea id="clipboard">text here</textarea>
+
+</head>
+<body bgcolor="#434343">
+<table style="border-radius: 10px;" align="center" bgcolor="#EEEEEE" left="10%" width="80%">
+<tr>
+	<td class="cell-text" align="left">
+	<h1><font class="header-huge-text">Preferences</font></h1>
+	</td>
+</tr>
+<tr>
+	<td class="cell-text" align="left">
+		<div class="div-icon-med-inline">
+			<img class="image-icon" id="tracks-login-ok" src="images/dot-err.png"/>
+		</div>
+		<font class="header-lg-text">8Tracks Login</font>
+	</td>
+	
+</tr>
+<tr/>
+<tr class="vert-space">
+	<td class="cell-text"><font class="header-med-text">username</font></td>
+	<td class="cell-text">
+		<div >
+			<input style="border-radius: 5px;" placeholder="username" type="text" id="tracks-username" name="username" class="login-info"/>
+		</div>
+	</td>
+	<td class="cell-text"><font class="header-med-text">password</font></td>
+	<td class="cell-text">
+		<div>
+			<input style="border-radius: 5px;" placeholder="password" type="password" id="tracks-password" name="password" class="login-info"/>
+		</div>
+	</td>
+	<td/>
+</tr>
+<tr>
+	<td class="cell-text">
+		<div class="div-icon-med-inline">
+			<img class="image-icon" id="lastfm-login-ok" src="images/dot-err.png"/>
+		</div>
+		<font class="header-lg-text">LastFm Login</font>
+	</td>
+</tr>
+<tr class="vert-space">
+	<td class="cell-text"><font class="header-med-text">username</font></td>
+	<td class="cell-text">
+		<div >
+			<input style="border-radius: 5px;" placeholder="username" type="text" id="lastfm-username" name="username" class="login-info"/>
+		</div>
+	</td>
+	<td class="cell-text"><font class="header-med-text">password</font></td>
+	<td class="cell-text">
+		<div>
+			<input style="border-radius: 5px;" placeholder="password" type="password" id="lastfm-password" name="password" class="login-info"/>
+		</div>
+	</td>
+	<td>
+		<label class="header-med-text">
+		  <input type="checkbox" id="lastfm-scrobble">
+		  Scrobble
+		</label>
+	</td>
+</tr>
+<tr>
+	<td class="cell-text">
+		<font class="header-lg-text">Music Tracking</font>
+	</td>
+</tr>
+<tr class = "vert-space">
+<td class="cell-text"><font class="header-med-text">track: </font></td>
+<td class="cell-text">
+	<select id="color">
+	 <option value="all">All Songs</option>
+	 <option value="fav">Favorited Songs</option>
+	 <option value="none">Track Songs</option>
+	</select>
+</td>
+<td class="cell-text">
+	<button class="body-sm-text" id="playlist-clear" style="border-radius: 10px;">Clear Tracked Songs</button>
+</td>
+</tr> 
+<tr class = "vert-space">
+	<td class="cell-text">
+		<font class="header-lg-text">Export Tracks</font>
+	</td>
+</tr>
+<tr class = "vert-space">
+	<td class="cell-text">
+		<div class="div-icon-med-inline">
+			<img class="image-icon" id="export-spotify" src="images/spotify.png"/>
+		</div>
+		<font class="header-med-text">Spotify</font>
+	</td>
+	<td class="cell-text">
+		<div class="div-icon-med-inline">
+			<img class="image-icon" id="export-text" src="images/text.png"/>
+		</div>
+		<font class="header-med-text">Plain Text</font>
+	</td>
+	<td class="cell-text">
+		<font id="export-status" class="header-med-text">status</font>
+	</td>
+</tr>
+<tr class = "vert-space"/>
+<tr class = "vert-space"/>
+<tr>
+	<td class="cell-text">
+		<button class="header-lg-text" id="save" style="border-radius: 10px;">Save Preferences</button>
+	</td>
+</tr>
+</table>
+
+
+</body>
+</html>

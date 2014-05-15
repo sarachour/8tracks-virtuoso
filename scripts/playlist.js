@@ -13,6 +13,10 @@ function Playlist(){
 			this.songs = {};
 		}
 	}
+	this.clear = function(){
+		this.songs = {};
+		this.save();
+	}
 	this.add = function(artist, name){
 		plist = this;
 		if(!plist.songs.hasOwnProperty(artist)){

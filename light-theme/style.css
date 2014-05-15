@@ -26,6 +26,13 @@
 	border-radius: 10px; 
 	padding:20px;
 }
+.header-huge-text {
+	margin: auto; 
+	font-family:"Lucida Grande";
+	font-variant:small-caps;
+	color:#414141;
+	font-size:48px;
+}
 .header-lg-text {
 	margin: auto; 
 	font-family:"Lucida Grande";
@@ -36,7 +43,6 @@
 .header-med-text {
 	margin: auto; 
 	font-family:"Lucida Grande";
-	font-style:oblique;
 	font-variant:small-caps;
 	color:black;
 	font-size:18px;
@@ -67,6 +73,11 @@
     width:10px; 
     display: inline-block;
 	height:10px;
+}
+.div-icon-med-inline {
+    width:25px; 
+    display: inline-block;
+	height:25px;
 }
 
 .div-icon {
@@ -114,4 +125,8 @@
 .fadey-text:hover {
 	background-color:rgba(255,255,255,0.6);
     opacity:1;
+}
+tr.vert-space > td
+{
+  padding-bottom: 1em;
 }

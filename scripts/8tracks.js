@@ -7,17 +7,14 @@ function EightTracks(){
 		this.API_KEY = "5f1ed8e86c7f6792bdd581ce587e996ce8b00ae2"
 		//this.play_token = localStorage.play_token
 		this.user_token = localStorage.user_token
-		console.log("init")
-		console.log(localStorage)
+	}
+	this.reload = function(){
+		this.user_token = localStorage.user_token
 	}
 	this.isUndefined = function(x){return (x == undefined);}
 
 	this.login = function(uname, pass, cbk){
 		sthat = this;
-		if(!this.isUndefined(this.user_token)){
-			console.log("login token exists from storage");
-			return;
-		}
 		$.post(
 			"https://8tracks.com/sessions.json",
 			{api_key : sthat.API_KEY,
@@ -74,6 +71,9 @@ function EightTracks(){
 	this.getNextMix = function(id, cbk){
 		var that= this;
 		//http://8tracks.com/sets/111696185/next_mix.xml?mix_id=14
+		if(!this.check()){
+			return;
+		}
 		url = "http://8tracks.com/sets/"+this.play_token+"/next_mix.json";
 		$.get(
 			url,
@@ -88,14 +88,21 @@ function EightTracks(){
 		);	
 
 	}
+	this.check = function(){
+		if(this.isUndefined(this.user_token)){
+			console.log("ERROR: no user token.");
+			return false;
+			
+		}
+		if(this.isUndefined(this.play_token)){
+			console.log("ERROR: no play token.");
+			return false;
+		}
+		return true;
+	}
 	this.playNextMix = function(mid, cbk){
 			var that = this;
-			if(this.isUndefined(this.user_token)){
-				console.log("ERROR: no user token.");
-				return;
-			}
-			if(this.isUndefined(this.play_token)){
-				console.log("ERROR: no play token.");
+			if(!this.check()){
 				return;
 			}
 			
@@ -118,12 +125,7 @@ function EightTracks(){
 	}
 	this.playMix = function(mix_name, mix_artist, cbk){
 			var that = this;
-			if(this.isUndefined(this.user_token)){
-				console.log("ERROR: no user token.");
-				return;
-			}
-			if(this.isUndefined(this.play_token)){
-				console.log("ERROR: no play token.");
+			if(!this.check()){
 				return;
 			}
 			
@@ -145,7 +147,11 @@ function EightTracks(){
 			
 	}
 	this.report = function(mid, tid){
+		var that = this;
 		var rurl = "http://8tracks.com/sets/"+this.play_token+"/next.json"
+		if(!this.check()){
+			return;
+		}
 		$.get(
 			rurl,
 			{
@@ -162,12 +168,7 @@ function EightTracks(){
 	this.nextTrack = function(mid, cbk){
 		url = "http://8tracks.com/sets/"+this.play_token+"/next.json"
 		var that = this;
-		if(this.isUndefined(this.user_token)){
-			console.log("ERROR: no user token.");
-			return;
-		}
-		if(this.isUndefined(this.play_token)){
-			console.log("ERROR: no play token.");
+		if(!this.check()){
 			return;
 		}
 		$.get(
@@ -189,6 +190,9 @@ function EightTracks(){
 	this.skipTrack = function(mixid, cbk){
 		url = "http://8tracks.com/sets/"+this.play_token+"/skip.json"
 		var that = this;
+		if(!this.check()){
+			return;
+		}
 		$.get(
 			url,
 			{
@@ -208,6 +212,9 @@ function EightTracks(){
 		else
 			url = "http://8tracks.com/mixes/"+mixid+"/unlike.json"
 		var that = this;
+		if(!this.check()){
+			return;
+		}
 		$.get(
 			url,
 			{
@@ -226,6 +233,9 @@ function EightTracks(){
 		else
 			url = "http://8tracks.com/tracks/"+trackid+"/unfav.json"
 		var that = this;
+		if(!this.check()){
+			return;
+		}
 		$.get(
 			url,
 			{
