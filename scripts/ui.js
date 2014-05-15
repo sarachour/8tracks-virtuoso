@@ -141,10 +141,6 @@ function UserInterface(){
 			this.timer = window.setInterval(function(){
 				chrome.extension.sendMessage({action: "get-track-info"}, function(data){
 					$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
-					if($('#player_prog').slider("option", "value") >= 100){
-						window.clearInterval(that.timer);
-						that.timer == null;
-					}
 			    });
 			}, 1000);
 		}
@@ -213,11 +209,26 @@ document.addEventListener('DOMContentLoaded', function() {
     	orientation: "vertical",
     	slide: function(event, ui) { 
     		pct = ui.value/100.0; 
+    		if(ui.value > 50){
+    			$("#player_volume").attr("src", "images/highvolume.png");
+    		}
+    		else if(ui.value > 0){
+    			$("#player_volume").attr("src", "images/lowvolume.png");
+    		}
+    		else{
+    			$("#player_volume").attr("src", "images/mute.png");
+    		}
     		chrome.extension.sendMessage({action: "set-volume", percent:pct})
     	}
     });
     $("#player_volume").click(function () {
-		$("#player_volume_controls").show("slow");
+    	var pos = $("#player_volume").position();
+    	var w= $("#player_volume_controls").width();
+    	var h= $("#player_volume_controls").height();
+    	console.log(pos);
+    	$("#player_volume_controls").css('top',pos.top-h);
+    	$("#player_volume_controls").css('left',pos.left+w);
+		$("#player_volume_controls").fadeToggle("slow");
 	});
     userInterface.updateView();    
 });

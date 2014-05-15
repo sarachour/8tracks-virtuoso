@@ -133,6 +133,7 @@ tr.vert-space > td
 }
 
 .sound-controls {
+	position:absolute;
     height:125px;
     font-style: normal;
     font-size:8pt;
