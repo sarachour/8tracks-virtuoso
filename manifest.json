@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "8-Tracks Scrobbler",
-  "description": "scobble tracks from 8tracks to spotify.",
+  "name": "8Tracks Music Player",
+  "description": "play 8tracks mixes. Supports exporting liked, played tracks to spotify.",
   "version": "1.0",
 
   "permissions": [
