@@ -68,7 +68,9 @@ function OptionsInterface(){
     			spot_link = "";
     			if(ob.hasOwnProperty("spotify")){
     				var tid = ob.spotify.track_id;
-    				spot_link = '<a href="'+tid+'">link</a>';
+    				spot_link = '<a href="'+tid+'">'+
+    					'<div class="div-icon-inline"><img class="image-icon" src="images/dot-ok.png"/></div>'+
+    					'</a>';
     			}
     			$('#track-history')
     			.append('<tr class="body-sm-text">' +
