@@ -31,6 +31,7 @@ function Playlist(){
 		if(this.track_type == "none"){
 			return;
 		}
+		console.log(artist+":"+name);
 
 		//created a new track in cache if doesn't exist
 		if(!plist.songs.hasOwnProperty(artist)){
@@ -43,10 +44,10 @@ function Playlist(){
 		//if the cache entry was a starred song, but now we're recording all songs
 		//upgrade the cache entry status
 		//get rid of ellipses
-		var sanitized_name = name.replace(/ *\([^)]*\) */g, "");
-		var sanitized_artist = artist.replace(/ *\([^)]*\) */g, "");
+		//var sanitized_name = name.replace(/ *\([^)]*\) */g, "");
+		//var sanitized_artist = artist.replace(/ *\([^)]*\) */g, "");
 
-		this.spotify.search(sanitized_artist, sanitized_name, function(data){
+		this.spotify.search(artist, name, function(data){
 			if(data.tracks.length > 0){
 				plist.songs[artist][name].spotify = {track_id: data.tracks[0].href};
 				plist.save();
