@@ -49,6 +49,7 @@ function Playlist(){
 		this.spotify.search(sanitized_artist, sanitized_name, function(data){
 			if(data.tracks.length > 0){
 				plist.songs[artist][name].spotify = {track_id: data.tracks[0].href};
+				plist.save();
 			}
 		})
 		plist.save();	
@@ -68,11 +69,22 @@ function Playlist(){
 		}
 		return playlist;
 	}
-	this.getItunes = function(){
-		return "ITunes";
-	}
-	this.getLastFm = function(){
-		return "LASTFM";
+	this.getObject = function(){
+		obj = [];
+		for(var artist in this.songs){
+			for(var track in this.songs[artist]){
+					if(!(this.track_type == "fav") || this.songs[artist][track].star){
+						var tmp = this.songs[artist][track];
+						var ob = {};
+						ob.spotify = tmp.spotify;
+						ob.name = track;
+						ob.artist = artist;
+						ob.star = tmp.star;
+						obj.push(ob);
+					}
+			}
+		}
+		return obj;
 	}
 	this.getPlain = function(){
 		playlist = "";

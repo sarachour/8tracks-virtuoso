@@ -1,12 +1,17 @@
 
 function OptionsInterface(){
 	this.init = function(){
+		this.updateView();
 	}
+	//style="display:none;"
 	this.setClipboard = function(text, msg){
+		$("#clipboard").css('visibility', 'visible');
 		$("#clipboard").text(text);
 		$("#clipboard").select();
-		$("#export-status").html(msg);
 		document.execCommand('copy',true);
+		$("#export-status").html(msg)
+		$("#export-status").fadeIn();
+		$("#clipboard").css('visibility', 'hidden');
 	}
 	this.on8TracksLogin = function(){
 		var uname = document.getElementById('tracks-username').value;
@@ -25,12 +30,6 @@ function OptionsInterface(){
 		
 	}
 	this.onLastFMLogin = function(){
-		var uname = document.getElementById('lastfm-username');
-		var pass = document.getElementById('lastfm-password');
-		if(uname == undefined || pass == undefined){
-			console.log("Login failed: username, pass values do not exist.");
-			return;
-		}
 		
 		//chrome.extension.sendMessage({action: "login", username: uname.value, password: pass.value })
 		
@@ -55,16 +54,50 @@ function OptionsInterface(){
 		else{
 			$("#tracks-login-ok").attr("src", "images/dot-err.png");
 		}
+		chrome.extension.sendMessage({action: "playlist-get", type:"obj"}, function(resp){
+			obj = resp.playlist;
+    		console.log(obj);
+    		$('#track-history').html('<tr class="body-sm-text" style="background-color:#131313;color:#D3D3D3;">'+
+						'<td>Track Name</td><td>Artist Name</td><td>Starred</td><td>Spotify Link</td>'+
+					'</tr>')
+
+    		for(var i=0; i < obj.length; i++){
+    			var ob = obj[i];
+    			star_link = "";
+    			if(ob.star) star_link = '<div class="div-icon-inline"><img class="image-icon" src="images/star.png"/></div>'
+    			spot_link = "";
+    			if(ob.hasOwnProperty("spotify")){
+    				var tid = ob.spotify.track_id;
+    				spot_link = '<a href="'+tid+'">link</a>';
+    			}
+    			$('#track-history')
+    			.append('<tr class="body-sm-text">' +
+    				'<td>'+ ob.name +'</td>'+
+    				'<td>'+ ob.artist +'</td>'+
+    				'<td>' + star_link + '</td>'+
+    				'<td>' + spot_link + '</td>'+
+    				'</tr>');
+    		}
+    	})
 		
 	}
 	this.init();
 }
 optionsInterface = new OptionsInterface();
 
+chrome.extension.onMessage.addListener(
+	function(request, sender, sendResponse) {
+			  if(request.action == "update"){
+			  		optionsInterface.updateView();
+			  }
+	}
+)
+
 document.addEventListener('DOMContentLoaded', function() {
     $("#save").click(function(){
     	console.log("saving");
     	optionsInterface.onSavePreferences();
+    	optionsInterface.updateView();
     });
 
     $("#playlist-clear").click(function(){
@@ -74,12 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
     })
 
     $("#export-spotify").click(function(){
-    	chrome.extension.sendMessage({action: "playlist-spotify"}, function(resp){
+    	chrome.extension.sendMessage({action: "playlist-get", type:"spotify"}, function(resp){
+    		console.log(resp.playlist);
     		optionsInterface.setClipboard(resp.playlist, "copied to clipboard. paste into spotify playlist.");
     	})
     })
     $("#export-text").click(function(){
-    	chrome.extension.sendMessage({action: "playlist-text"}, function(resp){
+    	chrome.extension.sendMessage({action: "playlist-get", type:"tab"}, function(resp){
+    		console.log(resp.playlist);
     		optionsInterface.setClipboard(resp.playlist, "copied to clipboard. paste into text file.");
     	})
     })

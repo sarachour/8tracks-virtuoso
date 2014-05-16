@@ -57,11 +57,13 @@ function MusicPlayer(){
 		  else if(request.action == "playlist-clear"){
 		  	that.playlist.clear();
 		  }
-		  else if(request.action == "playlist-text"){
-		  	sendResponse({"playlist": that.playlist.getPlain()});
-		  }
-		  else if(request.action == "playlist-spotify"){
-		  	sendResponse({"playlist": that.playlist.getSpotify()});
+		  else if(request.action == "playlist-get"){
+		  	if(request.type == "spotify")
+		  		sendResponse({"playlist": that.playlist.getSpotify()});
+		  	else if(request.type == "tab")
+		  		sendResponse({"playlist": that.playlist.getPlain()});
+		  	else if(request.type == "obj")
+		  		sendResponse({"playlist": that.playlist.getObject()});
 		  }
 		});
 		this.player.bind("ended", function () {

@@ -8,11 +8,12 @@
 <script src="scripts/lib/jquery-ui-1.10.4.min.js"></script>
 <script src="scripts/8tracks.js"></script>
 <script src="scripts/options.js"></script>
-<textarea id="clipboard" style="display:none;" width="100%" height="50px">text here</textarea>
+<textarea id="clipboard" style="visibility:hidden;" width="0%" height="0px">text here</textarea>
 
 </head>
 <body bgcolor="#434343">
-<table style="border-radius: 10px;" align="center" bgcolor="#EEEEEE" left="10%" width="80%">
+<div left="10%" width="80%" style="border-radius: 10px; background-color:#EEEEEE" align="center" bgcolor="#EEEEEE">
+<table  >
 <tr>
 	<td class="cell-text" align="left">
 	<h1><font class="header-huge-text">Preferences</font></h1>
@@ -79,18 +80,25 @@
 		</div>
 		<font class="header-med-text">Plain Text</font>
 	</td>
-	<td class="cell-text">
-		<font id="export-status" class="header-med-text">status</font>
-	</td>
 </tr>
-<tr class = "vert-space"/>
-<tr class = "vert-space"/>
 <tr>
-	<td class="cell-text">
-		<button class="header-lg-text" id="save" style="border-radius: 10px;">Save Preferences</button>
-	</td>
-</tr>
 </table>
+<div class="cell-text" style="background-color:#D3D3D3; height:200px;overflow:auto;">
+<table width="100%" id="track-history">
+	<tr class="body-sm-text" style="background-color:#131313;color:#D3D3D3;">
+		<td>Track Name</td><td>Artist Name</td><td>Starred</td><td>Spotify Link</td>
+	</tr>
+	<tr/>
+</table>
+</div>
+<br>
+<br>
+<button class="header-lg-text" id="save" style="border-radius: 10px;">Save Preferences</button>
+<br>
+<br>
+<font id="export-status" class="header-med-text" style="opacity:0.3;">test</font>
+</div>
+
 
 
 </body>
