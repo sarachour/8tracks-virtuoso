@@ -19,10 +19,35 @@
     <link rel="stylesheet" href="light-theme/style.css" />
     <script src="scripts/lib/jquery-1.10.2.js"></script>
     <script src="scripts/lib/jquery-ui-1.10.4.min.js"></script>
+    <script src="scripts/8tracks.js"></script>
     <script src="scripts/ui.js"></script>
   </head>
   <body>
-  
+
+<table id="login" style="width:100; border-radius:5px; background-color:#131313;display:none;">
+<tr>
+  <td>
+    <div class="div-icon-med-inline">
+      <img class="image-icon" id="login-indicator" src="images/dot-err.png"/>
+    </div>
+  </td>
+  <td class="cell-text"><font class="header-sm-text">username</font></td>
+  <td class="cell-text">
+    <div >
+      <input style="border-radius: 5px;" placeholder="username" type="text" id="username" name="username" class="login-info"/>
+    </div>
+  </td>
+  <td class="cell-text"><font class="header-sm-text">password</font></td>
+  <td class="cell-text">
+    <div>
+      <input style="border-radius: 5px;" placeholder="password" type="password" id="password" name="password" class="login-info"/>
+    </div>
+  </td>
+  <td/>
+  <td><button id="login-ok">login</button></td>
+</tr>
+</table>
+
 <table style="width:100%;">
   <tr class="cell-rounded" >
     <td style="width:25px;">

@@ -216,7 +216,25 @@ chrome.extension.onMessage.addListener(
 
 document.addEventListener('DOMContentLoaded', function() {
 
-
+	if(!localStorage.hasOwnProperty("user_token")){
+		$("#login").css("display", "block");
+		$("#login-ok").click(function(){
+			var uname = document.getElementById('username').value;
+			var pass = document.getElementById('password').value;
+			var that = this;
+			if(uname == "" || pass == ""){
+				console.log("Login failed: username, pass values do not exist.");
+				return;
+			}
+			eightTracks.login(uname, pass, function(){
+				//reload persistant data
+				chrome.extension.sendMessage({action: "reload"})
+				$("#login-indicator").attr("src", "images/dot-ok.png");
+				$("#login").fadeOut(500);
+				userInterface.updateView();
+			});
+		});
+	}
     $("#playstream").click(userInterface.onPlay);
 
     $("#player_play").click(function(){
