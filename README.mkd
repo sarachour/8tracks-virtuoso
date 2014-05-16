@@ -1,5 +1,7 @@
 # Description
 
-Listen to 8Tracks in style with this unobtrusive and powerful player. With Virtuoso, users are free to like tracks and mixes, purchase songs and synchronize 8tracks account information with other music services.
+Listen to 8Tracks in style with this unobtrusive and powerful player. 
 
-In this early release, users may export listened-to and favorited tracks to Spotify playlists and tab delimited plain-text. 
+I have always been an avid fan of 8tracks and have used it as my primary music discovery service. However, I found it difficult to export the tracks I discovered to other services. With Virtuoso, users are free to like tracks and mixes, purchase songs and synchronize 8tracks account information with other music services.
+
+In this early release, users may export listened-to and favorited tracks to Spotify playlists and tab delimited plain-text.
