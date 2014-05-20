@@ -165,7 +165,9 @@ function EightTracks(){
 			function(data) {
 				
 			}
-		);	
+		).fail(function(){ 
+  			cbk(null);
+		});	
 	}
 	this.nextTrack = function(mid, cbk){
 		url = "http://8tracks.com/sets/"+this.play_token+"/next.json"
@@ -207,7 +209,9 @@ function EightTracks(){
 			function(data) {
 				cbk(data);
 			}
-		);	
+		).fail(function(){ 
+  			cbk(null);
+		});	
 
 	}
 	this._likeMix = function(islike, mixid, cbk){

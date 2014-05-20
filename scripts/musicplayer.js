@@ -112,6 +112,8 @@ function MusicPlayer(){
 		this.playlist.add(this.track_info.performer, this.track_info.name, this.track_info.faved_by_current_user);
 	}
 	this.SET_TRACK_INFO = function(data){
+		console.log("track");
+		console.log(data);
 		this.track_info = data.set.track;
 		this.other_info = {
 			isBeginning: data.set.at_beginning,
