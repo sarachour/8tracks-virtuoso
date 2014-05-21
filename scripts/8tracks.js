@@ -166,7 +166,7 @@ function EightTracks(){
 				
 			}
 		).fail(function(){ 
-  			cbk(null);
+  			
 		});	
 	}
 	this.nextTrack = function(mid, cbk){
