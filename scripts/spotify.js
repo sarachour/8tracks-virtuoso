@@ -14,20 +14,11 @@ function Spotify(){
 		var that = this;
 		console.log("open: "+url)
 		
-		chrome.webNavigation.onCompleted.addListener(function(details) {
-		    //if (details.frameId !== 0) return; // Only process top-frame requests
-		    var tabId = details.tabId;
-		    console.log("loaded: "+details.tabId);
-		    if (tabId == that.opentab) {
-		    	console.log("done loading, remove")
-		        chrome.tabs.remove(tabId);
-		    }
-		});
-		
 		chrome.tabs.create({url: url, selected: false}, function(tab){
-			that.opentab = tab.id;
-			console.log("created");
-			
+			var opentab = tab.id;
+			setTimeout(function(){
+				chrome.tabs.remove(opentab, function(){})
+			}, 1000)
 		}); 
 
 
