@@ -109,7 +109,7 @@ function MusicPlayer(){
 		//this.player.play();
 	}
 	this.ADD_TRACK_TO_PLAYLIST = function(){
-		this.playlist.add(this.track_info.performer, this.track_info.name, this.track_info.faved_by_current_user);
+		this.playlist.add(this.track_info.performer, this.track_info.name, this.mix_info.name, this.track_info.faved_by_current_user);
 	}
 	this.SET_TRACK_INFO = function(data){
 		console.log("track");

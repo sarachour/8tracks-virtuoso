@@ -58,7 +58,7 @@ function OptionsInterface(){
 			obj = resp.playlist;
     		console.log(obj);
     		$('#track-history').html('<tr class="body-sm-text" style="background-color:#131313;color:#D3D3D3;">'+
-						'<td>Track Name</td><td>Artist Name</td><td>Starred</td><td>Spotify Link</td>'+
+						'<td>Track Name</td><td>Artist Name</td><td>Mixes</td><td>Starred</td><td>Spotify Link</td>'+
 					'</tr>')
 
     		for(var i=0; i < obj.length; i++){
@@ -72,10 +72,12 @@ function OptionsInterface(){
     					'<div class="div-icon-inline"><img class="image-icon" src="images/dot-ok.png"/></div>'+
     					'</a>';
     			}
+    			mixes = 
     			$('#track-history')
     			.append('<tr class="body-sm-text">' +
     				'<td>'+ ob.name +'</td>'+
     				'<td>'+ ob.artist +'</td>'+
+    				'<td>' + ob.mix.toString() + '</td>'+
     				'<td>' + star_link + '</td>'+
     				'<td>' + spot_link + '</td>'+
     				'</tr>');

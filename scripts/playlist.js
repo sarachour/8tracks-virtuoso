@@ -1,5 +1,12 @@
 function Playlist(){
-	this.spotify = new Spotify();
+	
+	this.init = function(){
+		this.spotify = new Spotify();
+		this.songs = {};
+		this.local = {};
+		this.load();
+	}
+
 	this.save = function(){
 		localStorage.setItem("playlist_cache", JSON.stringify(this.songs));
 	}
@@ -15,45 +22,51 @@ function Playlist(){
 	this.load = function(){
 		if(localStorage.hasOwnProperty("playlist_cache")){
 			this.songs = JSON.parse(localStorage.getItem("playlist_cache"));
-			console.log(this.songs);
 			//this.songs = {};
-		}
-		else{
-			this.songs = {};
 		}
 	}
 	this.clear = function(){
 		this.songs = {};
+		this.local = {};
 		this.save();
 	}
-	this.add = function(artist, name, starred){
+	this._insert = function(dict, artist, name, mix, starred, spotify_link){
+		if(!dict.hasOwnProperty(artist)){
+			dict[artist] = {};
+		}
+		if(!dict[artist].hasOwnProperty(name)){
+			dict[artist][name] = {};
+		}
+		dict[artist][name].star = starred;
+		if(spotify_link != null){
+			dict[artist][name].spotify = {track_id: spotify_link};
+		}
+		if(!dict[artist][name].hasOwnProperty('mix')){
+			dict[artist][name].mix = [];
+		}
+		//add mix if doesn't exist
+		if(dict[artist][name].mix.indexOf(mix) < 0){
+			dict[artist][name].mix.push(mix);
+		}
+	}
+	this.add = function(artist, name, mix, starred){
 		plist = this;
 		if(this.track_type == "none"){
 			return;
 		}
-		console.log(artist+":"+name);
-
-		//created a new track in cache if doesn't exist
-		if(!plist.songs.hasOwnProperty(artist)){
-			plist.songs[artist] = {};
-		}
-		if(!plist.songs[artist].hasOwnProperty(name)){
-			plist.songs[artist][name] = {};
-		}
-		plist.songs[artist][name].star = starred;
-		//if the cache entry was a starred song, but now we're recording all songs
-		//upgrade the cache entry status
-		//get rid of ellipses
-		//var sanitized_name = name.replace(/ *\([^)]*\) */g, "");
-		//var sanitized_artist = artist.replace(/ *\([^)]*\) */g, "");
+		plist._insert(plist.songs, artist, name, mix, starred, null); //global copy
+		plist._insert(plist.local, artist, name, mix, starred, null); //local copy
+		//plist.spotify.createTrackset("8tracks", plist.getSpotify().split("\n"), function(){});
+		plist.save();
 
 		this.spotify.search(artist, name, function(data){
 			if(data.tracks.length > 0){
-				plist.songs[artist][name].spotify = {track_id: data.tracks[0].href};
+				var link = data.tracks[0].href;
+				plist._insert(plist.songs, artist, name, mix, starred, link); //global copy
+				plist._insert(plist.local, artist, name, mix, starred, link); //local copy
 				plist.save();
 			}
 		})
-		plist.save();	
 
 	}
 	this.getSpotify = function(){
@@ -81,6 +94,10 @@ function Playlist(){
 						ob.name = track;
 						ob.artist = artist;
 						ob.star = tmp.star;
+						if(tmp.hasOwnProperty("mix"))
+							ob.mix = tmp.mix;
+						else
+							ob.mix = [];
 						obj.push(ob);
 					}
 			}
@@ -89,22 +106,23 @@ function Playlist(){
 	}
 	this.getPlain = function(){
 		playlist = "";
-		playlist = "artist\ttrack\tstarred\thas-spotify\n";
+		playlist = "artist\ttrack\tmixes\tstarred\nspotify\n";
 		for(var artist in this.songs){
 			for(var track in this.songs[artist]){
 					if(!(this.track_type == "fav") || this.songs[artist][track].star){
 						var liked = this.songs[artist][track].star ? "star" : "none";
-						var hasSpotify = "no";
+						var mixes = this.songs[artist][track].mix; 
+						var hasSpotify = "<no spotify>";
 						if(this.songs[artist][track].hasOwnProperty("spotify")){
-							hasSpotify = "spotify";
+							hasSpotify = this.songs[artist][track].spotify.track_id;
 						}
-						playlist += artist + "\t"+track + "\t" + liked + "\t"+hasSpotify+ "\n";
+						playlist += artist + "\t"+track +"\t"+mixes.toString() +"\t" + liked + "\t"+hasSpotify+ "\n";
 					}
 			}
 		}
 		return playlist;
 	}
-	this.load();
+	this.init();
 
 
 }
