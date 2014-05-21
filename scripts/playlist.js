@@ -56,7 +56,6 @@ function Playlist(){
 		}
 		plist._insert(plist.songs, artist, name, mix, starred, null); //global copy
 		plist._insert(plist.local, artist, name, mix, starred, null); //local copy
-		//plist.spotify.createTrackset("8tracks", plist.getSpotify().split("\n"), function(){});
 		plist.save();
 
 		this.spotify.search(artist, name, function(data){
@@ -64,19 +63,21 @@ function Playlist(){
 				var link = data.tracks[0].href;
 				plist._insert(plist.songs, artist, name, mix, starred, link); //global copy
 				plist._insert(plist.local, artist, name, mix, starred, link); //local copy
+				console.log("added:", plist.local);
+				plist.spotify.createTrackset("8tracks", plist._getSpotify(plist.local), function(){});
 				plist.save();
 			}
 		})
 
 	}
-	this.getSpotify = function(){
-		playlist = "";
-		for(var artist in this.songs){
-			for(var track in this.songs[artist]){
-				if(this.songs[artist][track].hasOwnProperty("spotify")){
+	this._getSpotify = function(data){
+		playlist = [];
+		for(var artist in data){
+			for(var track in data[artist]){
+				if(data[artist][track].hasOwnProperty("spotify")){
 					//if we're only tracking favorited songs, only display favorited songs.
-					if(!(this.track_type == "fav") || this.songs[artist][track].star){
-						playlist += this.songs[artist][track].spotify.track_id+"\n";
+					if(!(this.track_type == "fav") || data[artist][track].star){
+						playlist.push(data[artist][track].spotify.track_id);
 					}
 				}
 			}
