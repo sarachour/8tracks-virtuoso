@@ -148,3 +148,12 @@ tr.vert-space > td
     display:none;
 
 }
+
+.ui-slider .ui-slider-handle {
+
+    cursor: default;
+    height: 1.2em;
+    position: absolute;
+    width: 0.6em;
+    z-index: 2;
+}

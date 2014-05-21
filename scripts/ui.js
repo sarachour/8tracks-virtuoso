@@ -121,7 +121,13 @@ function UserInterface(){
 		
 	}
 
-
+	function pad(a,b){return(1e15+a+"").slice(-b)}
+	this.updateTime = function(data){
+		var tdiff = data.track_duration - data.track_time;
+		$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
+		time_string = Math.floor(tdiff/60) + ":" + pad(Math.floor(tdiff%60),2) 
+		$("#player_prog_duration").html(time_string);
+	}
 	this.updateView = function(){
 		var that = this;
 		chrome.extension.sendMessage({action: "get-track-info"}, function(data){
@@ -137,7 +143,11 @@ function UserInterface(){
 
 			$( "#albumart" ).attr( "src", data.mix_cover );
 			$("#player_volume_slider").slider('value', data.track_time/data.player_volume*100.0);
-			$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
+			
+			if(data.hasOwnProperty("track_time")){
+				that.updateTime(data);
+			}
+			
 			if(data.skip_ok){
 				$("#player_skip").attr("src", "images/ffwd.png");
 				$("#player_skip").click(function(){
@@ -193,10 +203,10 @@ function UserInterface(){
 			}
 	    });
 	    if(this.timer == null){
-	    	that = this;
+	    	var that = this;
 			this.timer = window.setInterval(function(){
 				chrome.extension.sendMessage({action: "get-track-info"}, function(data){
-					$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
+					that.updateTime(data);
 			    });
 			}, 1000);
 		}
