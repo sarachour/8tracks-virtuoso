@@ -17,21 +17,46 @@
 </head>
 <body>
 
-<div data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
-  <div class="north">
+<div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
+  <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north mpb">
     TITLE
   </div>
-  <div class="center">
-    COVER
+  <div id='player-cover' class="center">
+    <img class="img-cover" id="albumart"></img>
+    <div class="img-cover-text">
+      <div>
+        <div class="icon-sm"><img id="mix_rank" src="images/no-rank.png"/></div>
+        <strong class="text-sm"  id="mix-likes">likes</strong>
+        <div class="icon-sm"><img src="images/heart-on.png"/></div>
+        <strong class="text-sm"  id="mix-plays">plays</strong>
+        <div class="icon-sm"><img src="images/play.png"/></div>
+        <strong class="text-sm"  id="mix-tracks">tracks</strong>
+        <div class="icon-sm"><img src="images/music.png"/></div>
+      </div>
+      <div class="text-sm-faint" id="mix-tags">tag 1, tag 2, tag 3</div>
+      <strong class="text-sm" id="mix-description">description here</strong>
+    </div>
   </div>
   <div class="east">
-    RESULTS-1
+    R1
   </div>
   <div class="west">
-    RESULTS-2
+    R1
   </div>
-  <div class="south">
-    PLAYER;
+  <div id='player-controls' class="south">
+
+    <div data-layout='{"type": "grid", "hgap": 3, "vgap": 3}' class="column">
+      <div class="c">
+        PLY
+      </div>
+      <div class="c">
+        VOL
+      </div>
+      <div class="c">
+        SKIP
+      </div>
+    </div>
+
   </div>
 </div>
 
