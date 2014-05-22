@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // resized.
         $('.layout-inner').layout();
         $('.horizontal').layout();
-
+        $('#player-title').layout();
         var outerContainer = $('.layout-outer');
 
         function layout() {
