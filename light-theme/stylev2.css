@@ -22,14 +22,14 @@ img {
 }
 
 .icon-med {
-    width:25px; 
+    width:20px; 
     display: inline-block;
-	height:25px;
+	height:20px;
 }
 .icon-lg {
-    width:40px; 
+    width:30px; 
     display: inline-block;
-	height:40px;
+	height:30px;
 }
 
 .img-cover {

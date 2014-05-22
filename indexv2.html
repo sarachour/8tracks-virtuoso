@@ -19,22 +19,34 @@
 
 <div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
   <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north">
-    <div class="north">
+    <div class="north" style="height:30%;">
       <font id="mix-title" class="text-lg">{ No Mix }</font>
     </div>
     <div class="west">
-       <div class="icon-med"><img id="player_star_track" src="images/star.png"/></div>
-       <div class="icon-med"><img id="player_sync" src="images/sync.png"/></div>
+       <div class="icon-med" style="position:absolute; top:5px; left:5px;">
+          <img id="player_like_mix" src="images/heart.png"/>
+       </div>
+       <div class="icon-med" style="position:absolute; bottom:5px; left:5px;">
+          <img id="player_star_track" src="images/star.png"/>
+       </div>
     </div>
     <div class="center">
       <div style="margin:auto;" id="track-title" class="text-med">No Mix Found</div>
-      <div style="margin:auto;" id="track-title" class="text-sm">Open 8Tracks Mix in Browser</div>
+      <div style="margin:auto;" id="track-title" class="text-sm">
+        Open 8Tracks Mix in Browser
+      </div>
     </div>
     <div class="east icon-med">
-      <div class="icon-med"><img id="player_goto" src="images/goto.png"/></div>
-      <div class="icon-med"><img id="player_purchase" src="images/buy.png"/></div>
+      <div class="icon-med" style="position:absolute; top:5px; right:5px;">
+        <img id="player_goto" src="images/goto.png"/>
+      </div>
+      <div class="icon-med" style="position:absolute; bottom:5px; right:5px;">
+        <img id="player_purchase" src="images/buy.png"/>
+      </div>
     </div>
-    <div class="south">A2</div>
+    <div class="south" style="height:20%;">
+      <div class="icon-med"><img id="player_sync" src="images/sync.png"/></div>
+    </div>
   </div>
   <div id='player-cover' class="center">
     <img class="img-cover" id="albumart"></img>

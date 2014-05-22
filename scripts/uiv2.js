@@ -4,10 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // must happen before the outer layout is initialized. It
         // will be automatically resized when the outer layout is
         // resized.
-        $('.layout-inner').layout();
-        $('.horizontal').layout();
+        $('#player-controls').layout();
         $('#player-title').layout();
-        var outerContainer = $('.layout-outer');
+        var outerContainer = $('#player');
 
         function layout() {
           outerContainer.layout({resize: false});
