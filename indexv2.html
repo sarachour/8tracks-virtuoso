@@ -26,14 +26,15 @@
     <div class="img-cover-text">
       <div>
         <div class="icon-sm"><img id="mix_rank" src="images/no-rank.png"/></div>
-        <strong class="text-sm"  id="mix-likes">likes</strong>
+        <font class="text-sm"  id="mix-likes">likes</font>
         <div class="icon-sm"><img src="images/heart-on.png"/></div>
-        <strong class="text-sm"  id="mix-plays">plays</strong>
+        <font class="text-sm"  id="mix-plays">plays</font>
         <div class="icon-sm"><img src="images/play.png"/></div>
-        <strong class="text-sm"  id="mix-tracks">tracks</strong>
+        <font class="text-sm"  id="mix-tracks">tracks</font>
         <div class="icon-sm"><img src="images/music.png"/></div>
       </div>
       <div class="text-sm-faint" id="mix-tags">tag 1, tag 2, tag 3</div>
+      <br>
       <strong class="text-sm" id="mix-description">description here</strong>
     </div>
   </div>
@@ -43,22 +44,27 @@
   <div class="west">
     R1
   </div>
-  <div id='player-controls' class="south">
-
-    <div data-layout='{"type": "grid", "hgap": 3, "vgap": 3}' class="column">
-      <div class="c">
-        PLY
+  <div id='player-controls' class="south horizontal" data-layout='{"type": "flexGrid", "rows": 1, "hgap": 1, "vgap": 1}'>
+      <div class="icon-lg">
+        <img id="player_play" src="images/pause.png"/>
       </div>
-      <div class="c">
-        VOL
+      <div style="display: inline-block;height:25px;" id="player_prog">
+        <input id="test" style="width:100%;" type="range"/>
       </div>
-      <div class="c">
-        SKIP
+      <div class="icon-med">
+        <img id="player_volume" class="image-icon" src="images/highvolume.png"/>
       </div>
+      <div class="icon-med">
+        <img id="player_skip" class="image-icon" src="images/ffwd.png"/>
+      </div>
+      <!--
+      <font class="text-sm-faint" style="position:relative; z-index:999; padding:5px;" id="player_prog_duration">
+        0:00/0:00
+      </font>
+      -->
     </div>
-
+    
   </div>
-</div>
 
 </body>
 </html>

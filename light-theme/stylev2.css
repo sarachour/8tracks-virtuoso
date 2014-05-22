@@ -26,6 +26,11 @@ img {
     display: inline-block;
 	height:25px;
 }
+.icon-lg {
+    width:40px; 
+    display: inline-block;
+	height:40px;
+}
 
 .img-cover {
     background-color: #000000;
@@ -111,12 +116,5 @@ img {
 }
 
 
-.c {
-	background-color: rgb(220,220,220);
-	border: 1px solid rgb(200,200,200);
-	text-align: center;
-	width: 50px;
-	height: 50px;
-	display: inline-block;
-}
+
 
