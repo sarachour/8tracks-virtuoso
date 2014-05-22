@@ -1,0 +1,69 @@
+html, body {	
+	width: 100%;
+	height: 100%;
+	min-width: 400px;
+	min-height: 400px;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+.layout-outer {
+	height: 100%;
+}
+
+.center, .east, .west, .north, .south {
+	background-color: rgb(220,220,220);
+	border: 1px solid rgb(200,200,200);
+	text-align: center;
+    display: inline-block;
+}
+
+.west, .east {
+	width: 15%;
+}
+
+.north, .south {
+	height: 20%;
+}
+.header-lg-text {
+	font-family:"Lucida Grande";
+	font-variant:small-caps;
+	color:#414141;
+	font-size:30px;
+}
+.header-med-text {
+	font-family:"Lucida Grande";
+	font-variant:small-caps;
+	color:#414141;
+	font-size:18px;
+}
+.header-sm-text {
+	margin: auto; 
+	font-family:"Lucida Grande";
+	color:#8D8D8D;
+	font-variant:small-caps;
+	font-size:12px;
+}
+
+/**
+ * To get correct percentages widths and heights in the inner layout
+ * you have to set the container to take up all space that's left after
+ * the outer columns east, west, north and south components. In this case:
+ *  width = 100% - 8% - 8% = 84%
+ *  height = 100% - 10% - 10% = 80%
+ */
+.layout-inner {
+	width: 84%;
+	height: 80%;
+	background-color: white;
+	border: 0px;
+}
+
+.layout-inner .west, .layout-inner .east {
+	width: 25%;
+}
+
+.layout-inner .south, .layout-inner .north {
+	height: 20%;
+}
