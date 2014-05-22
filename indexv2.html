@@ -12,15 +12,25 @@
   <script src="scripts/lib/jlayout/jquery.sizes.js"></script>
    <script src="scripts/lib/jlayout/jlayout.border.js"></script>
   <script src="scripts/lib/jlayout/jquery.jlayout.js"></script>
-  
+  <script src="scripts/userInterface.js"></script>
   <script src="scripts/uiv2.js"></script>
 </head>
 <body>
 
 <div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
   <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north">
-    <div class="north" style="height:30%;">
-      <font id="mix-title" class="text-lg">{ No Mix }</font>
+    <div class="north" style="height:20%;">
+      
+      <div class="icon-sm" style="position:absolute; top:5px; left:5px;">
+        <img src="images/search.png"/>
+      </div>
+      <div class="icon-sm" style="position:absolute; top:5px; right:25px;">
+        <img src="images/sync.png"/>
+      </div>
+      <div class="icon-sm" style="position:absolute; top:5px; right:5px;">
+        <img src="images/cog.png"/>
+      </div>
+      
     </div>
     <div class="west">
        <div class="icon-med" style="position:absolute; top:5px; left:5px;">
@@ -31,6 +41,7 @@
        </div>
     </div>
     <div class="center">
+      <b id="mix-title" class="text-lg">{ No Mix }</b>
       <div style="margin:auto;" id="track-title" class="text-med">No Mix Found</div>
       <div style="margin:auto;" id="track-title" class="text-sm">
         Open 8Tracks Mix in Browser
@@ -43,9 +54,6 @@
       <div class="icon-med" style="position:absolute; bottom:5px; right:5px;">
         <img id="player_purchase" src="images/buy.png"/>
       </div>
-    </div>
-    <div class="south" style="height:20%;">
-      <div class="icon-med"><img id="player_sync" src="images/sync.png"/></div>
     </div>
   </div>
   <div id='player-cover' class="center">
@@ -62,14 +70,14 @@
       </div>
       <div class="text-sm-faint" id="mix-tags">tag 1, tag 2, tag 3</div>
       <br>
-      <strong class="text-sm" id="mix-description">description here</strong>
+      <font class="text-sm" id="mix-description">description here</font>
     </div>
   </div>
   <div class="east">
     R1
   </div>
   <div class="west">
-    R1
+    R2
   </div>
   <div id='player-controls' class="south horizontal" data-layout='{"type": "flexGrid", "rows": 1, "hgap": 1, "vgap": 1}'>
       <div class="icon-lg">
@@ -78,6 +86,9 @@
       <div style="display: inline-block;height:25px;" id="player_prog">
         <input id="test" style="width:100%;" type="range"/>
       </div>
+      <font class="text-sm-faint" style="z-index:999;" id="player_prog_duration">
+        0:00
+      </font>
       <div class="icon-med">
         <img id="player_volume" class="image-icon" src="images/highvolume.png"/>
       </div>
@@ -85,9 +96,7 @@
         <img id="player_skip" class="image-icon" src="images/ffwd.png"/>
       </div>
       <!--
-      <font class="text-sm-faint" style="position:relative; z-index:999; padding:5px;" id="player_prog_duration">
-        0:00/0:00
-      </font>
+      
       -->
     </div>
     
