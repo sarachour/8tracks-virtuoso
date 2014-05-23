@@ -73,6 +73,23 @@ function EightTracks(){
 				}
 			)
 	}
+	this.getMixByName = function(artist, name, cbk){
+		var that = this;
+		url = "http://8tracks.com/"+artist+"/"+name+".json"
+		$.get(
+			url,
+			{
+			api_key : that.API_KEY,
+			user_token : that.user_token,
+			api_version: 3},
+			function(data) {
+			   cbk(data);
+			}
+		).fail(function(){ 
+  			cbk({});
+		});;	
+		
+	}
 	this.getMix = function(id, cbk){
 		var that = this;
 		url = "http://8tracks.com/mixes/"+id+".json"

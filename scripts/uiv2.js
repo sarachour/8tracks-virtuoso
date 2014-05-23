@@ -12,6 +12,7 @@ function SetupLayout(){
   $('#player-controls').layout();
   $('#player-title').layout();
   $('#search-overlay-results').layout();
+  $('#search-overlay').hide();
   var outerContainer = $('#player').layout({resize: false});
 
 
@@ -107,9 +108,44 @@ function SetupPlayer(){
     })
 
     $( "#player_prog" ).on('change', function() { 
-        pct = $("#player_prog").val()/100.0; 
-        chrome.extension.sendMessage({action: "set-time", percent:pct})
-      });
+      pct = $("#player_prog").val()/100.0; 
+      chrome.extension.sendMessage({action: "set-time", percent:pct})
+    });
+
+    $( "#player_search" ).click(function() { 
+      $("#search-overlay").show();
+    });
+    $("#player_sync").click(function(){
+      userInterface.sync();
+    })
+    /*
+    $("#player_volume").click(function () {
+        var pos = $("#player_volume").position();
+        var w= $("#player_volume_controls").width();
+        var h= $("#player_volume_controls").height();
+        console.log(pos);
+        $("#player_volume_controls").css('top',pos.top-h);
+        $("#player_volume_controls").css('left',pos.left+w);
+      $("#player_volume_controls").fadeToggle("slow");
+    });
+    $( "#player_volume_slider" ).slider({
+      range: "min",
+      orientation: "vertical",
+      slide: function(event, ui) { 
+        pct = ui.value/100.0; 
+        if(ui.value > 50){
+          $("#player_volume").attr("src", "images/highvolume.png");
+        }
+        else if(ui.value > 0){
+          $("#player_volume").attr("src", "images/lowvolume.png");
+        }
+        else{
+          $("#player_volume").attr("src", "images/mute.png");
+        }
+        chrome.extension.sendMessage({action: "set-volume", percent:pct})
+      }
+    });
+    */
 }
 document.addEventListener('DOMContentLoaded', function() {
   SetupLayout();

@@ -45,14 +45,14 @@
   <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north">
     <div class="north" style="height:20%;">
       
-      <div class="icon-sm" style="position:absolute; top:5px; left:5px;">
+      <div id="player_search" class="icon-sm" style="position:absolute; top:5px; left:5px;">
         <img src="images/search.png"/>
       </div>
-      <div class="icon-sm" style="position:absolute; top:5px; right:25px;">
+      <div id="player_sync" class="icon-sm" style="position:absolute; top:5px; right:25px;">
         <img src="images/sync.png"/>
       </div>
-      <div class="icon-sm" style="position:absolute; top:5px; right:5px;">
-        <img src="images/cog.png"/>
+      <div id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:5px;">
+        <a href="options.html"><img src="images/cog.png"/></a>
       </div>
       
     </div>
@@ -67,7 +67,7 @@
     <div class="center">
       <b id="mix-title" class="text-lg">{ No Mix }</b>
       <div style="margin:auto;" id="track-title" class="text-med">No Mix Found</div>
-      <div style="margin:auto;" id="track-artist" class="text-sm">
+      <div style="margin:auto;font-style:italic;" id="track-artist" class="text-med">
         Open 8Tracks Mix in Browser
       </div>
     </div>
@@ -84,12 +84,12 @@
     <img class="img-cover" id="albumart"></img>
     <div class="img-cover-text">
       <div>
-        <div class="icon-sm"><img id="mix_rank" src="images/no-rank.png"/></div>
-        <font class="text-sm"  id="mix-likes">likes</font>
+        <div class="icon-sm" style="position:absolute; top:5px; left:5px;"><img id="mix_rank" src="images/no-rank.png"/></div>
+        <font class="text-sm" id="mix-likes" style="padding-left:10px;">likes</font>
         <div class="icon-sm"><img src="images/heart-on.png"/></div>
-        <font class="text-sm"  id="mix-plays">plays</font>
+        <font class="text-sm"  id="mix-plays" style="padding-left:10px;">plays</font>
         <div class="icon-sm"><img src="images/play.png"/></div>
-        <font class="text-sm"  id="mix-tracks">tracks</font>
+        <font class="text-sm"  id="mix-tracks" style="padding-left:10px;">tracks</font>
         <div class="icon-sm"><img src="images/music.png"/></div>
       </div>
       <div class="text-sm-faint" id="mix-tags">tag 1, tag 2, tag 3</div>
@@ -125,6 +125,6 @@
     </div>
     
   </div>
-
+  
 </body>
 </html>
