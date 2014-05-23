@@ -10,11 +10,59 @@ chrome.extension.onMessage.addListener(
 function SetupLayout(){
   $('#player-controls').layout();
   $('#player-title').layout();
+  $('#search-overlay-results').layout();
   var outerContainer = $('#player').layout({resize: false});
 
 
 }
-function SetupJQuery(){
+function SetupSearch(){
+  function doSearch(){
+    var grid = $("#search-overlay-results");
+    var desc = $("#search-overlay-description");
+    var type = $('#search-type').val();
+    var term = $('#search-text').val();
+    var sort = $('#search-sort').val();
+    grid.empty();
+    eightTracks.search(type, term, sort, function(data){
+      console.log(data);
+      var description = data.mix_set.name;
+      var smartid = data.mix_set.smart_id;
+      desc.html(description);
+      if(data.hasOwnProperty('mix_set')){
+        var mixes = data.mix_set.mixes;
+        for(var i=0; i < mixes.length; i++){
+          var id = mixes[i].id;
+          var cover = mixes[i].cover_urls.sq56;
+          var name = mixes[i].name;
+          var cert = mixes[i].certification;
+          var html_img = $('<img/>').attr("src", cover);
+          var html_div = $('<div/>').html(html_img).addClass("search-result").addClass("c");
+          console.log(html_div);
+          grid.append(html_div)
+        }
+      }
+    });
+  }
+  $("#search-type").on('change', function(){
+    var name = $('#search-type').val();
+    console.log("type:"+name);
+    if(name == 'tag' && name == 'artist' && name == 'mix'){
+      //make textbox visible
+    }
+    doSearch();
+  });
+  $("#search-text").on('change', function(){
+    var term = $('#search-text').val();
+    console.log("search:"+term);
+    doSearch();
+  })
+  $("#search-sort").on('change', function(){
+    var type = $('#search-sort').val();
+    console.log("sort:"+type);
+    doSearch();
+  })
+}
+function SetupPlayer(){
    //play bind
    $("#player_play").click(function(){
       if($("#player_play").hasClass("playing")){
@@ -54,7 +102,7 @@ function SetupJQuery(){
 }
 document.addEventListener('DOMContentLoaded', function() {
   SetupLayout();
-  SetupJQuery();  
-
+  SetupPlayer();  
+  SetupSearch();
 
 })

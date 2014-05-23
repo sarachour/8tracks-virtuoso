@@ -62,9 +62,24 @@ img {
     transition: all 0.5s ease;
 }
 .img-cover-text:hover {
-	background-color:rgba(255,255,255,0.6);
+	background-color:rgba(255,255,255,0.8);
     opacity:1;
 }
+
+.layout-overlay {
+	height: 100%;
+	background-color:rgba(0,0,0,1.0);
+	color:#fff;
+    opacity:0.8;
+    width: 100%;
+	top:0;
+    left:0;
+    text-align: center;
+    position: absolute;
+    padding: 10px;
+    z-index: 1000;
+}
+
 
 .layout-outer {
 	height: 100%;
@@ -113,6 +128,12 @@ img {
 	color:#4D4D4D;
 	font-variant:small-caps;
 	font-size:12px;
+}
+
+.search-result {
+    width:56px; 
+    display: inline-block;
+	height:56px;
 }
 
 

@@ -12,10 +12,33 @@
   <script src="scripts/lib/jlayout/jquery.sizes.js"></script>
    <script src="scripts/lib/jlayout/jlayout.border.js"></script>
   <script src="scripts/lib/jlayout/jquery.jlayout.js"></script>
+  <script src="scripts/8tracks.js"></script>
   <script src="scripts/userInterface.js"></script>
   <script src="scripts/uiv2.js"></script>
 </head>
 <body>
+<div id='search-overlay' class="layout-overlay">
+  <div style="height:10%; opacity:0.7;">
+    <select id="search-type" name="select">
+      <option value="tags">tag</option> 
+      <option value="artist" selected>artist</option>
+      <option value="liked">liked</option>
+      <option value="mix">similar to mix</option>
+      <option value="listened">listened</option>
+      <option value="dj">user</option>
+      <option value="all">all</option> 
+    </select>
+     <input type="text" style="width:40%;" id="search-text" hint="search term here"></input>  
+     <select id="search-sort" name="select">
+      <option value="hot">hot</option> 
+      <option value="recent" selected>recent</option>
+      <option value="popular">popular</option>
+    </select> 
+  </div>
+  <div id='search-overlay-description' class="text-med">TEST</div>
+  <div id='search-overlay-results' style="height:70%; width:90%;" data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
+  </div>
+</div>
 
 <div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
   <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north">

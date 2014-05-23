@@ -29,6 +29,26 @@ function EightTracks(){
 			}
 		);
 	}
+	this.search = function(type, slug, sort, cbk){
+		url="http://8tracks.com/mix_sets/"+type+":"
+		if(slug != null){
+			url+=slug+":"
+		}
+		url+=sort+".json?include=mixes";
+		console.log(url);
+		var that = this;
+		$.get(
+			url,
+			{
+				api_key : that.API_KEY,
+				user_token : that.user_token,
+				api_version: 3
+			},
+				function(data){
+					cbk(data);
+				}
+			)
+	}
 	this.createPlaybackStream = function(cbk, forceCreate){
 		url = "http://8tracks.com/sets/new.json"
 		var that = this;
@@ -41,10 +61,10 @@ function EightTracks(){
 		$.get(
 			url,
 			{
-			api_key : that.API_KEY,
-			user_token : that.user_token,
-			api_version: 3
-		},
+				api_key : that.API_KEY,
+				user_token : that.user_token,
+				api_version: 3
+			},
 				function(data){
 					that.play_token = data.play_token;
 					//localStorage.play_token = data.play_token;
