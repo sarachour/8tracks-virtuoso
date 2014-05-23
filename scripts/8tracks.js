@@ -123,6 +123,7 @@ function EightTracks(){
 			api_version: 3,
 			smart_id: smartid},
 			function(data) {
+			   console.log("nextmix:",data);
 			   cbk(data);
 			}
 		);	
@@ -146,7 +147,7 @@ function EightTracks(){
 				return;
 			}
 			
-			this.getNextMix(mid, function(mixdata){
+			this.getNextMix(mid, smartid, function(mixdata){
 				url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
 				console.log(mixdata)
 				$.get(

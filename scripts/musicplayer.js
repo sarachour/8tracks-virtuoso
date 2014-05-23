@@ -132,7 +132,7 @@ function MusicPlayer(){
 	this.nextMix = function(){
 		mplayer = this;
 
-		eightTracks.playNextMix(this.mix_info.id, function(mixdata, data){
+		eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data){
 			mplayer.mix_info = mixdata.next_mix;
 			mplayer.SET_TRACK_INFO(data);
 		});

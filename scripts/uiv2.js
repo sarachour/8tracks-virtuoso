@@ -118,6 +118,9 @@ function SetupPlayer(){
     $("#player_sync").click(function(){
       userInterface.sync();
     })
+    $("#player_next_mix").click(function(){
+      chrome.extension.sendMessage({action: "next-mix"})
+    })
     /*
     $("#player_volume").click(function () {
         var pos = $("#player_volume").position();
