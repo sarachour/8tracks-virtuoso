@@ -15,8 +15,8 @@ function MusicPlayer(){
 		});
 		chrome.extension.onMessage.addListener(
 		function(request, sender, sendResponse) {
-		  if(request.action == "mix"){
-		  		that.mix(request.name, request.artist);
+		  if(request.action == "play"){
+		  		that.mix(request.id, request.smart_id);
 		  }
 		  else if(request.action == "resume"){
 		  		that.resume();
@@ -111,6 +111,10 @@ function MusicPlayer(){
 	this.ADD_TRACK_TO_PLAYLIST = function(){
 		this.playlist.add(this.track_info.performer, this.track_info.name, this.mix_info.name, this.track_info.faved_by_current_user);
 	}
+	this.SET_MIX_INFO = function(data){
+		this.mix_info = data.mix;
+		chrome.extension.sendMessage({action: "update"})
+	}
 	this.SET_TRACK_INFO = function(data){
 		console.log("track");
 		console.log(data);
@@ -133,10 +137,13 @@ function MusicPlayer(){
 			mplayer.SET_TRACK_INFO(data);
 		});
 	}
-	this.mix = function(mixname, mixartist){
+	this.mix = function(mixid, smartmixid){
 		mplayer = this;
-		eightTracks.playMix(mixname, mixartist, function(mixdata, data){
-			mplayer.mix_info = mixdata.mix;
+		this.smart_mix_id = smartmixid;
+		eightTracks.getMix(mixid, function(data){
+			mplayer.SET_MIX_INFO(data);
+		})
+		eightTracks.playMix(mixid, function(data){
 			mplayer.SET_TRACK_INFO(data);
 		});
 	}
@@ -192,7 +199,7 @@ function MusicPlayer(){
 			eightTracks.report(this.mix_info.id, this.track_info.id);
 		}
 		if(this.other_info.isEnd == true || this.other_info.isLastTrack == true){
-			eightTracks.playNextMix(this.mix_info.id, function(mixdata, data){
+			eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data){
 				mplayer.mix_info = mixdata.next_mix;
 				if(data != null){
 					mplayer.SET_TRACK_INFO(data);
@@ -203,7 +210,7 @@ function MusicPlayer(){
 			});
 		}
 		else{
-			eightTracks.nextTrack(this.mix_info.id, function(data){
+			eightTracks.nextTrack(this.mix_info.id, this.smart_mix_id, function(data){
 				if(data != null){
 					mplayer.SET_TRACK_INFO(data);
 				}

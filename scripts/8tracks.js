@@ -73,9 +73,9 @@ function EightTracks(){
 				}
 			)
 	}
-	this.getMix = function(id, artist, cbk){
+	this.getMix = function(id, cbk){
 		var that = this;
-		url = "http://8tracks.com/"+artist+"/"+id+".json"
+		url = "http://8tracks.com/mixes/"+id+".json"
 		$.get(
 			url,
 			{
@@ -90,7 +90,7 @@ function EightTracks(){
 		});;	
 		
 	}
-	this.getNextMix = function(id, cbk){
+	this.getNextMix = function(id, smartid, cbk){
 		var that= this;
 		//http://8tracks.com/sets/111696185/next_mix.xml?mix_id=14
 		if(!this.check()){
@@ -103,7 +103,8 @@ function EightTracks(){
 			api_key : that.API_KEY,
 			user_token : that.user_token,
 			mix_id:id,
-			api_version: 3},
+			api_version: 3,
+			smart_id: smartid},
 			function(data) {
 			   cbk(data);
 			}
@@ -122,7 +123,7 @@ function EightTracks(){
 		}
 		return true;
 	}
-	this.playNextMix = function(mid, cbk){
+	this.playNextMix = function(mid, smartid, cbk){
 			var that = this;
 			if(!this.check()){
 				return;
@@ -137,7 +138,8 @@ function EightTracks(){
 					api_key : that.API_KEY,
 					user_token : that.user_token,
 					api_version: 3,
-					mix_id: mixdata.next_mix.id},
+					mix_id: mixdata.next_mix.id,
+					smart_id: smartid},
 					function(data) {
 						cbk(mixdata, data);
 					}
@@ -145,27 +147,23 @@ function EightTracks(){
 			});
 		
 	}
-	this.playMix = function(mix_name, mix_artist, cbk){
+	this.playMix = function(mix_id, cbk){
 			var that = this;
 			if(!this.check()){
 				return;
 			}
-			
-			this.getMix(mix_name, mix_artist, function(mixdata){
-				url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
-				console.log(mixdata.mix)
-				$.get(
-					url,
-					{
-					api_key : that.API_KEY,
-					user_token : that.user_token,
-					api_version: 3,
-					mix_id: mixdata.mix.id},
-					function(data) {
-						cbk(mixdata, data);
-					}
-				);	
-			})
+			url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
+			$.get(
+				url,
+				{
+				api_key : that.API_KEY,
+				user_token : that.user_token,
+				api_version: 3,
+				mix_id: mix_id},
+				function(data) {
+					cbk(data);
+				}
+			);
 			
 	}
 	this.report = function(mid, tid){
@@ -189,7 +187,7 @@ function EightTracks(){
   			
 		});	
 	}
-	this.nextTrack = function(mid, cbk){
+	this.nextTrack = function(mid, smartid, cbk){
 		url = "http://8tracks.com/sets/"+this.play_token+"/next.json"
 		var that = this;
 		if(!this.check()){

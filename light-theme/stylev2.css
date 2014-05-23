@@ -131,11 +131,31 @@ img {
 }
 
 .search-result {
-    width:56px; 
+    width:100px; 
     display: inline-block;
-	height:56px;
+	height:100px;
 }
-
+.search-result-text {
+	position:relative;
+    color:#000;
+    background-color:rgba(255,255,255,0.8);
+    top:-100px;
+    left:0;
+    width:100px; 
+    height:100px;
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    word-wrap: break-word;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.search-result-text:hover {
+	background-color:rgba(255,255,255,0.8);
+    opacity:1;
+}
 
 
 

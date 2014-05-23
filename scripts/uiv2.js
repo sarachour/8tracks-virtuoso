@@ -6,6 +6,7 @@ chrome.extension.onMessage.addListener(
         }
   }
 )
+
  
 function SetupLayout(){
   $('#player-controls').layout();
@@ -16,6 +17,9 @@ function SetupLayout(){
 
 }
 function SetupSearch(){
+  function loadMix(){
+
+  }
   function doSearch(){
     var grid = $("#search-overlay-results");
     var desc = $("#search-overlay-description");
@@ -32,11 +36,18 @@ function SetupSearch(){
         var mixes = data.mix_set.mixes;
         for(var i=0; i < mixes.length; i++){
           var id = mixes[i].id;
-          var cover = mixes[i].cover_urls.sq56;
+          var cover = mixes[i].cover_urls.sq100;
           var name = mixes[i].name;
           var cert = mixes[i].certification;
+          var html_text = $('<div/>').addClass("search-result-text").addClass("text-sm").html(name);
           var html_img = $('<img/>').attr("src", cover);
-          var html_div = $('<div/>').html(html_img).addClass("search-result").addClass("c");
+          var html_div = $('<div/>').addClass("search-result").append(html_img).append(html_text);
+          html_div.click(function(myid){
+            return function(){
+              console.log("loading mix: ",smartid ,myid); 
+              chrome.extension.sendMessage({action: "play", id:myid, smart_id:smartid})
+            } 
+          }(id));
           console.log(html_div);
           grid.append(html_div)
         }
@@ -104,5 +115,5 @@ document.addEventListener('DOMContentLoaded', function() {
   SetupLayout();
   SetupPlayer();  
   SetupSearch();
-
+  userInterface.updateView();
 })
