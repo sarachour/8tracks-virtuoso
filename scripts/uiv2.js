@@ -47,6 +47,7 @@ function SetupSearch(){
             return function(){
               console.log("loading mix: ",smartid ,myid); 
               chrome.extension.sendMessage({action: "play", id:myid, smart_id:smartid})
+              $("#search-overlay").fadeOut(200);
             } 
           }(id));
           console.log(html_div);
@@ -107,9 +108,9 @@ function SetupPlayer(){
       } 
     })
 
-    $( "#player_prog" ).on('change', function() { 
-      pct = $("#player_prog").val()/100.0; 
-      chrome.extension.sendMessage({action: "set-time", percent:pct})
+    $( "#player_prog" ).on('change', function(e) { 
+      var value = e.target.value;
+      chrome.extension.sendMessage({action: "set-time", percent:(value/100)})
     });
 
     $( "#player_search" ).click(function() { 
