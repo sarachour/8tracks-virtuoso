@@ -158,5 +158,36 @@ img {
     opacity:1;
 }
 
+.sound-controls {
+    position:absolute;
+    height:125px;
+    width: 25px;
+    font-style: normal;
+    font-size:8pt;
+    /*display:none;*/
+    z-index: 20;
+
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    background-color: #434343;
+    height: 3px;
+}
+ 
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    top: -1px;
+    z-index: 1;
+    width: 11px;
+    height: 11px;
+ 
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 40px;
+    background-color: #545454;
+}
+- See more at: http://www.webstutorial.com/range-input-slider-html5-css3/html-5#sthash.kxLUSAp8.dpuf
 
 

@@ -129,14 +129,14 @@ function SetupPlayer(){
     $("#player_next_mix").click(function(){
       chrome.extension.sendMessage({action: "next-mix"})
     })
-    /*
+    
     $("#player_volume").click(function () {
-        var pos = $("#player_volume").position();
+        var pos = $("#player_volume").offset();
         var w= $("#player_volume_controls").width();
         var h= $("#player_volume_controls").height();
         console.log(pos);
         $("#player_volume_controls").css('top',pos.top-h);
-        $("#player_volume_controls").css('left',pos.left+w);
+        $("#player_volume_controls").css('left',pos.left);
       $("#player_volume_controls").fadeToggle("slow");
     });
     $( "#player_volume_slider" ).slider({
@@ -156,7 +156,6 @@ function SetupPlayer(){
         chrome.extension.sendMessage({action: "set-volume", percent:pct})
       }
     });
-    */
 }
 document.addEventListener('DOMContentLoaded', function() {
   SetupLayout();

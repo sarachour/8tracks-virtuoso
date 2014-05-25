@@ -113,12 +113,13 @@
       <div class="icon-lg">
         <img id="player_play" src="images/pause.png"/>
       </div>
-      <div style="display: inline-block;height:25px;" id="player_prog">
+      <div style="display: inline-block;height:25px;text-align: right;" id="player_prog">
         <input id="test" style="width:100%;" min="0" max="100" step="1" type="range"/>
+        <font class="text-sm-faint" style="z-index:999;" id="player_prog_duration">
+          0:00
+        </font>
       </div>
-      <font class="text-sm-faint" style="z-index:999;" id="player_prog_duration">
-        0:00
-      </font>
+      
       <div class="icon-med">
         <img id="player_volume" class="image-icon" src="images/highvolume.png"/>
       </div>
@@ -134,6 +135,8 @@
     </div>
     
   </div>
-  
+  <div id="player_volume_controls" class="sound-controls">
+    <div  style="left:30%; top:10%; height:80%;" id="player_volume_slider"></div>
+  </div>
 </body>
 </html>
