@@ -109,26 +109,27 @@
   <div class="west">
     
   </div>
-  <div id='player-controls' class="south horizontal" data-layout='{"type": "flexGrid", "rows": 1, "hgap": 1, "vgap": 1}'>
-      <div class="icon-lg">
+  <div id='player-controls' class="south horizontal">
+      <div class="icon-lg" style="position:absolute; top:0px; left: 15px;">
         <img id="player_play" src="images/pause.png"/>
       </div>
-      <div style="display: inline-block;height:25px;text-align: right;" id="player_prog">
+      <div style="position:absolute; top:15px; left: 55px; right: 115px; display: inline-block;height:25px;text-align: right;" id="player_prog">
         <input id="test" style="width:100%;" min="0" max="100" step="1" type="range"/>
         <font class="text-sm-faint" style="z-index:999;" id="player_prog_duration">
           0:00
         </font>
       </div>
       
-      <div class="icon-med">
+      <div class="icon-med" style="position:absolute; top:10px; right: 25px;">
         <img id="player_volume" class="image-icon" src="images/highvolume.png"/>
       </div>
-      <div class="icon-med">
-        <img id="player_skip" class="image-icon" src="images/ffwd.png"/>
-      </div>
-      <div class="icon-med">
+      <div class="icon-med" style="position:absolute; top:10px; right: 55px;">
         <img id="player_next_mix" class="image-icon" src="images/cog.png"/>
       </div>
+      <div class="icon-med" style="position:absolute; top:10px; right: 85px;">
+        <img id="player_skip" class="image-icon" src="images/ffwd.png"/>
+      </div>
+      
       <!--
       
       -->

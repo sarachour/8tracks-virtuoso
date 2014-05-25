@@ -27,9 +27,9 @@ img {
 	height:20px;
 }
 .icon-lg {
-    width:30px; 
+    width:40px; 
     display: inline-block;
-	height:30px;
+	height:40px;
 }
 
 .img-cover {
@@ -98,7 +98,7 @@ img {
 }
 
 .south {
-	height: 10%;
+	height: 12%;
 }
 .north {
 	height: 40%;
