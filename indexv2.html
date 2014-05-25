@@ -23,9 +23,8 @@
       <option value="tags">tag</option> 
       <option value="artist" selected>artist</option>
       <option value="liked">liked</option>
-      <option value="mix">similar to mix</option>
       <option value="listened">listened</option>
-      <option value="dj">user</option>
+      <option value="recommended">recommended</option>
       <option value="all">all</option> 
     </select>
      <input type="text" style="width:40%;" id="search-text" hint="search term here"></input>  
@@ -43,21 +42,18 @@
 
 <div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
   <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north">
-    <div class="north" style="height:20%;">
+    <div class="north" style="height:25%; background-color:#434343;border-radius: 10px;">
       
       <div title="search for mix" id="player_search" class="icon-sm" style="position:absolute; top:5px; left:5px;">
         <img src="images/search.png"/>
       </div>
-      <div title="enable/disable record only starred tracks" id="player_record_starred" class="icon-sm" style="position:absolute; top:5px; right:65px;">
-        <img src="images/star.png"/>
-      </div>
-      <div title="enable/disable record to spotify" id="player_spotify" class="icon-sm" style="position:absolute; top:5px; right:45px;">
+      <div title="enable/disable record to spotify" id="player_spotify" class="icon-sm" style="position:absolute; top:5px; right:50px;">
         <img src="images/spotify.png"/>
       </div>
-      <div title="play open mix in browser" id="player_sync" class="icon-sm" style="position:absolute; top:5px; right:25px;">
+      <div title="play open mix in browser" id="player_sync" class="icon-sm" style="position:absolute; top:5px; right:30px;">
         <img src="images/sync.png"/>
       </div>
-      <div title="open settings" id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:5px;">
+      <div title="open settings" id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:10px;">
         <a href="options.html"><img src="images/cog.png"/></a>
       </div>
       
@@ -115,7 +111,7 @@
       </div>
       <div style="position:absolute; top:15px; left: 55px; right: 115px; display: inline-block;height:25px;text-align: right;" id="player_prog">
         <input id="test" style="width:100%;" min="0" max="100" step="1" type="range"/>
-        <font class="text-sm-faint" style="z-index:999;" id="player_prog_duration">
+        <font class="text-sm-white" style="z-index:999;" id="player_prog_duration">
           0:00
         </font>
       </div>
@@ -124,7 +120,7 @@
         <img id="player_volume" class="image-icon" src="images/highvolume.png"/>
       </div>
       <div class="icon-med" style="position:absolute; top:10px; right: 55px;">
-        <img id="player_next_mix" class="image-icon" src="images/cog.png"/>
+        <img id="player_next_mix" class="image-icon" src="images/ffwd-mix.png"/>
       </div>
       <div class="icon-med" style="position:absolute; top:10px; right: 85px;">
         <img id="player_skip" class="image-icon" src="images/ffwd.png"/>

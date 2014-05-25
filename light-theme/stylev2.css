@@ -96,9 +96,10 @@ img {
 .west, .east {
 	width: 15%;
 }
-
 .south {
-	height: 12%;
+	height: 10%;
+    background-color:#434343;
+    border-radius: 15px;
 }
 .north {
 	height: 40%;
@@ -130,7 +131,13 @@ img {
 	font-variant:small-caps;
 	font-size:12px;
 }
-
+.text-sm-white {
+    margin: auto; 
+    font-family:"Lucida Grande";
+    color:#DEDEDE;
+    font-variant:small-caps;
+    font-size:12px;
+}
 .search-result {
     width:100px; 
     display: inline-block;
@@ -171,7 +178,7 @@ img {
 
 input[type="range"] {
     -webkit-appearance: none;
-    background-color: #434343;
+    background-color: #DEDEDE;
     height: 3px;
 }
  
@@ -186,7 +193,7 @@ input[type="range"]::-webkit-slider-thumb {
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
     border-radius: 40px;
-    background-color: #545454;
+    background-color: #FEFEFE;
 }
 - See more at: http://www.webstutorial.com/range-input-slider-html5-css3/html-5#sthash.kxLUSAp8.dpuf
 
