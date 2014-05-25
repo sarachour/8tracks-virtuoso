@@ -36,7 +36,7 @@
     </select> 
   </div>
   <div id='search-overlay-description' class="text-med"></div>
-  <div id='search-overlay-results' style="height:70%; width:90%; overflow:scroll;" 
+  <div id='search-overlay-results' style="height:70%; width:90%; overflow:scroll; background-color:rgba(30,30,30,1.0);" 
     data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
   </div>
 </div>
@@ -45,22 +45,25 @@
   <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north">
     <div class="north" style="height:20%;">
       
-      <div id="player_search" class="icon-sm" style="position:absolute; top:5px; left:5px;">
+      <div title="search for mix" id="player_search" class="icon-sm" style="position:absolute; top:5px; left:5px;">
         <img src="images/search.png"/>
       </div>
-      <div id="player_sync" class="icon-sm" style="position:absolute; top:5px; right:25px;">
+      <div title="enable/disable record to spotify" id="player_spotify" class="icon-sm" style="position:absolute; top:5px; right:45px;">
+        <img src="images/spotify.png"/>
+      </div>
+      <div title="play open mix in browser" id="player_sync" class="icon-sm" style="position:absolute; top:5px; right:25px;">
         <img src="images/sync.png"/>
       </div>
-      <div id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:5px;">
+      <div title="open settings" id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:5px;">
         <a href="options.html"><img src="images/cog.png"/></a>
       </div>
       
     </div>
     <div class="west">
-       <div class="icon-med" style="position:absolute; top:5px; left:5px;">
+       <div title="like mix" class="icon-med" style="position:absolute; top:5px; left:5px;">
           <img id="player_like_mix" src="images/heart.png"/>
        </div>
-       <div class="icon-med" style="position:absolute; bottom:5px; left:5px;">
+       <div title="star track" class="icon-med" style="position:absolute; bottom:5px; left:5px;">
           <img id="player_star_track" src="images/star.png"/>
        </div>
     </div>
@@ -72,10 +75,10 @@
       </div>
     </div>
     <div class="east icon-med">
-      <div class="icon-med" style="position:absolute; top:5px; right:5px;">
+      <div title="open mix in browser" class="icon-med" style="position:absolute; top:5px; right:5px;">
         <img id="player_goto" src="images/goto.png"/>
       </div>
-      <div class="icon-med" style="position:absolute; bottom:5px; right:5px;">
+      <div title="buy track" class="icon-med" style="position:absolute; bottom:5px; right:5px;">
         <img id="player_purchase" src="images/buy.png"/>
       </div>
     </div>
@@ -84,13 +87,13 @@
     <img class="img-cover" id="albumart"></img>
     <div class="img-cover-text">
       <div>
-        <div class="icon-sm" style="position:absolute; top:5px; left:5px;"><img id="mix_rank" src="images/no-rank.png"/></div>
+        <div title="mix gold/bronze/silver medal" class="icon-sm" style="position:absolute; top:5px; left:5px;"><img id="mix_rank" src="images/no-rank.png"/></div>
         <font class="text-sm" id="mix-likes" style="padding-left:10px;">likes</font>
-        <div class="icon-sm"><img src="images/heart-on.png"/></div>
+        <div title="number of likes" class="icon-sm"><img src="images/heart-on.png"/></div>
         <font class="text-sm"  id="mix-plays" style="padding-left:10px;">plays</font>
-        <div class="icon-sm"><img src="images/play.png"/></div>
+        <div title="number of listens" class="icon-sm"><img src="images/play.png"/></div>
         <font class="text-sm"  id="mix-tracks" style="padding-left:10px;">tracks</font>
-        <div class="icon-sm"><img src="images/music.png"/></div>
+        <div title="number of tracks" class="icon-sm"><img src="images/music.png"/></div>
       </div>
       <div class="text-sm-faint" id="mix-tags">tag 1, tag 2, tag 3</div>
       <br>

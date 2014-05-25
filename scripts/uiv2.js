@@ -113,7 +113,14 @@ function SetupPlayer(){
     });
 
     $( "#player_search" ).click(function() { 
-      $("#search-overlay").show();
+      $("#search-overlay").fadeIn(200);
+      $("#search-overlay").click(function(e){
+        console.log(e);
+        if(e.target !== this)
+          return;
+
+        $("#search-overlay").fadeOut(200);
+      })
     });
     $("#player_sync").click(function(){
       userInterface.sync();
