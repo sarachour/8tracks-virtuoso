@@ -131,14 +131,16 @@ function UserInterface(){
 	function pad(a,b){return(1e15+a+"").slice(-b)}
 	this.updateTime = function(data){
 		var tdiff = data.track_duration - data.track_time;
-		//$("#player_prog").slider('value', data.track_time/data.track_duration*100.0);
-		$("#player_prog").val(data.track_time/data.track_duration*100.0);
+		var tfrac = data.track_time/data.track_duration*100.0;
+		$("#player_prog_slider").val(tfrac);
 		time_string = Math.floor(tdiff/60) + ":" + pad(Math.floor(tdiff%60),2) 
 		$("#player_prog_duration").html(time_string);
 	}
 	this.updateView = function(){
 		var that = this;
+		console.log("attempt update view");
 		chrome.extension.sendMessage({action: "get-track-info"}, function(data){
+			console.log("update view");
 	    	$("#mix-title").html(data.mix_name);
 			$("#track-title").html(data.track_name);
 			$("#track-artist").html(data.track_artist);
