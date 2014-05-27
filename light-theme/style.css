@@ -14,7 +14,11 @@ img {
     display:block;
     border:0px solid;
 }
-
+.icon-tiny {
+    width:5px; 
+    display: inline-block;
+    height:5px;
+}
 .icon-sm {
     width:15px; 
     display: inline-block;
@@ -117,6 +121,9 @@ img {
     margin: auto; 
     font-family:"Lucida Grande";
     font-variant:small-caps;
+}
+.tiny {
+    font-size:10px;
 }
 .small {
 	font-size:12px;

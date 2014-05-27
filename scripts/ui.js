@@ -111,8 +111,28 @@ function SetupSearch(){
           var cover = mixes[i].cover_urls.sq100;
           var name = mixes[i].name;
           var cert = mixes[i].certification;
-          var html_text = $('<div/>').addClass("search-result-text").addClass("text small black").html(name);
+          console.log(mixes[i]);
+          var badge_image = "images/no-rank.png";
+          if(cert == "gold"){
+            badge_image = "images/gold.png";
+          }
+          else if(cert == "silver"){
+            badge_image = "images/silver.png";
+          }
+          if(cert == "bronze"){
+            badge_image = "images/bronze.png";
+          }
+          var html_text = $('<div/>').addClass("search-result-text").addClass("text tiny black").html(name);
           var html_img = $('<img/>').attr("src", cover);
+          var html_badge = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", badge_image));
+          var html_likes = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/heart-on.png"));
+          var html_plays = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/play-black.png"));
+          var html_tracks = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/music.png"));
+          html_text.append("<br>",
+            html_badge,"<br>", 
+            mixes[i].likes_count,html_likes,"<br>", 
+            mixes[i].plays_count,html_plays,"<br>", 
+            mixes[i].tracks_count, html_tracks);
           var html_div = $('<div/>').addClass("search-result").append(html_img).append(html_text);
           html_div.click(function(myid){
             return function(){
