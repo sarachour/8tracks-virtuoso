@@ -130,9 +130,10 @@ function SetupSearch(){
           var html_tracks = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/music.png"));
           html_text.append("<br>",
             html_badge,"<br>", 
-            mixes[i].likes_count,html_likes,"<br>", 
-            mixes[i].plays_count,html_plays,"<br>", 
-            mixes[i].tracks_count, html_tracks);
+            mixes[i].likes_count,html_likes,"&nbsp;", 
+            mixes[i].plays_count,html_plays,"&nbsp;", 
+            mixes[i].tracks_count, html_tracks, "<br>",
+            mixes[i].tag_list_cache);
           var html_div = $('<div/>').addClass("search-result").append(html_img).append(html_text);
           html_div.click(function(myid){
             return function(){
