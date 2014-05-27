@@ -49,9 +49,48 @@ function SetupLayout(){
   var outerContainer = $('#player').layout({resize: false});
 
 }
-function SetupSearch(){
-  function loadMix(){
 
+
+function SetupSearch(){
+  function setupAutocomplete(){
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 100;  //time in ms, 5 second for example
+
+    //on keyup, start the countdown
+    $('#search-text').keyup(function(){
+        clearTimeout(typingTimer);
+        console.log("up");
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown 
+    $('#search-text').keydown(function(){
+        console.log("down");
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    function doneTyping () {
+        var term = $('#search-text').val();
+        //do something
+        eightTracks.getTags(term, function(data){
+          availableTags = [];
+          for(var i=0; i< data.tag_cloud.tags.length; i++){
+            var tag = data.tag_cloud.tags[i];
+            availableTags.push(tag.name);
+          }
+          console.log(availableTags);
+          $( "#search-text" ).autocomplete({
+            source: availableTags,
+            select: function( event, ui ) {
+              $( "#search-text" ).val(ui.item.label);
+              doSearch();
+              return false;
+            }
+          });
+        })
+        console.log("sufficient pause");
+    }
   }
   function doSearch(){
     var grid = $("#search-overlay-results");
@@ -72,7 +111,7 @@ function SetupSearch(){
           var cover = mixes[i].cover_urls.sq100;
           var name = mixes[i].name;
           var cert = mixes[i].certification;
-          var html_text = $('<div/>').addClass("search-result-text").addClass("text-sm").html(name);
+          var html_text = $('<div/>').addClass("search-result-text").addClass("text small black").html(name);
           var html_img = $('<img/>').attr("src", cover);
           var html_div = $('<div/>').addClass("search-result").append(html_img).append(html_text);
           html_div.click(function(myid){
@@ -91,8 +130,9 @@ function SetupSearch(){
   $("#search-type").on('change', function(){
     var name = $('#search-type').val();
     console.log("type:"+name);
-    if(name == 'tag' && name == 'artist' && name == 'mix'){
+    if(name == 'tags' || name == 'artist' || name == 'mix'){
       //make textbox visible
+      $("#search-text-container").fadeIn(200);
     }
     doSearch();
   });
@@ -101,11 +141,14 @@ function SetupSearch(){
     console.log("search:"+term);
     doSearch();
   })
+  $("#search-text-container").hide();
   $("#search-sort").on('change', function(){
     var type = $('#search-sort').val();
     console.log("sort:"+type);
     doSearch();
   })
+  doSearch();
+  setupAutocomplete();
 
 }
 function SetupPlayer(){

@@ -266,7 +266,6 @@ function EightTracks(){
 			user_token : that.user_token,
 			api_version: 3},
 			function(data) {
-				console.log(data);
 				cbk(data);
 			}
 		);	
@@ -287,10 +286,26 @@ function EightTracks(){
 			user_token : that.user_token,
 			api_version: 3},
 			function(data) {
-				console.log(data);
 				cbk(data);
 			}
 		);	
+	}
+	this.getTags = function(key, cbk){
+		var that = this;
+		url = "http://8tracks.com/tags.json";
+		$.get(
+			url,
+			{
+				api_key : that.API_KEY,
+				user_token : that.user_token,
+				api_version: 3,
+				q: key
+			},
+			function(data) {
+				console.log(data);
+				cbk(data);
+			}
+		);
 	}
 	this.likeMix = function(mixid, cbk){
 		this._likeMix(true, mixid, cbk);

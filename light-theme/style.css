@@ -169,15 +169,11 @@ img {
 
 }
 button{
-    font-style: normal;
-    font-size:12pt;
     margin-left:10px;
     margin-right:10px;
     border-radius: 5px;
 }
 input[type="text"], input[type="password"]{
-    font-style: normal;
-    font-size:12pt;
     margin-left:10px;
     margin-right:10px;
     border-radius: 5px;
@@ -201,6 +197,14 @@ input[type="range"]::-webkit-slider-thumb {
     -moz-border-radius: 40px;
     border-radius: 40px;
     background-color: #FEFEFE;
+}
+
+.ui-autocomplete { 
+    font-style: normal;
+    font-size:8pt;
+    position: absolute; 
+    cursor: default;
+    z-index:1000 !important;
 }
 
 

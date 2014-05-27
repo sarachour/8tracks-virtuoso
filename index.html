@@ -18,21 +18,25 @@
 </head>
 <body>
 <div id='search-overlay' class="layout-overlay">
-  <div style="height:10%; opacity:0.7;">
-    <select id="search-type" name="select">
-      <option value="tags">tag</option> 
-      <option value="artist" selected>artist</option>
+  <div style="height:10%;">
+    <label class="medium text white">search by</label>
+    <select id="search-type">
       <option value="liked">liked</option>
-      <option value="listened">listened</option>
+      <option value="listened" selected>listened to</option>
       <option value="recommended">recommended</option>
-      <option value="all">all</option> 
+      <option value="all">all mixes</option> 
+      <option value="tags">tag</option> 
     </select>
-     <input type="text" style="width:40%;" id="search-text" hint="search term here"></input>  
+     <label class="medium text white" for="search-sort">sorted by</label>
      <select id="search-sort" name="select">
-      <option value="hot">hot</option> 
-      <option value="recent" selected>recent</option>
+      <option value="hot" selected>hot</option> 
+      <option value="recent">recent</option>
       <option value="popular">popular</option>
     </select> 
+    <div class="ui-widget" id="search-text-container">
+      <label class="medium text white" for="search-text">with</label>
+      <input type="text" class="small" style="height:20px; width:200px;font-size:8pt;" id="search-text" hint="search term here"></input>  
+    </div>
   </div>
   <div id='search-overlay-description' class="text medium black"></div>
   <div id='search-overlay-results' style="height:70%; width:90%; overflow:scroll; background-color:rgba(30,30,30,1.0);" 
@@ -82,10 +86,10 @@
       
     </div>
     <div class="west">
-       <div title="like mix" class="icon-med" style="position:absolute; top:5px; left:5px;">
+       <div title="like mix" class="icon-med" style="position:absolute; top:5px; left:15px;">
           <img id="player_like_mix" src="images/heart.png"/>
        </div>
-       <div title="star track" class="icon-med" style="position:absolute; bottom:5px; left:5px;">
+       <div title="star track" class="icon-med" style="position:absolute; bottom:5px; left:15px;">
           <img id="player_star_track" src="images/star.png"/>
        </div>
     </div>
@@ -97,10 +101,10 @@
       </div>
     </div>
     <div class="east icon-med">
-      <div title="open mix in browser" class="icon-med" style="position:absolute; top:5px; right:5px;">
+      <div title="open mix in browser" class="icon-med" style="position:absolute; top:5px; right:15px;">
         <img id="player_goto" src="images/goto.png"/>
       </div>
-      <div title="buy track" class="icon-med" style="position:absolute; bottom:5px; right:5px;">
+      <div title="buy track" class="icon-med" style="position:absolute; bottom:5px; right:15px;">
         <img id="player_purchase" src="images/buy.png"/>
       </div>
     </div>
