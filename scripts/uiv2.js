@@ -8,13 +8,39 @@ chrome.extension.onMessage.addListener(
 )
 
  
+function showLogin(){
+  $('#login-overlay').fadeIn(200);
+  $("#player_log_in").click(function(){
+    var uname = $('#login_username').val();
+    var pass = $('#login_password').val();
+    var that = this;
+    if(uname == "" || pass == ""){
+      console.log("Login failed: username, pass values do not exist.");
+      return;
+    }
+    eightTracks.login(uname, pass, function(){
+      //reload persistant data
+      chrome.extension.sendMessage({action: "reload"})
+      $("#login-indicator").attr("src", "images/dot-ok.png");
+      $("#login-overlay").fadeOut(500);
+      userInterface.updateView();
+    });
+  });
+  $('#login-back').click(function(){
+      $("#login-overlay").fadeOut(200);
+  })
+  
+}
 function SetupLayout(){
   $('#player-controls').layout();
   $('#player-title').layout();
   $('#search-overlay-results').layout();
-  $('#search-overlay').hide();
-  var outerContainer = $('#player').layout({resize: false});
+  if(localStorage.hasOwnProperty("user_token")){
+    $('#search-overlay, #login-overlay').hide();
+    $("#login-indicator").attr("src", "images/dot-ok.png");
+  }
 
+  var outerContainer = $('#player').layout({resize: false});
 
 }
 function SetupSearch(){
@@ -74,6 +100,7 @@ function SetupSearch(){
     console.log("sort:"+type);
     doSearch();
   })
+
 }
 function SetupPlayer(){
    //play bind
@@ -115,6 +142,9 @@ function SetupPlayer(){
 
     $( "#player_search" ).click(function() { 
       $("#search-overlay").fadeIn(200);
+      $('#search-back').click(function(){
+          $("#search-overlay").fadeOut(200);
+      })
       $("#search-overlay").click(function(e){
         console.log(e);
         if(e.target !== this)
@@ -125,6 +155,9 @@ function SetupPlayer(){
     });
     $("#player_sync").click(function(){
       userInterface.sync();
+    })
+    $("#player_login").click(function(){
+      showLogin();
     })
     $("#player_next_mix").click(function(){
       chrome.extension.sendMessage({action: "next-mix"})

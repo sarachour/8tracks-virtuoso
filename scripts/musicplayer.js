@@ -103,8 +103,14 @@ function MusicPlayer(){
 		this.playlist.reload();
 	}
 	this.play = function(src){
+		var that = this;
 		this.player.attr("src", src);
-		$("#player").trigger("play");
+		$("#player").trigger("play", function(){
+			if(!this.player.hasOwnProperty('duration')){
+				console.log("the source appears to be null. loading next.");
+				that.nextTrack();
+			}
+		});
 		//$("#player").play();
 		//this.player.play();
 	}
@@ -201,7 +207,7 @@ function MusicPlayer(){
 		if(this.other_info.isEnd == true || this.other_info.isLastTrack == true){
 			eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data){
 				mplayer.mix_info = mixdata.next_mix;
-				if(data != null){
+				if(data != null  && data.set.track.hasOwnProperty("track_file_stream_url")){
 					mplayer.SET_TRACK_INFO(data);
 				}
 				else{
@@ -211,7 +217,7 @@ function MusicPlayer(){
 		}
 		else{
 			eightTracks.nextTrack(this.mix_info.id, this.smart_mix_id, function(data){
-				if(data != null){
+				if(data != null && data.set.track.hasOwnProperty("track_file_stream_url")){
 					mplayer.SET_TRACK_INFO(data);
 				}
 				else{

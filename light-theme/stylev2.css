@@ -104,40 +104,33 @@ img {
 .north {
 	height: 40%;
 }
-.text-lg {
-	font-family:"Lucida Grande";
-	font-variant:small-caps;
-	color:#414141;
+.huge {
+    font-size:36px;
+}
+.large {
 	font-size:16px;
 }
-.text-med {
-	font-family:"Lucida Grande";
-	font-variant:small-caps;
-	color:#414141;
+.medium {
 	font-size:14px;
 }
-.text-sm {
-	margin: auto; 
-	font-family:"Lucida Grande";
-	color:#414141;
-	font-variant:small-caps;
-	font-size:12px;
-}
-
-.text-sm-faint {
-	margin: auto; 
-	font-family:"Lucida Grande";
-	color:#4D4D4D;
-	font-variant:small-caps;
-	font-size:12px;
-}
-.text-sm-white {
+.text {
     margin: auto; 
     font-family:"Lucida Grande";
-    color:#DEDEDE;
     font-variant:small-caps;
-    font-size:12px;
 }
+.small {
+	font-size:12px;
+}
+.black {
+    color:#414141;
+}
+.faint {
+	color:#4D4D4D;
+}
+.white{
+    color:#DEDEDE;
+}
+
 .search-result {
     width:100px; 
     display: inline-block;
@@ -175,6 +168,20 @@ img {
     z-index: 20;
 
 }
+button{
+    font-style: normal;
+    font-size:12pt;
+    margin-left:10px;
+    margin-right:10px;
+    border-radius: 5px;
+}
+input[type="text"], input[type="password"]{
+    font-style: normal;
+    font-size:12pt;
+    margin-left:10px;
+    margin-right:10px;
+    border-radius: 5px;
+}
 
 input[type="range"] {
     -webkit-appearance: none;
@@ -195,6 +202,5 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 40px;
     background-color: #FEFEFE;
 }
-- See more at: http://www.webstutorial.com/range-input-slider-html5-css3/html-5#sthash.kxLUSAp8.dpuf
 
 
