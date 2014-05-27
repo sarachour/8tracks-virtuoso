@@ -10,6 +10,12 @@ chrome.extension.onMessage.addListener(
  
 function showLogin(){
   $('#login-overlay').fadeIn(200);
+  $("#login-overlay").click(function(e){
+    if(e.target !== this)
+      return;
+
+    $("#login-overlay").fadeOut(200);
+  })
   $("#player_log_in").click(function(){
     var uname = $('#login_username').val();
     var pass = $('#login_password').val();
@@ -146,7 +152,6 @@ function SetupPlayer(){
           $("#search-overlay").fadeOut(200);
       })
       $("#search-overlay").click(function(e){
-        console.log(e);
         if(e.target !== this)
           return;
 
@@ -167,7 +172,6 @@ function SetupPlayer(){
         var pos = $("#player_volume").offset();
         var w= $("#player_volume_controls").width();
         var h= $("#player_volume_controls").height();
-        console.log(pos);
         $("#player_volume_controls").css('top',pos.top-h);
         $("#player_volume_controls").css('left',pos.left);
       $("#player_volume_controls").fadeToggle("slow");
