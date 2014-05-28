@@ -1,0 +1,204 @@
+html, body {    
+    width: 100%;
+    height: 100%;
+    min-width: 400px;
+    min-height: 450px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+img {
+    max-width:100%; 
+    max-height:100%;
+    margin:auto;
+    display:block;
+    border:0px solid;
+}
+
+table {
+    margin:auto;
+    overflow:scroll;
+    border:1px solid;
+}
+thead {
+    margin:auto;
+    background-color: rgb(130,130,130);
+    overflow:hidden;
+    border:1px solid;
+}
+tbody {
+    margin:auto;
+    background-color: rgb(180,180,180);
+    overflow:hidden;
+    border:1px solid;
+}
+
+button {
+
+}
+::-moz-selection{
+    background-color:Transparent;
+    color:#000;
+}
+
+::selection {
+    background-color:Transparent;
+    color:#000;
+}
+
+.selected {
+    border:3px solid #BBBB13;
+}
+
+.ul {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.ll {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+.ur {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.lr {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+
+
+
+.icon-sm {
+    width:15px; 
+    display: inline-block;
+    height:15px;
+}
+
+.icon-med {
+    width:32px; 
+    display: inline-block;
+    height:32px;
+}
+
+.text-overlay{
+    background-color: rgba(10,10,10, 0.9);
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.layout-outer {
+    height: 100%;
+}
+
+
+.center, .east, .west, .north, .south {
+    background-color: rgb(220,220,220);
+    text-align: center;
+    display: inline-block;
+}
+
+.center{
+   background-color: rgb(30,30,30); 
+   border-radius: 15px;
+   padding: 15px;
+}
+.west {
+    background-color: rgb(50,50,50); 
+    width: 15%;
+}
+.east {
+    background-color: rgb(50,50,50); 
+    width: 25%;
+}
+.south, .north{
+    background-color: rgb(90,90,90); 
+    height: 5%;
+}
+.black {
+    color:#414141;
+}
+.faint {
+    color:#4D4D4D;
+}
+.white{
+    color:#DEDEDE;
+}
+
+
+.large {
+    font-size:16px;
+}
+.medium {
+    font-size:14px;
+}
+.small {
+    font-size:12px;
+}
+.text {
+    margin: auto; 
+    font-family:"Lucida Grande";
+    font-variant:small-caps;
+}
+.scrollable {
+    overflow: scroll;
+    height: 50%;
+
+}
+.result {
+    text-align: center;
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 15px;
+
+}
+.result-img-overlay {
+    position:relative;
+    color:#000;
+    top:-200%;
+    width:100%; 
+    height:100%;
+    z-index: 5;
+    word-wrap: break-word;
+    border-radius: 15px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.result-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+
+}
+.result-text {
+	position:relative;
+    color:#000;
+    background-color:rgba(255,255,255,0.8);
+    top:-100%;
+    width:100%; 
+    height:100%;
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    word-wrap: break-word;
+    border-radius: 15px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.result-text:hover {
+    background-color:rgba(255,255,255,0.8);
+    opacity:1;
+}

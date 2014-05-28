@@ -144,27 +144,35 @@ function OptionsInterface(){
 
             var html_icon_overlay = $('<div/>').addClass("result-img-overlay");
             if(cmix._IS_NEW  == true){
-                var ov_likes = $('<div/>').addClass("icon-med ll").append($('<img/>').attr("src", "images/dot-ok.png"));
+                var ov_likes = $('<div/>').addClass("icon-sm ll").append($('<img/>').attr("src", "images/dot-ok.png"));
                 html_icon_overlay.append(ov_likes)
             }
             if(cmix.liked_by_current_user){
-                var ov_likes = $('<div/>').addClass("icon-med ur").append($('<img/>').attr("src", "images/heart-on.png"));
+                var ov_likes = $('<div/>').addClass("icon-sm ur").append($('<img/>').attr("src", "images/heart-on.png"));
                 html_icon_overlay.append(ov_likes)
             }
             star_count=0;
             track_count = 0;
             for(var artist in cmix.tracks){
                 for(var track in cmix.tracks[artist]){
-                    track_count+=1;
-                    if(cmix.tracks[artist][track].faved_by_current_user){
-                        star_count++;
+                    if(artist != "_IS_NEW" && track != "_IS_NEW"){
+                        track_count+=1;
+                        if(cmix.tracks[artist][track].faved_by_current_user){
+                            star_count++;
+                        }
                     }
                 }
             }
             if(star_count > 0){
-                var ov_stars = $('<div/>').addClass("icon-med ul").append($('<img/>').attr("src", "images/star-on.png"));
+                var ov_stars = $('<div/>').addClass("icon-sm ul")
+                    .append($('<img/>').attr("src", "images/star-on.png"))
+                    .append(star_count);
                 html_icon_overlay.append(ov_stars)
             }
+            var ov_tracks = $('<div/>').addClass("lr white text text-overlay small")
+                .append(track_count + "/"+cmix.tracks_count);
+            html_icon_overlay.append(ov_tracks)
+
             html_div.append(html_info, html_icon_overlay);
             html_div.click(function(mymix, myelem){
                 return function(){
