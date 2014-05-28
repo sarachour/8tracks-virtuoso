@@ -15,6 +15,7 @@ function OptionsInterface(){
             that.data = resp.playlist;
             that.updateGrid();
         });
+
     }
     this.clearSelection = function(){
         this.selection = {};
@@ -70,7 +71,7 @@ function OptionsInterface(){
         for(var artist in selection){
             for(var track in selection[artist]){
                 var info = selection[artist][track];
-                if(artist != "STATE" && track != "STATE"){
+                if(artist != "_IS_NEW" && track != "_IS_NEW"){
                     var starred_img_url = "images/star.png"
                     if(info.faved_by_current_user)
                         starred_img_url = "images/star-on.png";
@@ -141,8 +142,30 @@ function OptionsInterface(){
                 html_tags, "<br>",
                 html_desc);
 
-           
-            html_div.append(html_info);
+            var html_icon_overlay = $('<div/>').addClass("result-img-overlay");
+            if(cmix._IS_NEW  == true){
+                var ov_likes = $('<div/>').addClass("icon-med ll").append($('<img/>').attr("src", "images/dot-ok.png"));
+                html_icon_overlay.append(ov_likes)
+            }
+            if(cmix.liked_by_current_user){
+                var ov_likes = $('<div/>').addClass("icon-med ur").append($('<img/>').attr("src", "images/heart-on.png"));
+                html_icon_overlay.append(ov_likes)
+            }
+            star_count=0;
+            track_count = 0;
+            for(var artist in cmix.tracks){
+                for(var track in cmix.tracks[artist]){
+                    track_count+=1;
+                    if(cmix.tracks[artist][track].faved_by_current_user){
+                        star_count++;
+                    }
+                }
+            }
+            if(star_count > 0){
+                var ov_stars = $('<div/>').addClass("icon-med ul").append($('<img/>').attr("src", "images/star-on.png"));
+                html_icon_overlay.append(ov_stars)
+            }
+            html_div.append(html_info, html_icon_overlay);
             html_div.click(function(mymix, myelem){
                 return function(){
                     that.select(mymix, myelem);

@@ -9,21 +9,23 @@ function Playlist(name, isPersistant){
 
 	this.save = function(){
 		if(this.isPersistant){
-			var STATE_NAME = this.name+"_STATE";
 			localStorage.setItem(name, JSON.stringify(this.data));
-			localStorage[STATE_NAME] = this.NEW_STATE;
 		}
 	}
 	this.load = function(){
 		if(this.isPersistant){
-			var STATE_NAME = this.name+"_STATE";
 			this.data = {};
-			this.STATE = false;
 			if(localStorage.hasOwnProperty(this.name)){
 				this.data = JSON.parse(localStorage.getItem(this.name));
 			}
-			if(localStorage.hasOwnProperty(STATE_NAME)){
-				this.STATE = !localStorage.getItem(STATE_NAME);
+			for(var mix in this.data){
+				this.data[mix]._IS_NEW = false;
+				for(var artist in this.data[mix].tracks){
+					this.data[mix].tracks[artist]._IS_NEW = false;
+					for(var track in this.data[mix].tracks[artist]){
+						this.data[mix].tracks[artist][track]._IS_NEW = false;
+					}
+				}
 			}
 		}
 	}
@@ -42,7 +44,7 @@ function Playlist(name, isPersistant){
 			}
 		}
 		if(this.isPersistant){
-			this.data[mix].STATE = this.STATE;
+			this.data[mix]._IS_NEW = true;
 		}
 	}
 	this._insert_track = function(mix, artist, name, props){
@@ -65,9 +67,9 @@ function Playlist(name, isPersistant){
 			}
 		}
 		if(this.isPersistant){
-			this.data[mix].STATE = this.STATE;
-			ldata[artist].STATE = this.STATE;
-			ldata[artist][name].STATE = this.STATE;
+			this.data[mix]._IS_NEW = true;
+			ldata[artist]._IS_NEW = true;
+			ldata[artist][name]._IS_NEW = true;
 		}
 	}
 	this.addMix = function(mix, props, callback){
