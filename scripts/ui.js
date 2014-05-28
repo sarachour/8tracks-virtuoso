@@ -7,9 +7,64 @@ chrome.extension.onMessage.addListener(
   }
 )
 
- 
-function showLogin(){
+function doSearch(){
+    var grid = $("#search-overlay-results");
+    var desc = $("#search-overlay-description");
+    var type = $('#search-type').val();
+    var term = $('#search-text').val();
+    var sort = $('#search-sort').val();
+    grid.empty();
+    eightTracks.search(type, term, sort, function(data){
+      var description = data.mix_set.name;
+      var smartid = data.mix_set.smart_id;
+      desc.html(description);
+      if(data.hasOwnProperty('mix_set')){
+        var mixes = data.mix_set.mixes;
+        for(var i=0; i < mixes.length; i++){
+          var id = mixes[i].id;
+          var cover = mixes[i].cover_urls.sq100;
+          var name = mixes[i].name;
+          var cert = mixes[i].certification;
+          var badge_image = "images/no-rank.png";
+          if(cert == "gold"){
+            badge_image = "images/gold.png";
+          }
+          else if(cert == "silver"){
+            badge_image = "images/silver.png";
+          }
+          if(cert == "bronze"){
+            badge_image = "images/bronze.png";
+          }
+          var html_text = $('<div/>').addClass("search-result-text").addClass("text tiny black").html(name);
+          var html_img = $('<img/>').attr("src", cover);
+          var html_badge = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", badge_image));
+          var html_likes = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/heart-on.png"));
+          var html_plays = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/play-black.png"));
+          var html_tracks = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/music.png"));
+          html_text.append("<br>",
+            html_badge,"<br>", 
+            mixes[i].likes_count,html_likes,"&nbsp;", 
+            mixes[i].plays_count,html_plays,"&nbsp;", 
+            mixes[i].tracks_count, html_tracks, "<br>",
+            mixes[i].tag_list_cache);
+          var html_div = $('<div/>').addClass("search-result").append(html_img).append(html_text);
+          html_div.click(function(myid){
+            return function(){
+              chrome.extension.sendMessage({action: "play", id:myid, smart_id:smartid})
+              $("#search-overlay").fadeOut(200);
+            } 
+          }(id));
+          grid.append(html_div)
+        }
+      }
+    });
+  }
+
+function ShowLogin(){
   $('#login-overlay').fadeIn(200);
+  
+}
+function SetupLogin(){
   $("#login-overlay").click(function(e){
     if(e.target !== this)
       return;
@@ -28,8 +83,9 @@ function showLogin(){
       //reload persistant data
       chrome.extension.sendMessage({action: "reload"})
       $("#login-indicator").attr("src", "images/dot-ok.png");
-      $("#login-overlay").fadeOut(500);
+      $("#login-overlay").fadeOut(200);
       userInterface.updateView();
+      doSearch();
     });
   });
   $('#login-back').click(function(){
@@ -41,8 +97,9 @@ function SetupLayout(){
   $('#player-controls').layout();
   $('#player-title').layout();
   $('#search-overlay-results').layout();
+  $('#search-overlay').hide();
   if(localStorage.hasOwnProperty("user_token")){
-    $('#search-overlay, #login-overlay').hide();
+    $('#login-overlay').hide();
     $("#login-indicator").attr("src", "images/dot-ok.png");
   }
 
@@ -91,62 +148,6 @@ function SetupSearch(){
         })
         console.log("sufficient pause");
     }
-  }
-  function doSearch(){
-    var grid = $("#search-overlay-results");
-    var desc = $("#search-overlay-description");
-    var type = $('#search-type').val();
-    var term = $('#search-text').val();
-    var sort = $('#search-sort').val();
-    grid.empty();
-    eightTracks.search(type, term, sort, function(data){
-      console.log(data);
-      var description = data.mix_set.name;
-      var smartid = data.mix_set.smart_id;
-      desc.html(description);
-      if(data.hasOwnProperty('mix_set')){
-        var mixes = data.mix_set.mixes;
-        for(var i=0; i < mixes.length; i++){
-          var id = mixes[i].id;
-          var cover = mixes[i].cover_urls.sq100;
-          var name = mixes[i].name;
-          var cert = mixes[i].certification;
-          console.log(mixes[i]);
-          var badge_image = "images/no-rank.png";
-          if(cert == "gold"){
-            badge_image = "images/gold.png";
-          }
-          else if(cert == "silver"){
-            badge_image = "images/silver.png";
-          }
-          if(cert == "bronze"){
-            badge_image = "images/bronze.png";
-          }
-          var html_text = $('<div/>').addClass("search-result-text").addClass("text tiny black").html(name);
-          var html_img = $('<img/>').attr("src", cover);
-          var html_badge = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", badge_image));
-          var html_likes = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/heart-on.png"));
-          var html_plays = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/play-black.png"));
-          var html_tracks = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/music.png"));
-          html_text.append("<br>",
-            html_badge,"<br>", 
-            mixes[i].likes_count,html_likes,"&nbsp;", 
-            mixes[i].plays_count,html_plays,"&nbsp;", 
-            mixes[i].tracks_count, html_tracks, "<br>",
-            mixes[i].tag_list_cache);
-          var html_div = $('<div/>').addClass("search-result").append(html_img).append(html_text);
-          html_div.click(function(myid){
-            return function(){
-              console.log("loading mix: ",smartid ,myid); 
-              chrome.extension.sendMessage({action: "play", id:myid, smart_id:smartid})
-              $("#search-overlay").fadeOut(200);
-            } 
-          }(id));
-          console.log(html_div);
-          grid.append(html_div)
-        }
-      }
-    });
   }
   $("#search-type").on('change', function(){
     var name = $('#search-type').val();
@@ -226,7 +227,7 @@ function SetupPlayer(){
       userInterface.sync();
     })
     $("#player_login").click(function(){
-      showLogin();
+      ShowLogin();
     })
     $("#player_next_mix").click(function(){
       chrome.extension.sendMessage({action: "next-mix"})
@@ -261,6 +262,7 @@ function SetupPlayer(){
 document.addEventListener('DOMContentLoaded', function() {
   SetupLayout();
   SetupPlayer();  
+  SetupLogin();
   SetupSearch();
   userInterface.updateView();
 })

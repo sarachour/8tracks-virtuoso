@@ -138,7 +138,6 @@ function UserInterface(){
 	}
 	this.updateView = function(){
 		var that = this;
-		console.log("attempt update view");
 		chrome.extension.sendMessage({action: "get-track-info"}, function(data){
 			console.log("update view");
 	    	$("#mix-title").html(data.mix_name);

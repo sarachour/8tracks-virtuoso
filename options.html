@@ -3,103 +3,38 @@
 <head><title>8Tracks Player Preferences</title>
 
 <link rel="stylesheet" href="light-theme/jquery-ui-1.10.4.custom.min.css" />
-<link rel="stylesheet" href="light-theme/style.css" />
+<link rel="stylesheet" href="light-theme/option-style.css" />
+
 <script src="scripts/lib/jquery-1.10.2.js"></script>
 <script src="scripts/lib/jquery-ui-1.10.4.min.js"></script>
+
+  
+<script src="scripts/lib/jlayout/jquery.sizes.js"></script>
+<script src="scripts/lib/jlayout/jlayout.border.js"></script>
+<script src="scripts/lib/jlayout/jquery.jlayout.js"></script>
+
 <script src="scripts/8tracks.js"></script>
 <script src="scripts/options.js"></script>
-<textarea id="clipboard" style="visibility:hidden;" width="0%" height="0px">text here</textarea>
+<textarea id="clipboard" style="display:none;" width="0%" height="0px">text here</textarea>
 
 </head>
 <body bgcolor="#434343">
-<div left="10%" width="80%" style="border-radius: 10px; background-color:#EEEEEE" align="center" bgcolor="#EEEEEE">
-<table  >
-<tr>
-	<td class="cell-text" align="left">
-	<h1><font class="header-huge-text">Preferences</font></h1>
-	</td>
-</tr>
-<tr>
-	<td class="cell-text" align="left">
-		<div class="div-icon-med-inline">
-			<img class="image-icon" id="tracks-login-ok" src="images/dot-err.png"/>
+<div id="options" data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
+	<div class="north">THIS IS WHERE PREFERENCES PANE Is</div>
+	<div class="south">THIS IS WHERE STATUS BAR IS</div>
+	<div id='mixes-results'class="center" style="position:relative; top:0px; height:100%; width:100%; overflow:scroll;" data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
+	</div>
+	<div class="east" id="tracks-results">
+		<table id="tracks-table" width="100%" class="text small black" style="width=100%;padding=20px;">
+		<thead>
+			<tr><td>track</td><td>artist</td><td>star</td></tr>
+		</thead>
+		<tbody id="tracks-table-body">
+		</tbody>
+		</table>
 		</div>
-		<font class="header-lg-text">8Tracks Login</font>
-	</td>
-	
-</tr>
-<tr/>
-<tr class="vert-space">
-	<td class="cell-text"><font class="header-med-text">username</font></td>
-	<td class="cell-text">
-		<div >
-			<input style="border-radius: 5px;" placeholder="username" type="text" id="tracks-username" name="username" class="login-info"/>
-		</div>
-	</td>
-	<td class="cell-text"><font class="header-med-text">password</font></td>
-	<td class="cell-text">
-		<div>
-			<input style="border-radius: 5px;" placeholder="password" type="password" id="tracks-password" name="password" class="login-info"/>
-		</div>
-	</td>
-	<td/>
-</tr>
-<tr>
-	<td class="cell-text">
-		<font class="header-lg-text">Music Tracking</font>
-	</td>
-</tr>
-<tr class = "vert-space">
-<td class="cell-text"><font class="header-med-text">track: </font></td>
-<td class="cell-text">
-	<select id="playlist_type">
-	 <option value="all">All Songs</option>
-	 <option value="fav">Favorited Songs</option>
-	 <option value="none">None</option>
-	</select>
-</td>
-<td class="cell-text">
-	<button class="body-sm-text" id="playlist-clear" style="border-radius: 10px;">Clear Tracked Songs</button>
-</td>
-</tr> 
-<tr class = "vert-space">
-	<td class="cell-text">
-		<font class="header-lg-text">Export Tracks</font>
-	</td>
-</tr>
-<tr class = "vert-space">
-	<td class="cell-text">
-		<div class="div-icon-med-inline">
-			<img class="image-icon" id="export-spotify" src="images/spotify.png"/>
-		</div>
-		<font class="header-med-text">Spotify</font>
-	</td>
-	<td class="cell-text">
-		<div class="div-icon-med-inline">
-			<img class="image-icon" id="export-text" src="images/text.png"/>
-		</div>
-		<font class="header-med-text">Plain Text</font>
-	</td>
-</tr>
-<tr>
-</table>
-<div class="cell-text" style="background-color:#D3D3D3; height:200px;overflow:auto;">
-<table width="100%" id="track-history">
-	<tr class="body-sm-text" style="background-color:#131313;color:#D3D3D3;">
-		<td>Track Name</td><td>Artist Name</td><td>Starred</td><td>Spotify Link</td>
-	</tr>
-	<tr/>
-</table>
+	<div class="west">THIS IS WHERE FILTER SETTINGS/EXPORT SETTINS GO</div>
 </div>
-<br>
-<br>
-<button class="header-lg-text" id="save" style="border-radius: 10px;">Save Preferences</button>
-<br>
-<br>
-<font id="export-status" class="header-med-text" style="opacity:0.3;">test</font>
-</div>
-
-
 
 </body>
 </html>
