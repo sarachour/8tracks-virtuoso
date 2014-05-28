@@ -44,26 +44,6 @@ function OptionsInterface(){
             }
         }
     }
-    this.toDictionary = function(mixes){
-        var selection = {};
-        for(var i=0; i < mixes.length; i++){
-            var mix = mixes[i];
-            for(var artist in mix.tracks){
-                if(!selection.hasOwnProperty(artist)){
-                    selection[artist] = {};
-                }
-                for(var track in mix.tracks[artist]){
-                    if(!selection[artist].hasOwnProperty(track)){
-                        selection[artist][track] = {};
-                    }
-                    for(var p in mix.tracks[artist][track]){
-                        selection[artist][track][p] = mix.tracks[artist][track][p];
-                    }
-                }
-            }
-        }
-        return selection;
-    }
     this.updateTracklist = function(){
         var selection = this.selection;
         var grid = $("#tracks-table-body");
@@ -83,7 +63,7 @@ function OptionsInterface(){
 
                     if(info.spotify != null){
                         spotify_img= $("<div/>").addClass("icon-sm").append($("<a/>")
-                            .attr("href", info.spotify.track_url)
+                            .attr("href", info.spotify.track_id)
                             .append($("<img/>").attr("src", "images/spotify-on.png")))
                     }
                     else{
@@ -164,8 +144,9 @@ function OptionsInterface(){
                 }
             }
             if(star_count > 0){
-                var ov_stars = $('<div/>').addClass("icon-sm ul")
-                    .append($('<img/>').attr("src", "images/star-on.png"))
+                var ov_stars = $('<div/>').addClass(' ul text-overlay white small')
+                    .append($('<div/>').addClass("icon-sm")
+                        .append($('<img/>').attr("src", "images/star-on.png")))
                     .append(star_count);
                 html_icon_overlay.append(ov_stars)
             }
