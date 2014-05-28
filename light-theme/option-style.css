@@ -33,9 +33,6 @@ tbody {
     border:1px solid;
 }
 
-button {
-
-}
 ::-moz-selection{
     background-color:Transparent;
     color:#000;
@@ -75,7 +72,19 @@ button {
 
 
 
-
+.toggle-button {
+    background-color: rgba(50,50,50, 0.9);
+    border-radius: 5px;
+    padding: 2px;
+}
+.toggle-button.down {
+    background: #bbb;
+    background-color: rgba(50,50,112, 0.9);
+    border-top: solid 2px #777;
+    border-left: solid 2px #777;
+    border-bottom:solid 2px  #eaeaea;
+    border-right: solid 2px #eaeaea;
+    }
 .icon-sm {
     width:15px; 
     display: inline-block;

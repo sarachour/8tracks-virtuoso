@@ -186,7 +186,9 @@ chrome.extension.onMessage.addListener(
 function SetupLayout(){
   $('#mixes-results').layout();
   var outerContainer = $('#options').layout({resize: false});
-
+  $('.toggle-button').click(function(){
+        $(this).toggleClass("down");
+    });
 }
 
 function SetupShortcuts(){

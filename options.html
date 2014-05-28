@@ -20,14 +20,19 @@
 </head>
 <body bgcolor="#434343">
 <div id="options" data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
-	<div class="north">THIS IS WHERE PREFERENCES PANE Is</div>
+	<div class="north">
+		Filter:
+		<button class="text toggle-button small white" id="filter_starred" title="show starred tracks only">starred tracks</button>
+		<button class="text toggle-button small white" id="filter_liked" title="show liked mixes only">liked mixes</button>
+		<button class="text toggle-button small white" id="filter_played" title="show liked mixes only">played recently</button>
+	</div>
 	<div class="south">THIS IS WHERE STATUS BAR IS</div>
 	<div id='mixes-results'class="center" style="position:relative; top:0px; height:100%; width:100%; overflow:scroll;" data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
 	</div>
 	<div class="east" id="tracks-results">
 		<table id="tracks-table" width="100%" class="text small black" style="width=100%;padding=20px;">
 		<thead>
-			<tr><td>track</td><td>artist</td><td>star</td></tr>
+			<tr><td>track</td><td>artist</td><td>star</td><td>spotify</td></tr>
 		</thead>
 		<tbody id="tracks-table-body">
 		</tbody>
