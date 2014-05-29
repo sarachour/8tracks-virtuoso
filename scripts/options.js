@@ -63,8 +63,9 @@ function Filter(){
 function Selector(){
     this.selection = {};
     this.mixes = [];
-    this.setInputHandler = function(ih){
-        this.inputHandler = ih;
+    this.multiselect = false;
+    this.setMulti = function(m){
+        this.multiselect = m;
     }
     this.clear = function(){
         this.selection = {};
@@ -72,7 +73,7 @@ function Selector(){
         $(".selected").removeClass("selected");
     }
     this.selectPattern = function(pattern){
-        if(!this.inputHandler.isMultiSelectMode()){
+        if(!this.multiselect){
             this.clear();
         }
         if($(pattern).hasClass("selected")){
@@ -85,7 +86,7 @@ function Selector(){
     }
     this.select = function(elem){
         var isSelected = elem.hasClass("selected");
-        if(!this.inputHandler.isMultiSelectMode()){
+        if(!this.multiselect){
             this.clear();
         }
         if(isSelected){
@@ -132,77 +133,25 @@ function Selector(){
 
 
 function GridInputHandler(selector){
-    this.MULTI_SELECT = false;
     this.selector = selector;
     this.keys=[];
     var that = this;
-    this.check = function(checker){
-        var okcount =false;
-        for(var i=0; i < this.keys.length; i++){
-            var key = this.keys[i];
-            if(checker(key)){
-                okcount = true;
-            }
-        }
-        return okcount;
-    }
-    this.update = function(){
-        var shiftOffChecker = function(m){return (m.shiftKey == true && m.IS_UP == true);};
-        var shiftOnChecker = function(m){return (m.shiftKey == true && m.IS_UP == false);};
-        var metaOffChecker = function(m){
-            return ((m.metaKey) && m.IS_UP == true)
-        }
-        var letterOffChecker = function(let){
-            return function(m){
-                var letter = String.fromCharCode(m.keyCode);
-                return ((letter == let) && m.IS_UP == true)
-            }
-        }
-        console.log(this.keys);
-        if(this.check(metaOffChecker) && this.check(letterOffChecker("A"))){
-            console.log("select all");
-            this.selector.selectPattern(".result");
-        }
-        if(this.check(shiftOnChecker)){
-            console.log("shift on");
-            this.MULTI_SELECT = true;
-        }
-        else if(this.check(shiftOffChecker)){
-            console.log("shift off");
-            this.MULTI_SELECT = false;
-        }
-    }
-    this.onDown = function(e){
-        e.IS_UP = false;
-        this.keys.push(e);
-        this.update();
-    }
-    this.onUp = function(e){
-        
-        var ndown = 0;
-        for(var i=0; i < this.keys.length; i++){
-            var key = this.keys[i];
-            key.IS_UP = true;
-        }
-        this.update();
-        this.keys = [];
-    }
-    $(document).keydown(function (e) {
-        that.onDown(e);
+    $(document).bind('keydown', 'shift', function(){
+        that.selector.setMulti(true);
     });
-    $(document).keyup(function (e) {
-        that.onUp(e);
+    $(document).bind('keyup', 'shift', function(){
+        that.selector.setMulti(false);
     });
-    this.isMultiSelectMode = function(){
-        return this.MULTI_SELECT;
-    }
+    $(document).bind('keydown', 'ctrl+a', function(){
+        that.selector.selectPattern(".result");
+    });
+
     
 }
 
 function OptionsInterface(){
     this.selector = new Selector();
     this.inputHandler = new GridInputHandler(this.selector);
-    this.selector.setInputHandler(this.inputHandler);
     this.filter = new Filter();
 	this.init = function(){
 		this.updateView();
