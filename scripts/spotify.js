@@ -12,7 +12,7 @@ function Spotify(){
 			url += ","+trackid;
 		}
 		var that = this;
-		console.log("open: "+url)
+		console.log("open: \n"+url)
 		
 		chrome.tabs.create({url: url, selected: false}, function(tab){
 			var opentab = tab.id;

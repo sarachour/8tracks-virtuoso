@@ -107,28 +107,29 @@ function Selector(){
         var selection = $(selector(null));
         for(var i=0; i < selection.length; i++){
             var mix = $(selector(i)).data("mix");
-            if(this.mixes.indexOf(mix.name) < 0){
-                this.mixes.push(mix.name);
-                for(var artist in mix.tracks){
+            for(var artist in mix.tracks){
+                if(artist != "_IS_NEW"){
                     if(!this.selection.hasOwnProperty(artist)){
                         this.selection[artist] = {};
                     }
                     for(var track in mix.tracks[artist]){
-                        if(!this.selection[artist].hasOwnProperty(track)){
-                            this.selection[artist][track] = {};
-                        }
-                        for(var p in mix.tracks[artist][track]){
-                            this.selection[artist][track][p] = mix.tracks[artist][track][p];
+                        if(track != "_IS_NEW"){
+                            if(!this.selection[artist].hasOwnProperty(track)){
+                                this.selection[artist][track] = {};
+                            }
+                            for(var p in mix.tracks[artist][track]){
+                                this.selection[artist][track][p] = mix.tracks[artist][track][p];
+                            }
                         }
                     }
                 }
-
             }
         }
     }
     this.getSelection = function(){
         return this.selection;
     }
+    
 }
 
 
@@ -146,9 +147,12 @@ function GridInputHandler(selector){
         that.selector.selectPattern(".result");
     });
     $(document).bind('keydown', 'ctrl+c meta+c', function(){
-        console.log("copy to clipboard");
+        $("#export-status").hide();
+        $("#export-overlay").fadeIn(400);
     });
-
+    $(document).bind('keydown', 'esc', function(){
+        $("#export-overlay").fadeOut(400);
+    });
     
 }
 
@@ -156,6 +160,7 @@ function OptionsInterface(){
     this.selector = new Selector();
     this.inputHandler = new GridInputHandler(this.selector);
     this.filter = new Filter();
+    this.spotify = new Spotify();
 	this.init = function(){
 		this.updateView();
 	}
@@ -163,9 +168,73 @@ function OptionsInterface(){
         var that = this;
         chrome.extension.sendMessage({action: "playlist-get", type:"obj"}, function(resp){
             that.data = resp.playlist;
-            that.updateGrid();
+            that.selector.update();
+            that.updateView();
         });
 
+    }
+    this.setClipboard = function(text, msg){
+        $("#clipboard").css('display', 'block');
+        $("#clipboard").text(text);
+        $("#clipboard").select();
+        document.execCommand('copy',true);
+        $("#export-status").fadeIn(300);
+        $("#export-status").html(msg)
+        $("#clipboard").css('display', 'none');
+    }
+    this.exportSpotify = function(){
+        var sel = this.selector.getSelection();
+        var dat = [];
+        var str = "";
+        for(var artist in sel){
+            for(var track in sel[artist]){
+                var msel = sel[artist][track];
+                if(msel.hasOwnProperty("spotify")){
+                    dat.push(msel.spotify.track_id);
+                    str += msel.spotify.track_id + "\n";
+                }
+            }
+        }
+        if(dat.length <= 10){
+            var that = this;
+            this.spotify.createTrackset("8tracks-export", dat, function(){
+               
+            })
+            that.setClipboard(str, "Created Playlist. Open Spotify.");
+        }
+        else{
+            this.setClipboard(str, "Copied to clipboard. Now paste into Spotify playlist.");
+        }
+    }
+    this.exportTabDelim = function(){
+        var sel = this.selector.getSelection();
+        var dat = [];
+        dat.push(['track', 'artist', 'starred', 'spotify']);
+        for(var artist in sel){
+            for(var track in sel[artist]){
+                var row = [];
+                var msel = sel[artist][track];
+                row.push(track);
+                row.push(artist);
+                row.push(msel.faved_by_current_user);
+
+                if(msel.hasOwnProperty("spotify")){
+                    row.push(msel.spotify.track_id);
+                }
+                else{
+                    row.push("");
+                }
+                dat.push(row);
+            }
+        }
+        var text = "";
+        for(var i=0; i < dat.length; i++){
+            for(var j=0; j < dat[i].length; j++){
+                text += dat[i][j] + "\t";
+            }  
+            text += "\n";
+        }
+        this.setClipboard(text, "Copied to clipboard. Paste into spreadsheet.");
     }
     this.updateTracklist = function(){
         var selection = this.selector.getSelection();
@@ -294,6 +363,7 @@ function OptionsInterface(){
 	}
 	this.updateView = function(){
 		this.updateGrid();
+        this.updateTracklist();
 	}
 	this.init();
 }
@@ -320,8 +390,20 @@ function SetupShortcuts(){
     
 }
 
+jQuery.fn.center = function () {
+    this.css("position","absolute");
+    this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + 
+                                                $(window).scrollTop()) + "px");
+    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + 
+                                                $(window).scrollLeft()) + "px");
+    return this;
+}
 
 function SetupUI(){
+    $("#export-container").center();
+    $("#export-overlay").hide();
+    $("#export-status").hide();
+
     $("#filter_starred").click(function(){
         if($("#filter_starred").hasClass("down")){
             optionsInterface.filter.setFilterStarred(true);
@@ -353,16 +435,10 @@ function SetupUI(){
     })
 
     $("#export-spotify").click(function(){
-    	chrome.extension.sendMessage({action: "playlist-get", type:"spotify"}, function(resp){
-    		console.log(resp.playlist);
-    		optionsInterface.setClipboard(resp.playlist, "copied to clipboard. paste into spotify playlist.");
-    	})
+    	optionsInterface.exportSpotify();
     })
     $("#export-text").click(function(){
-    	chrome.extension.sendMessage({action: "playlist-get", type:"tab"}, function(resp){
-    		console.log(resp.playlist);
-    		optionsInterface.setClipboard(resp.playlist, "copied to clipboard. paste into text file.");
-    	})
+    	optionsInterface.exportTabDelim();
     })
 }
 document.addEventListener('DOMContentLoaded', function() {

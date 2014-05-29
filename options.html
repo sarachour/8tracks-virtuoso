@@ -14,12 +14,25 @@
 <script src="scripts/lib/jlayout/jlayout.border.js"></script>
 <script src="scripts/lib/jlayout/jquery.jlayout.js"></script>
 
+<script src="scripts/spotify.js"></script>
 <script src="scripts/8tracks.js"></script>
 <script src="scripts/options.js"></script>
 <textarea id="clipboard" style="display:none;" width="0%" height="0px">text here</textarea>
 
 </head>
 <body bgcolor="#434343">
+<div id="export-overlay" class="view-overlay">
+	<div id="export-container" style="background-color:rgb(100,100,100);width:400px; height:150;">
+		<h3 class="text white large" style=" padding:10px;"> choose how you want to copy the selection </h3>
+		<button id="export-spotify" class="normal-button white text large" style="width:100%; padding:10px;">
+			Copy to Spotify
+		</button><br>
+		<button id="export-text" class="normal-button white text large" style="width:100%; padding:10px;">
+			Copy as PlainText
+		</button>
+		<div id="export-status" class="text white medium"></div>
+	</div>
+</div>
 <div id="options" data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
 	<div class="north">
 		Filter:

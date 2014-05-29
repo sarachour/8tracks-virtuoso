@@ -33,6 +33,17 @@ tbody {
     border:1px solid;
 }
 
+.view-overlay {
+    position:absolute;
+    background-color: rgba(0,0,0, 0.8);
+    top:0;
+    width:100%; 
+    height:100%;
+    z-index: 20;
+    word-wrap: break-word;
+    text-align:center;
+}
+
 ::-moz-selection{
     background-color:Transparent;
     color:#000;
@@ -70,7 +81,16 @@ tbody {
     right: 5px;
 }
 
-
+.centered {
+    position:absolute;
+    left: 50%;
+    top: 50%;
+}
+.normal-button {
+    background-color: rgba(50,50,50, 0.9);
+    border-radius: 5px;
+    padding: 2px;
+}
 
 .toggle-button {
     background-color: rgba(50,50,50, 0.9);
