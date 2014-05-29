@@ -38,7 +38,39 @@ function Filter(){
         else
             return false;
     }
-    this.filter = function(){
+    this.filterTrack = function(tr){
+        console.log(tr);
+        if(
+            ((this.FILTER_STARRED && tr.faved_by_current_user) || !this.FILTER_STARRED)&&
+            ((this.FILTER_RECENT && cmix._IS_NEW) || !this.FILTER_RECENT)
+            ){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    this.filterTracks = function(){
+        var selector = function(idx){
+            if(idx != null) return ".result-track:nth-child("+idx+")";
+            else return ".result-track";
+        }
+        var tracks = $(selector(null));
+        for(var i=0; i < tracks.length; i++){
+            var elem = $(selector(i+1));
+            var track = elem.data("track");
+            if(this.filterTrack(track)){
+                elem.addClass("show");
+                elem.removeClass("hide");
+            }
+            else{
+                elem.removeClass("show");
+                elem.addClass("hide");
+            }
+        }
+        
+    }
+    this.filterMixes = function(){
         var selector = function(idx){
             if(idx != null) return ".result:nth-child("+idx+")";
             else return ".result";
@@ -57,6 +89,10 @@ function Filter(){
             }
         }
         
+    }
+    this.filter = function(){
+        this.filterMixes();
+        this.filterTracks();
     }
 }
 
@@ -240,6 +276,7 @@ function OptionsInterface(){
         this.setClipboard(text, "Copied to clipboard. Paste into spreadsheet.");
     }
     this.updateTracklist = function(){
+        var that = this;
         var selection = this.selector.getSelection();
         var grid = $("#tracks-table-body");
         grid.empty();
@@ -247,29 +284,14 @@ function OptionsInterface(){
             for(var track in selection[artist]){
                 var info = selection[artist][track];
                 if(artist != "_IS_NEW" && track != "_IS_NEW"){
-                    var row = $("<tr/>");
+                    var row = $("<tr/>").addClass("result-track");
                     var starred_img_url = "images/star.png"
                     if(info.faved_by_current_user)
                         starred_img_url = "images/star-on.png";
 
                     var starred_img = $("<div/>").addClass("icon-sm").append(
                         $("<img/>").attr("src", starred_img_url)
-                    ).click(function(melem){
-                        return function(){
-                            var track = melem.data("track");
-                            console.log(track);
-                            if(track.faved_by_current_user){
-                                track.faved_by_current_user = false;
-                                eightTracks.unfavoriteTrack(track.id, function(){});
-                                melem.find('img[src="images/star-on.png"]').attr("src", "images/star.png");
-                            }
-                            else{
-                                track.faved_by_current_user = true;
-                                eightTracks.favoriteTrack(track.id, function(){});
-                                melem.find('img[src="images/star.png"]').attr("src", "images/star-on.png");
-                            }
-                        }
-                    }(row))
+                    )
                     var spotify_img_url = "images/spotify-black.png";
 
                     if(info.spotify != null){
