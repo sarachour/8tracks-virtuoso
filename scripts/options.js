@@ -1,4 +1,73 @@
 
+function Filter(){
+    this.FILTER_LIKED = false;
+    this.FILTER_STARRED = false;
+    this.FILTER_RECENT = false;
+
+    this.setFilterLiked = function(filterLiked){
+        this.FILTER_LIKED = filterLiked;
+        this.filter();
+    }
+    this.setFilterStarred = function(filterStarred){
+        this.FILTER_STARRED = filterStarred;
+        this.filter();
+    }
+    this.setFilterRecent = function(filterRecent){
+        this.FILTER_RECENT = filterRecent;
+        this.filter();
+    }
+
+    this.filterMix = function(cmix){
+        star_count=0;
+        track_count = 0;
+        for(var artist in cmix.tracks){
+            for(var track in cmix.tracks[artist]){
+                if(artist != "_IS_NEW" && track != "_IS_NEW"){
+                    track_count+=1;
+                    if(cmix.tracks[artist][track].faved_by_current_user){
+                        star_count++;
+                    }
+                }
+            }
+        }
+        if((this.FILTER_STARRED && star_count > 0  || !this.FILTER_STARRED) && 
+               (this.FILTER_LIKED && cmix.liked_by_current_user || !this.FILTER_LIKED) &&
+               (this.FILTER_RECENT && cmix._IS_NEW || !this.FILTER_RECENT) ){
+            return true;
+        }
+        else
+            return false;
+    }
+    this.filter = function(){
+        var selector = function(idx){
+            if(idx != null) return ".result:nth-child("+idx+")";
+            else return ".result";
+        }
+        var grid = $(selector(null));
+        for(var i=0; i < grid.length; i++){
+            var elem = $(selector(i+1));
+            var mix = elem.data("mix");
+            if(this.filterMix(mix)){
+                elem.addClass("show");
+                elem.removeClass("hide");
+            }
+            else{
+                elem.removeClass("show");
+                elem.addClass("hide");
+            }
+        }
+        
+    }
+}
+
+function KeyHandler(){
+    this.SHIFT_MODIFIER = false;
+    this.CTRL_MODIFIER = false;
+    this.A_MODIFIER = false;
+    this.C_MODIFIER = false;
+    this.V_MODIFIER = false;
+}
+
 function OptionsInterface(){
     this.selection = {};
     this.selection_html = [];
@@ -6,21 +75,11 @@ function OptionsInterface(){
     this.FILTER_LIKED = false;
     this.FILTER_STARRED = false;
     this.FILTER_RECENT = false;
+
+    this.filter = new Filter();
 	this.init = function(){
 		this.updateView();
 	}
-    this.setFilterLiked = function(filterLiked){
-        this.FILTER_LIKED = filterLiked;
-        this.updateView();
-    }
-    this.setFilterStarred = function(filterStarred){
-        this.FILTER_STARRED = filterStarred;
-        this.updateView();
-    }
-    this.setFilterRecent = function(filterRecent){
-        this.FILTER_RECENT = filterRecent;
-        this.updateView();
-    }
     this.setShiftDown = function(isdown){
         this.SHIFT_MODIFIER = isdown;
     }
@@ -116,76 +175,73 @@ function OptionsInterface(){
                     }
                 }
             }
-            if((this.FILTER_STARRED && star_count > 0  || !this.FILTER_STARRED) && 
-               (this.FILTER_LIKED && cmix.liked_by_current_user || !this.FILTER_LIKED) &&
-               (this.FILTER_RECENT && cmix._IS_NEW || !this.FILTER_RECENT) )
-            {
 
-                var badge_image = "images/no-rank.png";
-                if(mix.certification == "gold"){
-                    badge_image = "images/gold.png";
-                }
-                else if(mix.certification == "silver"){
-                    badge_image = "images/silver.png";
-                }
-                if(mix.certification == "bronze"){
-                    badge_image = "images/bronze.png";
-                }
-                var html_img = $('<img/>').addClass("result-img").attr("src", cmix.cover_urls.sq250);
-                var html_div = $('<div/>').addClass("result").addClass("text black small");
-
-                html_div.append(html_img);
-
-                var html_title = $('<div/>').addClass("med").html(cmix.name);
-                var html_tags = $('<div/>').addClass("small faint").html(cmix.tag_list_cache);
-                var html_desc = $('<div/>').addClass("scrollable").html(cmix.description_html);
-                var html_badge = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", badge_image));
-                var html_likes = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/heart-on.png"));
-                var html_plays = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/play-black.png"));
-                var html_tracks = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/music.png"));
-                var html_info = $('<div/>').addClass("result-text");
-
-                html_info.append("<br>",
-                    html_title, "<br>",
-                    html_badge, "&nbsp;",
-                    cmix.likes_count,html_likes,"&nbsp;", 
-                    cmix.plays_count,html_plays,"&nbsp;", 
-                    cmix.tracks_count, html_tracks, "<br>",
-                    html_tags, "<br>",
-                    html_desc);
-
-                var html_icon_overlay = $('<div/>').addClass("result-img-overlay");
-                if(cmix._IS_NEW  == true){
-                    var ov_likes = $('<div/>').addClass("icon-sm ll").append($('<img/>').attr("src", "images/dot-ok.png"));
-                    html_icon_overlay.append(ov_likes)
-                }
-                if(cmix.liked_by_current_user){
-                    var ov_likes = $('<div/>').addClass("icon-sm ur").append($('<img/>').attr("src", "images/heart-on.png"));
-                    html_icon_overlay.append(ov_likes)
-                }
-                
-                if(star_count > 0){
-                    var ov_stars = $('<div/>').addClass(' ul text-overlay white small')
-                        .append($('<div/>').addClass("icon-sm")
-                            .append($('<img/>').attr("src", "images/star-on.png")))
-                        .append(star_count);
-                    html_icon_overlay.append(ov_stars)
-                }
-                var ov_tracks = $('<div/>').addClass("lr white text text-overlay small")
-                    .append(track_count + "/"+cmix.tracks_count);
-                html_icon_overlay.append(ov_tracks)
-
-                html_div.append(html_info, html_icon_overlay);
-                html_div.click(function(mymix, myelem){
-                    return function(){
-                        that.select(mymix, myelem);
-                        that.updateTracklist();
-
-                    } 
-                  }(cmix, html_div));
-                grid.append(html_div);
+            var badge_image = "images/no-rank.png";
+            if(mix.certification == "gold"){
+                badge_image = "images/gold.png";
             }
+            else if(mix.certification == "silver"){
+                badge_image = "images/silver.png";
+            }
+            if(mix.certification == "bronze"){
+                badge_image = "images/bronze.png";
+            }
+            var html_img = $('<img/>').addClass("result-img").attr("src", cmix.cover_urls.sq250);
+            var html_div = $('<div/>').addClass("result show").addClass("text black small");
+
+            html_div.append(html_img);
+
+            var html_title = $('<div/>').addClass("med").html(cmix.name);
+            var html_tags = $('<div/>').addClass("small faint").html(cmix.tag_list_cache);
+            var html_desc = $('<div/>').addClass("scrollable").html(cmix.description_html);
+            var html_badge = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", badge_image));
+            var html_likes = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/heart-on.png"));
+            var html_plays = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/play-black.png"));
+            var html_tracks = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/music.png"));
+            var html_info = $('<div/>').addClass("result-text");
+
+            html_info.append("<br>",
+                html_title, "<br>",
+                html_badge, "&nbsp;",
+                cmix.likes_count,html_likes,"&nbsp;", 
+                cmix.plays_count,html_plays,"&nbsp;", 
+                cmix.tracks_count, html_tracks, "<br>",
+                html_tags, "<br>",
+                html_desc);
+
+            var html_icon_overlay = $('<div/>').addClass("result-img-overlay");
+            if(cmix._IS_NEW  == true){
+                var ov_likes = $('<div/>').addClass("icon-sm ll").append($('<img/>').attr("src", "images/dot-ok.png"));
+                html_icon_overlay.append(ov_likes)
+            }
+            if(cmix.liked_by_current_user){
+                var ov_likes = $('<div/>').addClass("icon-sm ur").append($('<img/>').attr("src", "images/heart-on.png"));
+                html_icon_overlay.append(ov_likes)
+            }
+            
+            if(star_count > 0){
+                var ov_stars = $('<div/>').addClass(' ul text-overlay white small')
+                    .append($('<div/>').addClass("icon-sm")
+                        .append($('<img/>').attr("src", "images/star-on.png")))
+                    .append(star_count);
+                html_icon_overlay.append(ov_stars)
+            }
+            var ov_tracks = $('<div/>').addClass("lr white text text-overlay small")
+                .append(track_count + "/"+cmix.tracks_count);
+            html_icon_overlay.append(ov_tracks)
+
+            html_div.append(html_info, html_icon_overlay);
+            html_div.click(function(mymix, myelem){
+                return function(){
+                    that.select(mymix, myelem);
+                    that.updateTracklist();
+
+                } 
+              }(cmix, html_div));
+            html_div.data("mix", cmix);
+            grid.append(html_div);
         }
+    
 
 	}
 	this.updateView = function(){
@@ -233,26 +289,26 @@ function SetupShortcuts(){
 function SetupUI(){
     $("#filter_starred").click(function(){
         if($("#filter_starred").hasClass("down")){
-            optionsInterface.setFilterStarred(true);
+            optionsInterface.filter.setFilterStarred(true);
         }
         else{
-            optionsInterface.setFilterStarred(false);
+            optionsInterface.filter.setFilterStarred(false);
         }
     });
     $("#filter_liked").click(function(){
         if($("#filter_liked").hasClass("down")){
-            optionsInterface.setFilterLiked(true);
+            optionsInterface.filter.setFilterLiked(true);
         }
         else{
-            optionsInterface.setFilterLiked(false);
+            optionsInterface.filter.setFilterLiked(false);
         }
     });
     $("#filter_recent").click(function(){
         if($("#filter_recent").hasClass("down")){
-            optionsInterface.setFilterRecent(true);
+            optionsInterface.filter.setFilterRecent(true);
         }
         else{
-            optionsInterface.setFilterRecent(false);
+            optionsInterface.filter.setFilterRecent(false);
         }
     });
 	$("#playlist-clear").click(function(){

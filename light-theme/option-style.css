@@ -168,8 +168,11 @@ tbody {
     display: inline-block;
     overflow: hidden;
     border-radius: 15px;
-
 }
+.hide {
+    display: none;
+}
+
 .result-img-overlay {
     position:relative;
     color:#000;
