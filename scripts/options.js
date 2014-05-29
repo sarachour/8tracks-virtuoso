@@ -39,10 +39,9 @@ function Filter(){
             return false;
     }
     this.filterTrack = function(tr){
-        console.log(tr);
         if(
             ((this.FILTER_STARRED && tr.faved_by_current_user) || !this.FILTER_STARRED)&&
-            ((this.FILTER_RECENT && cmix._IS_NEW) || !this.FILTER_RECENT)
+            ((this.FILTER_RECENT && tr._IS_NEW) || !this.FILTER_RECENT)
             ){
             return true;
         }
@@ -137,9 +136,10 @@ function Selector(){
     }
     this.update = function(){
         var selector = function(idx){
-            if(idx != null) return ".selected:eq("+idx+")";
-            else return ".selected";
+            if(idx != null) return ".result.show.selected:eq("+idx+")";
+            else return ".show.selected";
         }
+        this.selection = {};
         var selection = $(selector(null));
         for(var i=0; i < selection.length; i++){
             var mix = $(selector(i)).data("mix");
@@ -153,8 +153,12 @@ function Selector(){
                             if(!this.selection[artist].hasOwnProperty(track)){
                                 this.selection[artist][track] = {};
                             }
+                            var is_starred = track.faved_by_current_user;
                             for(var p in mix.tracks[artist][track]){
                                 this.selection[artist][track][p] = mix.tracks[artist][track][p];
+                            }
+                            if(is_starred){
+                                this.selection[artist][track].faved_by_current_user = is_starred;
                             }
                         }
                     }
@@ -164,6 +168,26 @@ function Selector(){
     }
     this.getSelection = function(){
         return this.selection;
+    }
+    this.getSelectionFromHTML = function(){
+        var data = {};
+        var selector = function(idx){
+            if(idx != null) return ".result-track.show:eq("+idx+")";
+            else return ".result-track.show";
+        }
+        var selection = $(selector(null));
+        for(var i=0; i < selection.length; i++){
+            var track = $(selector(i)).data("track");
+            console.log(track);
+            if(!data.hasOwnProperty(track.performer)){
+                data[track.performer] = {};
+            }
+            data[track.performer][track.name] = track;
+            
+        }
+        console.log(selection.length);
+        console.log(data);
+        return data;
     }
     
 }
@@ -222,7 +246,7 @@ function OptionsInterface(){
 
     }
     this.exportSpotify = function(){
-        var sel = this.selector.getSelection();
+        var sel = this.selector.getSelectionFromHTML();
         var dat = [];
         var str = "";
         for(var artist in sel){
@@ -246,7 +270,7 @@ function OptionsInterface(){
         }
     }
     this.exportTabDelim = function(){
-        var sel = this.selector.getSelection();
+        var sel = this.selector.getSelectionFromHTML();
         var dat = [];
         dat.push(['track', 'artist', 'starred', 'spotify']);
         for(var artist in sel){
@@ -284,7 +308,7 @@ function OptionsInterface(){
             for(var track in selection[artist]){
                 var info = selection[artist][track];
                 if(artist != "_IS_NEW" && track != "_IS_NEW"){
-                    var row = $("<tr/>").addClass("result-track");
+                    var row = $("<tr/>").addClass("result-track").addClass("show");
                     var starred_img_url = "images/star.png"
                     if(info.faved_by_current_user)
                         starred_img_url = "images/star-on.png";
@@ -316,6 +340,7 @@ function OptionsInterface(){
                 }
             }
         }
+        that.filter.filterTracks();
     }
 	this.updateGrid = function(){
         var grid = $("#mixes-results");
@@ -395,7 +420,6 @@ function OptionsInterface(){
                 return function(){
                     that.selector.select(myelem);
                     that.updateTracklist();
-
                 } 
               }(html_div));
             html_div.data("mix", cmix);
@@ -472,13 +496,17 @@ function SetupUI(){
     $("#filter_liked").click(function(){
         if($("#filter_liked").hasClass("down")){
             optionsInterface.filter.setFilterLiked(true);
+            optionsInterface.selector.update();
+            optionsInterface.updateTracklist();
         }
         else{
             optionsInterface.filter.setFilterLiked(false);
+            optionsInterface.selector.update();
+            optionsInterface.updateTracklist();
         }
     });
-    $("#filter_recent").click(function(){
-        if($("#filter_recent").hasClass("down")){
+    $("#filter_played").click(function(){
+        if($("#filter_played").hasClass("down")){
             optionsInterface.filter.setFilterRecent(true);
         }
         else{
