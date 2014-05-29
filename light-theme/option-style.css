@@ -39,7 +39,7 @@ tbody {
     top:0;
     width:100%; 
     height:100%;
-    z-index: 20;
+    z-index: 30;
     word-wrap: break-word;
     text-align:center;
 }
@@ -142,10 +142,12 @@ tbody {
 .west {
     background-color: rgb(50,50,50); 
     width: 15%;
+    z-index: 20;
 }
 .east {
     background-color: rgb(50,50,50); 
     width: 25%;
+    z-index: 20;
 }
 .south, .north{
     background-color: rgb(90,90,90); 

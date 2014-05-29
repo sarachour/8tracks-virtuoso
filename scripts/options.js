@@ -179,8 +179,9 @@ function OptionsInterface(){
         $("#clipboard").select();
         document.execCommand('copy',true);
         $("#export-status").fadeIn(300);
-        $("#export-status").html(msg)
+        $("#export-status").html(msg).delay(2000);
         $("#clipboard").css('display', 'none');
+
     }
     this.exportSpotify = function(){
         var sel = this.selector.getSelection();
@@ -379,11 +380,25 @@ chrome.extension.onMessage.addListener(
 )
 
 function SetupLayout(){
-  $('#mixes-results').layout();
-  var outerContainer = $('#options').layout({resize: false});
-  $('.toggle-button').click(function(){
+    $('#mixes-results').layout();
+    var outerContainer = $('#options').layout({resize: false});
+    function layout() {
+        outerContainer.layout({resize: false});
+    }
+
+
+    $('.toggle-button').click(function(){
         $(this).toggleClass("down");
-   });
+    });
+    $('.layout-outer > .east').resizable({
+        handles: 'w',
+        stop: layout
+    });
+
+    $('.layout-outer > .west').resizable({
+        handles: 'e',
+        stop: layout
+    });
 }
 
 function SetupShortcuts(){
@@ -436,9 +451,11 @@ function SetupUI(){
 
     $("#export-spotify").click(function(){
     	optionsInterface.exportSpotify();
+        $("#export-overlay").fadeOut(600);
     })
     $("#export-text").click(function(){
     	optionsInterface.exportTabDelim();
+        $("#export-overlay").fadeOut(600);
     })
 }
 document.addEventListener('DOMContentLoaded', function() {

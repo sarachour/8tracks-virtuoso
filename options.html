@@ -30,7 +30,7 @@
 		<button id="export-text" class="normal-button white text large" style="width:100%; padding:10px;">
 			Copy as PlainText
 		</button>
-		<div id="export-status" class="text white medium"></div>
+
 	</div>
 </div>
 <div id="options" data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
@@ -40,8 +40,10 @@
 		<button class="text toggle-button small white" id="filter_liked" title="show liked mixes only">liked mixes</button>
 		<button class="text toggle-button small white" id="filter_played" title="show liked mixes only">played recently</button>
 	</div>
-	<div class="south">THIS IS WHERE STATUS BAR IS</div>
-	<div id='mixes-results'class="center" style="position:relative; top:0px; height:100%; width:100%; overflow:scroll;" data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
+	<div class="south">
+		<div id="export-status" class="text white medium"></div>
+	</div>
+	<div id='mixes-results'class="center" style="position:absolute; top:0px; height:100%; width:100%; overflow:scroll;" data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
 	</div>
 	<div class="east" id="tracks-results">
 		<table id="tracks-table" width="100%" class="text small black" style="width=100%;padding=20px;">
