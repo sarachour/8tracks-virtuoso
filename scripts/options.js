@@ -162,6 +162,7 @@ function OptionsInterface(){
     this.inputHandler = new GridInputHandler(this.selector);
     this.filter = new Filter();
     this.spotify = new Spotify();
+    eightTracks.createPlaybackStream(function(){});
 	this.init = function(){
 		this.updateView();
 	}
@@ -246,13 +247,29 @@ function OptionsInterface(){
             for(var track in selection[artist]){
                 var info = selection[artist][track];
                 if(artist != "_IS_NEW" && track != "_IS_NEW"){
+                    var row = $("<tr/>");
                     var starred_img_url = "images/star.png"
                     if(info.faved_by_current_user)
                         starred_img_url = "images/star-on.png";
 
                     var starred_img = $("<div/>").addClass("icon-sm").append(
                         $("<img/>").attr("src", starred_img_url)
-                    )
+                    ).click(function(melem){
+                        return function(){
+                            var track = melem.data("track");
+                            console.log(track);
+                            if(track.faved_by_current_user){
+                                track.faved_by_current_user = false;
+                                eightTracks.unfavoriteTrack(track.id, function(){});
+                                melem.find('img[src="images/star-on.png"]').attr("src", "images/star.png");
+                            }
+                            else{
+                                track.faved_by_current_user = true;
+                                eightTracks.favoriteTrack(track.id, function(){});
+                                melem.find('img[src="images/star.png"]').attr("src", "images/star-on.png");
+                            }
+                        }
+                    }(row))
                     var spotify_img_url = "images/spotify-black.png";
 
                     if(info.spotify != null){
@@ -266,12 +283,14 @@ function OptionsInterface(){
                     }
                     var status = $("<div/>").append(starred_img).append(spotify_img);
 
-                    grid.append($("<tr/>")
-                    .append($("<td>").html(track))
+                    
+                    row.append($("<td>").html(track))
                     .append($("<td>").html(artist))
                     .append($("<td>").html(starred_img))
                     .append($("<td>").html(spotify_img))
-                    )
+                    .data("track", selection[artist][track]);
+                    grid.append(row)
+                    
                 }
             }
         }
