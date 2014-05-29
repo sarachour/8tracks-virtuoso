@@ -60,29 +60,153 @@ function Filter(){
     }
 }
 
-function KeyHandler(){
-    this.SHIFT_MODIFIER = false;
-    this.CTRL_MODIFIER = false;
-    this.A_MODIFIER = false;
-    this.C_MODIFIER = false;
-    this.V_MODIFIER = false;
+function Selector(){
+    this.selection = {};
+    this.mixes = [];
+    this.setInputHandler = function(ih){
+        this.inputHandler = ih;
+    }
+    this.clear = function(){
+        this.selection = {};
+        this.mixes = [];
+        $(".selected").removeClass("selected");
+    }
+    this.selectPattern = function(pattern){
+        if(!this.inputHandler.isMultiSelectMode()){
+            this.clear();
+        }
+        if($(pattern).hasClass("selected")){
+            this.selection = {};
+            this.mixes = [];
+            $(pattern).removeClass("selected");
+        }
+        $(pattern).addClass("selected");
+        this.update();
+    }
+    this.select = function(elem){
+        var isSelected = elem.hasClass("selected");
+        if(!this.inputHandler.isMultiSelectMode()){
+            this.clear();
+        }
+        if(isSelected){
+            this.selection = {};
+            this.mixes = [];
+            elem.removeClass("selected");
+        }
+        else {
+            elem.addClass("selected");
+        }
+        this.update();
+    }
+    this.update = function(){
+        var selector = function(idx){
+            if(idx != null) return ".selected:eq("+idx+")";
+            else return ".selected";
+        }
+        var selection = $(selector(null));
+        for(var i=0; i < selection.length; i++){
+            var mix = $(selector(i)).data("mix");
+            if(this.mixes.indexOf(mix.name) < 0){
+                this.mixes.push(mix.name);
+                for(var artist in mix.tracks){
+                    if(!this.selection.hasOwnProperty(artist)){
+                        this.selection[artist] = {};
+                    }
+                    for(var track in mix.tracks[artist]){
+                        if(!this.selection[artist].hasOwnProperty(track)){
+                            this.selection[artist][track] = {};
+                        }
+                        for(var p in mix.tracks[artist][track]){
+                            this.selection[artist][track][p] = mix.tracks[artist][track][p];
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    this.getSelection = function(){
+        return this.selection;
+    }
+}
+
+
+function GridInputHandler(selector){
+    this.MULTI_SELECT = false;
+    this.selector = selector;
+    this.keys=[];
+    var that = this;
+    this.check = function(checker){
+        var okcount =false;
+        for(var i=0; i < this.keys.length; i++){
+            var key = this.keys[i];
+            if(checker(key)){
+                okcount = true;
+            }
+        }
+        return okcount;
+    }
+    this.update = function(){
+        var shiftOffChecker = function(m){return (m.shiftKey == true && m.IS_UP == true);};
+        var shiftOnChecker = function(m){return (m.shiftKey == true && m.IS_UP == false);};
+        var metaOffChecker = function(m){
+            return ((m.metaKey) && m.IS_UP == true)
+        }
+        var letterOffChecker = function(let){
+            return function(m){
+                var letter = String.fromCharCode(m.keyCode);
+                return ((letter == let) && m.IS_UP == true)
+            }
+        }
+        console.log(this.keys);
+        if(this.check(metaOffChecker) && this.check(letterOffChecker("A"))){
+            console.log("select all");
+            this.selector.selectPattern(".result");
+        }
+        if(this.check(shiftOnChecker)){
+            console.log("shift on");
+            this.MULTI_SELECT = true;
+        }
+        else if(this.check(shiftOffChecker)){
+            console.log("shift off");
+            this.MULTI_SELECT = false;
+        }
+    }
+    this.onDown = function(e){
+        e.IS_UP = false;
+        this.keys.push(e);
+        this.update();
+    }
+    this.onUp = function(e){
+        
+        var ndown = 0;
+        for(var i=0; i < this.keys.length; i++){
+            var key = this.keys[i];
+            key.IS_UP = true;
+        }
+        this.update();
+        this.keys = [];
+    }
+    $(document).keydown(function (e) {
+        that.onDown(e);
+    });
+    $(document).keyup(function (e) {
+        that.onUp(e);
+    });
+    this.isMultiSelectMode = function(){
+        return this.MULTI_SELECT;
+    }
+    
 }
 
 function OptionsInterface(){
-    this.selection = {};
-    this.selection_html = [];
-    this.SHIFT_MODIFIER = false;
-    this.FILTER_LIKED = false;
-    this.FILTER_STARRED = false;
-    this.FILTER_RECENT = false;
-
+    this.selector = new Selector();
+    this.inputHandler = new GridInputHandler(this.selector);
+    this.selector.setInputHandler(this.inputHandler);
     this.filter = new Filter();
 	this.init = function(){
 		this.updateView();
 	}
-    this.setShiftDown = function(isdown){
-        this.SHIFT_MODIFIER = isdown;
-    }
     this.updateData = function(){
         var that = this;
         chrome.extension.sendMessage({action: "playlist-get", type:"obj"}, function(resp){
@@ -91,35 +215,8 @@ function OptionsInterface(){
         });
 
     }
-    this.clearSelection = function(){
-        this.selection = {};
-        for(var i=0; i < this.selection_html.length; i++){
-            this.selection_html[i].removeClass("selected");
-        }
-        this.selection_html = [];
-    }
-    this.select = function(mix, html){
-        if(this.SHIFT_MODIFIER == false){
-            this.clearSelection();
-        }
-        html.addClass("selected");
-        this.selection_html.push(html);
-        for(var artist in mix.tracks){
-            if(!this.selection.hasOwnProperty(artist)){
-                this.selection[artist] = {};
-            }
-            for(var track in mix.tracks[artist]){
-                if(!this.selection[artist].hasOwnProperty(track)){
-                    this.selection[artist][track] = {};
-                }
-                for(var p in mix.tracks[artist][track]){
-                    this.selection[artist][track][p] = mix.tracks[artist][track][p];
-                }
-            }
-        }
-    }
     this.updateTracklist = function(){
-        var selection = this.selection;
+        var selection = this.selector.getSelection();
         var grid = $("#tracks-table-body");
         grid.empty();
         for(var artist in selection){
@@ -155,7 +252,6 @@ function OptionsInterface(){
                 }
             }
         }
-        console.log(selection);
     }
 	this.updateGrid = function(){
         var grid = $("#mixes-results");
@@ -231,13 +327,13 @@ function OptionsInterface(){
             html_icon_overlay.append(ov_tracks)
 
             html_div.append(html_info, html_icon_overlay);
-            html_div.click(function(mymix, myelem){
+            html_div.click(function(myelem){
                 return function(){
-                    that.select(mymix, myelem);
+                    that.selector.select(myelem);
                     that.updateTracklist();
 
                 } 
-              }(cmix, html_div));
+              }(html_div));
             html_div.data("mix", cmix);
             grid.append(html_div);
         }
@@ -256,7 +352,6 @@ chrome.extension.onMessage.addListener(
   function(request, sender, sendResponse) {
         if(request.action == "update"){
             optionsInterface.updateData();
-            optionsInterface.updateView();
         }
   }
 )
@@ -270,19 +365,7 @@ function SetupLayout(){
 }
 
 function SetupShortcuts(){
-    $(document).keydown(function (e) {
-        if (e.shiftKey) {
-            optionsInterface.setShiftDown(true);
-            return true;
-        }
-    });
-    $(document).keyup(function (e) {
-        if (optionsInterface.SHIFT_MODIFIER) {
-            console.log("keyup");
-            optionsInterface.setShiftDown(false);
-            return true;
-        }
-    });
+    
 }
 
 
