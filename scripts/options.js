@@ -145,6 +145,7 @@ function GridInputHandler(selector){
     });
     $(document).bind('keydown', 'ctrl+a meta+a', function(){
         that.selector.selectPattern(".result");
+        optionsInterface.updateTracklist();
     });
     $(document).bind('keydown', 'ctrl+c meta+c', function(){
         $("#export-status").hide();
