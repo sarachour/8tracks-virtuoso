@@ -142,8 +142,11 @@ function GridInputHandler(selector){
     $(document).bind('keyup', 'shift', function(){
         that.selector.setMulti(false);
     });
-    $(document).bind('keydown', 'ctrl+a', function(){
+    $(document).bind('keydown', 'ctrl+a meta+a', function(){
         that.selector.selectPattern(".result");
+    });
+    $(document).bind('keydown', 'ctrl+c meta+c', function(){
+        console.log("copy to clipboard");
     });
 
     
