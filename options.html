@@ -35,10 +35,7 @@
 </div>
 <div id="options" data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
 	<div class="north">
-		Filter:
-		<button class="text toggle-button small white" id="filter_starred" title="show starred tracks only">starred tracks</button>
-		<button class="text toggle-button small white" id="filter_liked" title="show liked mixes only">liked mixes</button>
-		<button class="text toggle-button small white" id="filter_played" title="show liked mixes only">played recently</button>
+		Preferences
 	</div>
 	<div class="south">
 		<div id="export-status" class="text white medium"></div>
@@ -54,7 +51,26 @@
 		</tbody>
 		</table>
 		</div>
-	<div class="west">THIS IS WHERE FILTER SETTINGS/EXPORT SETTINS GO</div>
+	<div class="west white small">
+		Filter:<br>
+		<button class="white toggle-button wide" id="filter_starred" title="show starred tracks only">starred tracks</button>
+		<button class="white toggle-button wide" id="filter_liked" title="show liked mixes only">liked mixes</button>
+		<button class="white toggle-button wide" id="filter_played" title="show liked mixes only">played recently</button>
+		<button class="white toggle-button wide" id="filter_keyword" title="filter by keyword">by keyword</button>
+		<div id="filter_keyword_properties" style="margin:15px;">
+			<input id="filter_keyword" type="text" hint="keyword">
+			in
+			<input id="filter_tags" type="checkbox" value="tags">
+			<span class="wide" >tags</span>
+			<input id="filter_description" type="checkbox" value="description">
+			<span class="wide">description</span>
+			<input id="filter_title" type="checkbox" value="title">
+			<span class="wide">title</span>
+			<input id="filter_artist" type="checkbox" value="artist">
+			<span class="wide">artist</span>
+		</div>
+
+	</div>
 </div>
 
 </body>

@@ -32,6 +32,11 @@ tbody {
     overflow:hidden;
     border:1px solid;
 }
+input[type="text"], input[type="password"]{
+    margin-left:10px;
+    margin-right:10px;
+    border-radius: 5px;
+}
 
 .view-overlay {
     position:absolute;
@@ -81,6 +86,9 @@ tbody {
     right: 5px;
 }
 
+.wide {
+    width: 100%;
+}
 .centered {
     position:absolute;
     left: 50%;
