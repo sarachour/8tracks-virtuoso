@@ -22,12 +22,14 @@
 </head>
 <body bgcolor="#434343">
 <div id="export-overlay" class="view-overlay">
-	<div id="export-container" style="background-color:rgb(100,100,100);width:400px; height:150;">
-		<h3 class="text white large" style=" padding:10px;"> choose how you want to copy the selection </h3>
-		<button id="export-spotify" class="normal-button white text large" style="width:100%; padding:10px;">
+	<div id="export-container" class="normal-button" 
+		style="background-color:rgb(50,50,50); width:400px; height:200px;border-radius:10px;">
+		<div style="height:10%;"></div>
+		<div class="text large white" style="padding:10px;"> choose how you want to copy the selection </div>
+		<button id="export-spotify" class="normal-button text large" style="width:60%; padding:10px; margin:5px;">
 			Copy to Spotify
 		</button><br>
-		<button id="export-text" class="normal-button white text large" style="width:100%; padding:10px;">
+		<button id="export-text" class="normal-button text large" style="width:60%; padding:10px; margin:5px;">
 			Copy as PlainText
 		</button>
 
@@ -45,7 +47,7 @@
 	<div class="east" id="tracks-results" style="overflow:scroll;">
 		<table id="tracks-table" width="100%" height="100%" class="text small black" style="width=100%;padding=20px;">
 		<thead>
-			<tr><td>track</td><td>artist</td><td>star</td><td>spotify</td></tr>
+			<tr><td>track</td><td>artist</td><td>buy</td><td>url</td><td>star</td><td>spotify</td></tr>
 		</thead>
 		<tbody id="tracks-table-body">
 		</tbody>

@@ -98,6 +98,7 @@ function SetupLayout(){
   $('#player-title').layout();
   $('#search-overlay-results').layout();
   $('#search-overlay').hide();
+  $('#player_volume_controls').hide();
   if(localStorage.hasOwnProperty("user_token")){
     $('#login-overlay').hide();
     $("#login-indicator").attr("src", "images/dot-ok.png");
@@ -237,9 +238,9 @@ function SetupPlayer(){
         var pos = $("#player_volume").offset();
         var w= $("#player_volume_controls").width();
         var h= $("#player_volume_controls").height();
-        $("#player_volume_controls").css('top',pos.top-h);
+        $("#player_volume_controls").css('top',pos.top-h-10);
         $("#player_volume_controls").css('left',pos.left);
-      $("#player_volume_controls").fadeToggle("slow");
+        $("#player_volume_controls").fadeToggle("slow");
     });
     $( "#player_volume_slider" ).slider({
       range: "min",

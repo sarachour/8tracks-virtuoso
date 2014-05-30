@@ -386,6 +386,7 @@ function OptionsInterface(){
                     var starred_img = $("<div/>").addClass("icon-sm").append(
                         $("<img/>").attr("src", starred_img_url)
                     )
+
                     var spotify_img_url = "images/spotify-black.png";
 
                     if(info.spotify != null){
@@ -395,13 +396,29 @@ function OptionsInterface(){
                     }
                     else{
                          spotify_img= $("<div/>").addClass("icon-sm").append(
-                            $("<img/>").attr("src", "images/spotify-black.png")) 
+                            $("<img/>")
+                            .attr("src", "images/spotify-black.png")) 
                     }
+
+                    var buy_img = $("<div/>").addClass("icon-sm").append($("<a/>")
+                            .attr("href", info.buy_link)
+                            .attr("target", "_blank")
+                            .append($("<img/>").attr("src", "images/buy.png")))
+
+                    var goto_img = $("<div/>").addClass("icon-sm").append($("<a/>")
+                            .attr("href", info.url)
+                            .attr("target", "_blank")
+                            .append($("<img/>").attr("src", "images/goto.png")))
+
+
+
                     var status = $("<div/>").append(starred_img).append(spotify_img);
 
                     
                     row.append($("<td>").html(track))
                     .append($("<td>").html(artist))
+                    .append($("<td>").html(buy_img))
+                    .append($("<td>").html(goto_img))
                     .append($("<td>").html(starred_img))
                     .append($("<td>").html(spotify_img))
                     .data("track", selection[artist][track]);

@@ -151,7 +151,7 @@ function UserInterface(){
 			$("#mix-description").html(data.mix_description);
 
 			$( "#albumart" ).attr( "src", data.mix_cover );
-			$("#player_volume_slider").slider('value', data.track_time/data.player_volume*100.0);
+			$("#player_volume_slider").slider('value', data.player_volume*100.0);
 			
 			if(data.hasOwnProperty("track_time")){
 				that.updateTime(data);
