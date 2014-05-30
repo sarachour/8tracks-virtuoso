@@ -690,6 +690,15 @@ function SetupUI(){
         }
        
     })
+    $("#clear-data-button").click(function(){
+        var r=confirm("This will clear all the mix data virtuoso has accumulated. Are you sure?");
+        if (r) 
+        {
+            chrome.extension.sendMessage({action: "playlist-clear"}, function(resp){
+                displayMessage("cleared all mix data.");
+            });
+        } 
+    })
 }
 document.addEventListener('DOMContentLoaded', function() {
     SetupLayout();
