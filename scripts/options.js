@@ -3,6 +3,17 @@ function Filter(){
     this.FILTER_LIKED = false;
     this.FILTER_STARRED = false;
     this.FILTER_RECENT = false;
+    this.FILTER_KEYWORD = false;
+    this.FILTER_KEYWORD_PROPS = {
+        keyword: "", 
+        onTags: true, 
+        onArtist: true, 
+        onDescription: true,
+        onTitle: true,
+        trackKeyword: "",
+        onTrackTitle: true,
+        onTrackArtist: true
+    };
 
     this.setFilterLiked = function(filterLiked){
         this.FILTER_LIKED = filterLiked;
@@ -16,7 +27,56 @@ function Filter(){
         this.FILTER_RECENT = filterRecent;
         this.filter();
     }
+    this.setFilterKeyword = function(enabled){
+        this.FILTER_KEYWORD = enabled;
+        this.filter();
+    }
+    this.setFilterKeywordProp = function(propname, prop){
+        this.FILTER_KEYWORD_PROPS[propname] = prop;
+        this.filter();
+    }
+    this.mixHasKeyword = function(mix){
+        function check(s1, s2){
+            return s1.toLowerCase().indexOf(s2.toLowerCase()) >= 0;
+        }
+        var has = false;
+        var props = this.FILTER_KEYWORD_PROPS;
 
+        var kw = props.keyword;
+        var inName = check(mix.name, kw);
+        var inArtist = false;
+        var inDescription = check(mix.description, kw);
+        var inTags = check(mix.tag_list_cache, kw);
+
+        console.log(props);
+        for(var artist in mix.tracks){
+            inArtist = inArtist | check(artist, kw);
+            for(var name in mix.tracks[artist]){
+                inName = inName | check(name, kw);
+            }
+        }
+        has = (inName && props.onTitle);
+        has = has | (inArtist && props.onArtist);
+        has = has | (inDescription && props.onDescription);
+        has = has | (inTags && props.onTags);
+
+        return has;
+    }
+    this.trackHasKeyword = function(track){
+        function check(s1, s2){
+            return s1.toLowerCase().indexOf(s2.toLowerCase()) >= 0;
+        }
+        var props = this.FILTER_KEYWORD_PROPS;
+
+        var kw = props.trackKeyword; 
+        var inName = check(track.name, kw);
+        var inArtist = check(track.performer, kw);
+
+        var has = false;
+        has = has | (props.onTitle && inName) ;
+        has = has | (props.onArtist && inArtist);
+        return has;
+    }
     this.filterMix = function(cmix){
         star_count=0;
         track_count = 0;
@@ -30,9 +90,10 @@ function Filter(){
                 }
             }
         }
-        if((this.FILTER_STARRED && star_count > 0  || !this.FILTER_STARRED) && 
-               (this.FILTER_LIKED && cmix.liked_by_current_user || !this.FILTER_LIKED) &&
-               (this.FILTER_RECENT && cmix._IS_NEW || !this.FILTER_RECENT) ){
+        if(( (this.FILTER_STARRED && star_count > 0)  || !this.FILTER_STARRED) && 
+               ((this.FILTER_LIKED && cmix.liked_by_current_user) || !this.FILTER_LIKED) &&
+               ((this.FILTER_RECENT && cmix._IS_NEW) || !this.FILTER_RECENT) &&
+               ((this.FILTER_KEYWORD &&this.mixHasKeyword(cmix)) || !this.FILTER_KEYWORD) ){
             return true;
         }
         else
@@ -41,7 +102,8 @@ function Filter(){
     this.filterTrack = function(tr){
         if(
             ((this.FILTER_STARRED && tr.faved_by_current_user) || !this.FILTER_STARRED)&&
-            ((this.FILTER_RECENT && tr._IS_NEW) || !this.FILTER_RECENT)
+            ((this.FILTER_RECENT && tr._IS_NEW) || !this.FILTER_RECENT) &&
+            ((this.FILTER_KEYWORD &&this.trackHasKeyword(tr)) || !this.FILTER_KEYWORD)
             ){
             return true;
         }
@@ -484,6 +546,7 @@ function SetupUI(){
     $("#export-container").center();
     $("#export-overlay").hide();
     $("#export-status").hide();
+    $("#filter_keyword_properties").hide();
 
     $("#filter_starred").click(function(){
         if($("#filter_starred").hasClass("down")){
@@ -527,6 +590,54 @@ function SetupUI(){
     	optionsInterface.exportTabDelim();
         $("#export-overlay").fadeOut(600);
     })
+    $("#filter_keyword").click(function(){
+        if($("#filter_keyword").hasClass("down")){
+            optionsInterface.filter.setFilterKeyword(true);
+            optionsInterface.selector.update();
+            $("#filter_keyword_properties").fadeIn(200);
+        }
+        else{
+            optionsInterface.filter.setFilterKeyword(false);
+            optionsInterface.selector.update();
+            $("#filter_keyword_properties").fadeOut(200);
+        }
+    })
+     $("#filter_keyword_text").on('keyup', function(){
+        var kw = $('#filter_keyword_text').val();
+        console.log(kw);
+        optionsInterface.filter.setFilterKeywordProp("keyword", kw);
+        optionsInterface.selector.update();
+     });
+     $("#filter_tags").change(function() {
+        optionsInterface.filter.setFilterKeywordProp("onTags", this.checked);
+        optionsInterface.selector.update();
+    });
+     $("#filter_description").change(function() {
+        optionsInterface.filter.setFilterKeywordProp("onDescription", this.checked);
+        optionsInterface.selector.update();
+    });
+     $("#filter_title").change(function() {
+        optionsInterface.filter.setFilterKeywordProp("onTitle", this.checked);
+        optionsInterface.selector.update();
+    });
+     $("#filter_artist").change(function() {
+        optionsInterface.filter.setFilterKeywordProp("onArtist", this.checked);
+        optionsInterface.selector.update();
+    });
+     $("#filter_track_keyword_text").on('keyup', function(){
+        var kw = $('#filter_track_keyword_text').val();
+        console.log(kw);
+        optionsInterface.filter.setFilterKeywordProp("trackKeyword", kw);
+        optionsInterface.selector.update();
+     });
+     $("#filter_track_title").change(function() {
+        optionsInterface.filter.setFilterKeywordProp("onTrackTitle", this.checked);
+        optionsInterface.selector.update();
+    });
+     $("#filter_track_artist").change(function() {
+        optionsInterface.filter.setFilterKeywordProp("onTrackArtist", this.checked);
+        optionsInterface.selector.update();
+    });
 }
 document.addEventListener('DOMContentLoaded', function() {
     SetupLayout();

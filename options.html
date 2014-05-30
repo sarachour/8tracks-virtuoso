@@ -58,16 +58,26 @@
 		<button class="white toggle-button wide" id="filter_played" title="show liked mixes only">played recently</button>
 		<button class="white toggle-button wide" id="filter_keyword" title="filter by keyword">by keyword</button>
 		<div id="filter_keyword_properties" style="margin:15px;">
-			<input id="filter_keyword" type="text" hint="keyword">
-			in
-			<input id="filter_tags" type="checkbox" value="tags">
-			<span class="wide" >tags</span>
-			<input id="filter_description" type="checkbox" value="description">
-			<span class="wide">description</span>
-			<input id="filter_title" type="checkbox" value="title">
-			<span class="wide">title</span>
-			<input id="filter_artist" type="checkbox" value="artist">
-			<span class="wide">artist</span>
+			<b>Filter Mix By</b> <br>
+			<input id="filter_keyword_text" type="text" hint="keyword">
+			<div style="text-align:left; padding-left:20px; padding-bottom:10px;">
+				<input id="filter_tags" type="checkbox" value="tags" checked>
+				<span class="wide" >tags</span><br>
+				<input id="filter_description" type="checkbox" value="description" checked>
+				<span class="wide">description</span><br>
+				<input id="filter_title" type="checkbox" value="title" checked>
+				<span class="wide">title</span><br>
+				<input id="filter_artist" type="checkbox" value="artist" checked>
+				<span class="wide">artist</span><br>
+			</div>
+			<b>Filter Track By</b> <br>
+			<input id="filter_track_keyword_text" type="text" hint="keyword">
+			<div style="text-align:left; padding-left:20px;">
+				<input id="filter_track_title" type="checkbox" value="title" checked>
+				<span class="wide">title</span><br>
+				<input id="filter_track_artist" type="checkbox" value="artist" checked>
+				<span class="wide">artist</span><br>
+			</div>
 		</div>
 
 	</div>
