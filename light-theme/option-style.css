@@ -105,9 +105,11 @@ input[type="text"], input[type="password"]{
     font-size:16px;
 }
 .normal-button {
-    background-color: rgba(50,50,50, 0.9);
+    background-color: rgba(40,40,40, 0.9);
     border-radius: 5px;
-    padding: 2px;
+    padding: 3px;
+    border: solid 2px #000;
+    color:rgb(150,150,150);
 }
 
 .toggle-button {
@@ -121,7 +123,7 @@ input[type="text"], input[type="password"]{
     background-color: rgba(40,40,80, 0.9);
     border-radius: 5px;
     padding: 3px;
-    border: solid 2px #FFF;
+    border: solid 2px #EEE;
     color:rgb(150,150,150);
     }
 .icon-sm {
