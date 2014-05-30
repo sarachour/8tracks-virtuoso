@@ -1,63 +1,54 @@
 # Getting Started
 ## Controls Overview
+Hover over any of the icons to read a description of what it does.
 
 ## Logging into 8Tracks
 
-1. Right click on the Virtuoso icon and select "Options"
-
+1. Click the person in the upper right hand corner of the player.
 
 * Fill in your 8Tracks login information in the username, password boxes.
 	* Notice there is a red dot next to "8Tracks Login". This means that Virtuoso does not have your login info.
 	
-* Select 'Save Preferences'. 
+* Select 'Log in'. 
 	* The red dot next to "8Tracks Login" should change from red to green.
 	
 * You are now logged in!
 
-## Playing a Mix
+## Playing a Mix from the browser
 
 1. Open an 8tracks mix in a chrome tab.
 2. Open the Virtuoso player. 
 3. Virtuoso will automatically start playing the mix.
-	* *If Virtuoso is already playing a mix*: press the 'refresh' button in the player to load the mix in the chrome tab.
+	* *If Virtuoso is already playing a mix*: press the 'refresh' button in upper right hand corner of the player to load the mix in the chrome tab.
 	
+
 ## Exporting Play Histories
 Users may export the tracks they listened to and liked out of 8tracks using Virtuoso's export functionality.
 
 ### Exporting to Spotify
 
-1. Right click on the Virtuoso icon and select "Options"
+1. Click the options button in the upper right hand corner of the player.
 
-* Click on the Spotify icon.
-* Open Spotify and select a playlist.
-* Paste into the playlist. The tracks from your play history will be added.
+In the Mix Manager:
+* Select which mixes you wish to export.
+* Type in Ctrl+C and select 'export to spotify' OR click the 'export to spotify' button.
+* If you selected too many tracks, you will need to manually paste (Ctrl+V) into a playlist in spotify.
 
 ### Exporting to Plaintext
 
-1. Right click on the Virtuoso icon and select "Options"
+1. Click the options button in the upper right hand corner of the player.
 
-* Click on the paper icon next to "Plain Text"
-* Open a Spreadsheet editor or text file.
-* Paste into the document/spreadsheet.
+In the Mix Manager:
+* Select which mixes you wish to export.
+* Type in Ctrl+C and select 'export to tab-delimited' OR click the 'export to tab-delimited' button.
+* Open a spreadsheet editor, and press Ctrl+V
 
 ### Clearing Play History
-1. Right click on the Virtuoso icon and select "Options"
+1. Click the options button in the upper right hand corner of the player.
 
-* Click on the "Clear Tracked Songs" button.
+In the Mix Manager:
+* Click on the "clear mix data" button
 
-### Track only Favorited Songs
-1. Right click on the Virtuoso icon and select "Options"
-
-* Click on the 'Track' drop down and select 'Favorited Songs'
-
-* Click 'Save Preferences' 
-
-### Stop Tracking Play History
-1. Right click on the Virtuoso icon and select "Options"
-
-* Click on the 'Track' drop down and select 'None'
-
-* Click 'Save Preferences' 
 
 
 
