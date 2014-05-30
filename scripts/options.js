@@ -697,8 +697,8 @@ function SetupUI(){
         if(sel.length == 1){
             var dat = sel.data("mix");
             var mid = dat.id;
-            var msmartid = "like:"+mid;
-            chrome.extension.sendMessage({action: "play", id:mid, smartid:msmartid}, function(resp){
+            var msmartid = "similar:"+mid;
+            chrome.extension.sendMessage({action: "play", id:mid, smart_id:msmartid}, function(resp){
                 displayMessage("playing mix.");
             });
         }       

@@ -163,7 +163,7 @@ input[type="text"], input[type="password"]{
 }
 .west {
     background-color: rgb(40,40,40); 
-    width: 15%;
+    width: 25%;
     border-radius: 15px;
     z-index: 20;
     border: solid 2px #333;
