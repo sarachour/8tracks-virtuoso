@@ -699,7 +699,7 @@ function SetupUI(){
             var mid = dat.id;
             var msmartid = "like:"+mid;
             chrome.extension.sendMessage({action: "play", id:mid, smartid:msmartid}, function(resp){
-                displayMessage("Playing mix.");
+                displayMessage("playing mix.");
             });
         }       
         else if(sel.length > 1){
@@ -714,9 +714,7 @@ function SetupUI(){
         var r=confirm("This will clear all the mix data virtuoso has accumulated. Are you sure?");
         if (r) 
         {
-            chrome.extension.sendMessage({action: "playlist-clear"}, function(resp){
-                displayMessage("cleared all mix data.");
-            });
+            chrome.extension.sendMessage({action: "playlist-clear"});
         } 
     })
 }

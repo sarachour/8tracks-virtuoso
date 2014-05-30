@@ -55,7 +55,9 @@ function MusicPlayer(){
 		  		that.unfavoriteTrack();
 		  }
 		  else if(request.action == "playlist-clear"){
-		  	that.playlist.clear();
+		  		that.playlist.clear();
+		  		that.UPDATE_MIX_INFO();
+		  		that.UPDATE_TRACK_INFO();
 		  }
 		  else if(request.action == "playlist-get"){
 		  	if(request.type == "spotify")

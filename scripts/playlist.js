@@ -9,7 +9,7 @@ function Playlist(name, isPersistant){
 
 	this.save = function(){
 		if(this.isPersistant){
-			localStorage.setItem(name, JSON.stringify(this.data));
+			localStorage.setItem(this.name, JSON.stringify(this.data));
 		}
 	}
 	this.load = function(){
