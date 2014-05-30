@@ -284,6 +284,11 @@ function GridInputHandler(selector){
     
 }
 
+function displayMessage(msg){
+    $("#export-status").fadeIn(300);
+    $("#export-status").html(msg).delay(2000).fadeOut(500);
+    $("#clipboard").css('display', 'none');
+}
 function OptionsInterface(){
     this.selector = new Selector();
     this.inputHandler = new GridInputHandler(this.selector);
@@ -307,9 +312,7 @@ function OptionsInterface(){
         $("#clipboard").text(text);
         $("#clipboard").select();
         document.execCommand('copy',true);
-        $("#export-status").fadeIn(300);
-        $("#export-status").html(msg).delay(2000);
-        $("#clipboard").css('display', 'none');
+        displayMessage(msg);
 
     }
     this.exportSpotify = function(){
@@ -666,6 +669,26 @@ function SetupUI(){
     })
     $("#export-plaintext-button").click(function(){
         optionsInterface.exportTabDelim();
+    })
+    $("#play-mix-button").click(function(){
+        console.log("playing mix");
+        var sel = $(".selected");
+        
+        if(sel.length == 1){
+            var dat = sel.data("mix");
+            var mid = dat.id;
+            var msmartid = "like:"+mid;
+            chrome.extension.sendMessage({action: "play", id:mid, smartid:msmartid}, function(resp){
+                displayMessage("Playing mix.");
+            });
+        }       
+        else if(sel.length > 1){
+            displayMessage("Too many mixes selected. Please select one only.");
+        }
+        else{
+            displayMessage("No mixes selected. Please select one.");
+        }
+       
     })
 }
 document.addEventListener('DOMContentLoaded', function() {
