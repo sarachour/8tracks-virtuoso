@@ -552,6 +552,9 @@ function SetupLayout(){
         handles: 'e',
         stop: layout
     });
+    $( window ).resize(function() {
+      $('#options').layout({resize: false});
+    });
 }
 
 function SetupShortcuts(){
