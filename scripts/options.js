@@ -4,6 +4,7 @@ function Filter(){
     this.FILTER_STARRED = false;
     this.FILTER_RECENT = false;
     this.FILTER_KEYWORD = false;
+    this.FILTER_TRACK_KEYWORD = false;
     this.FILTER_KEYWORD_PROPS = {
         keyword: "", 
         onTags: true, 
@@ -29,6 +30,10 @@ function Filter(){
     }
     this.setFilterKeyword = function(enabled){
         this.FILTER_KEYWORD = enabled;
+        this.filter();
+    }
+    this.setFilterTrackKeyword = function(enabled){
+        this.FILTER_TRACK_KEYWORD = enabled;
         this.filter();
     }
     this.setFilterKeywordProp = function(propname, prop){
@@ -103,7 +108,7 @@ function Filter(){
         if(
             ((this.FILTER_STARRED && tr.faved_by_current_user) || !this.FILTER_STARRED)&&
             ((this.FILTER_RECENT && tr._IS_NEW) || !this.FILTER_RECENT) &&
-            ((this.FILTER_KEYWORD &&this.trackHasKeyword(tr)) || !this.FILTER_KEYWORD)
+            ((this.FILTER_TRACK_KEYWORD &&this.trackHasKeyword(tr)) || !this.FILTER_TRACK_KEYWORD)
             ){
             return true;
         }
@@ -320,7 +325,7 @@ function OptionsInterface(){
                 }
             }
         }
-        if(dat.length <= 10){
+        if(dat.length <= 100){
             var that = this;
             this.spotify.createTrackset("8tracks-export", dat, function(){
                
@@ -547,6 +552,7 @@ function SetupUI(){
     $("#export-overlay").hide();
     $("#export-status").hide();
     $("#filter_keyword_properties").hide();
+    $("#filter_track_keyword_properties").hide();
 
     $("#filter_starred").click(function(){
         if($("#filter_starred").hasClass("down")){
@@ -607,26 +613,43 @@ function SetupUI(){
         console.log(kw);
         optionsInterface.filter.setFilterKeywordProp("keyword", kw);
         optionsInterface.selector.update();
+        optionsInterface.updateTracklist();
      });
      $("#filter_tags").change(function() {
         optionsInterface.filter.setFilterKeywordProp("onTags", this.checked);
         optionsInterface.selector.update();
+        optionsInterface.updateTracklist();
     });
      $("#filter_description").change(function() {
         optionsInterface.filter.setFilterKeywordProp("onDescription", this.checked);
         optionsInterface.selector.update();
+        optionsInterface.updateTracklist();
     });
      $("#filter_title").change(function() {
         optionsInterface.filter.setFilterKeywordProp("onTitle", this.checked);
         optionsInterface.selector.update();
+        optionsInterface.updateTracklist();
     });
      $("#filter_artist").change(function() {
         optionsInterface.filter.setFilterKeywordProp("onArtist", this.checked);
         optionsInterface.selector.update();
+        optionsInterface.updateTracklist();
     });
+     $("#filter_track_keyword").click(function(){
+        if($("#filter_track_keyword").hasClass("down")){
+            optionsInterface.filter.setFilterTrackKeyword(true);
+            optionsInterface.selector.update();
+            $("#filter_track_keyword_properties").fadeIn(200);
+        }
+        else{
+            optionsInterface.filter.setFilterTrackKeyword(false);
+            optionsInterface.selector.update();
+            optionsInterface.updateTracklist();
+            $("#filter_track_keyword_properties").fadeOut(200);
+        }
+    })
      $("#filter_track_keyword_text").on('keyup', function(){
         var kw = $('#filter_track_keyword_text').val();
-        console.log(kw);
         optionsInterface.filter.setFilterKeywordProp("trackKeyword", kw);
         optionsInterface.selector.update();
      });
@@ -638,6 +661,12 @@ function SetupUI(){
         optionsInterface.filter.setFilterKeywordProp("onTrackArtist", this.checked);
         optionsInterface.selector.update();
     });
+     $("#export-spotify-button").click(function(){
+        optionsInterface.exportSpotify();
+    })
+    $("#export-text-button").click(function(){
+        optionsInterface.exportTabDelim();
+    })
 }
 document.addEventListener('DOMContentLoaded', function() {
     SetupLayout();

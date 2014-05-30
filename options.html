@@ -52,13 +52,13 @@
 		</table>
 		</div>
 	<div class="west white small">
-		Filter:<br>
-		<button class="white toggle-button wide" id="filter_starred" title="show starred tracks only">starred tracks</button>
-		<button class="white toggle-button wide" id="filter_liked" title="show liked mixes only">liked mixes</button>
-		<button class="white toggle-button wide" id="filter_played" title="show liked mixes only">played recently</button>
-		<button class="white toggle-button wide" id="filter_keyword" title="filter by keyword">by keyword</button>
+		<div class="header wide text">Filter</div><br>
+		<button class="toggle-button wide" id="filter_starred" title="show starred tracks only">starred tracks</button>
+		<button class="toggle-button wide" id="filter_liked" title="show liked mixes only">liked mixes</button>
+		<button class="toggle-button wide" id="filter_played" title="show liked mixes only">played recently</button>
+		<button class="toggle-button wide" id="filter_keyword" title="filter by keyword">mix by keyword</button>
 		<div id="filter_keyword_properties" style="margin:15px;">
-			<b>Filter Mix By</b> <br>
+			<div class="wide">Filter Mix By</div>
 			<input id="filter_keyword_text" type="text" hint="keyword">
 			<div style="text-align:left; padding-left:20px; padding-bottom:10px;">
 				<input id="filter_tags" type="checkbox" value="tags" checked>
@@ -70,7 +70,10 @@
 				<input id="filter_artist" type="checkbox" value="artist" checked>
 				<span class="wide">artist</span><br>
 			</div>
-			<b>Filter Track By</b> <br>
+		</div>
+		<button class="toggle-button wide" id="filter_track_keyword" title="filter by keyword">track by keyword</button>
+		<div id="filter_track_keyword_properties" style="margin:15px;">
+			<div class="wide">Filter Track By</div> <br>
 			<input id="filter_track_keyword_text" type="text" hint="keyword">
 			<div style="text-align:left; padding-left:20px;">
 				<input id="filter_track_title" type="checkbox" value="title" checked>
@@ -79,7 +82,9 @@
 				<span class="wide">artist</span><br>
 			</div>
 		</div>
-
+		<div class="header wide text">Export</div>
+		<button class="white normal-button wide" id="export-spotify-button" title="export to spotify">export to spotify</button>
+		<button class="white normal-button wide" id="export-plaintext-button" title="export to plaintext">export to plaintext</button>
 	</div>
 </div>
 

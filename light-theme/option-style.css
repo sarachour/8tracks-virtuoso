@@ -94,6 +94,16 @@ input[type="text"], input[type="password"]{
     left: 50%;
     top: 50%;
 }
+.header {
+    background-color: rgba(30,30,30, 0.9);
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color:#DEDEDE;
+    font-size:16px;
+}
 .normal-button {
     background-color: rgba(50,50,50, 0.9);
     border-radius: 5px;
@@ -101,17 +111,18 @@ input[type="text"], input[type="password"]{
 }
 
 .toggle-button {
-    background-color: rgba(50,50,50, 0.9);
+    background-color: rgba(40,40,40, 0.9);
     border-radius: 5px;
-    padding: 2px;
+    padding: 3px;
+    border: solid 2px #000;
+    color:rgb(150,150,150);
 }
 .toggle-button.down {
-    background: #bbb;
-    background-color: rgba(50,50,112, 0.9);
-    border-top: solid 2px #777;
-    border-left: solid 2px #777;
-    border-bottom:solid 2px  #eaeaea;
-    border-right: solid 2px #eaeaea;
+    background-color: rgba(40,40,80, 0.9);
+    border-radius: 5px;
+    padding: 3px;
+    border: solid 2px #FFF;
+    color:rgb(150,150,150);
     }
 .icon-sm {
     width:15px; 
