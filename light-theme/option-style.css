@@ -38,6 +38,7 @@ input[type="text"], input[type="password"]{
     border-radius: 5px;
 }
 
+
 .view-overlay {
     position:absolute;
     background-color: rgba(0,0,0, 0.8);
@@ -183,7 +184,9 @@ input[type="text"], input[type="password"]{
 .white{
     color:#DEDEDE;
 }
-
+.urgent {
+    background-color:#418041;
+}
 
 .large {
     font-size:16px;

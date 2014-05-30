@@ -664,7 +664,7 @@ function SetupUI(){
      $("#export-spotify-button").click(function(){
         optionsInterface.exportSpotify();
     })
-    $("#export-text-button").click(function(){
+    $("#export-plaintext-button").click(function(){
         optionsInterface.exportTabDelim();
     })
 }
