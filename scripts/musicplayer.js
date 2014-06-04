@@ -13,61 +13,84 @@ function MusicPlayer(){
 	    eightTracks.createPlaybackStream(function(data){
 			console.log("created playback stream.");
 		});
+		chrome.runtime.onSuspend.addListener(function(){
+			var currentdate = new Date();
+			var datetime = "Suspend: " + currentdate.getDay() + "/"+currentdate.getMonth() 
+			console.log(this)
+
+		})
+		chrome.runtime.onSuspend.addListener(function(){
+			var currentdate = new Date();
+			var datetime = "Suspend Cancelled: " + currentdate.getDay() + "/"+currentdate.getMonth() 
+			console.log(this)
+
+		})
+		chrome.runtime.onStartup.addListener(function(){
+			var currentdate = new Date();
+			var datetime = "Startup: " + currentdate.getDay() + "/"+currentdate.getMonth() 
+			console.log(this)
+
+		})
+
+		this.player.error(function(e) { 
+               console.log("Logging playback error: ", e); 
+		})
+
 		chrome.extension.onMessage.addListener(
-		function(request, sender, sendResponse) {
-		  if(request.action == "play"){
-		  		that.mix(request.id, request.smart_id);
-		  }
-		  else if(request.action == "resume"){
-		  		that.resume();
-		  }
-		  else if(request.action == "pause"){
-		  		that.pause();
-		  }
-		  else if(request.action == "next-mix"){
-		  		that.nextMix();
-		  }
-		  else if(request.action == "skip"){
-		  		that.skip();
-		  }
-		  else if(request.action == "reload"){
-		  		that.reload();
-		  }
-		  else if(request.action == "set-time"){
-		  		that.setTime(request.percent);
-		  }
-		  else if(request.action == "set-volume"){
-		  		that.setVolume(request.percent);
-		  }
-		  else if(request.action == "get-track-info"){
-		  		sendResponse(that.getTrackInfo());
-		  }
-		  else if(request.action == "like-mix"){
-		  		that.likeMix();
-		  }
-		  else if(request.action == "unlike-mix"){
-		  		that.unlikeMix();
-		  }
-		  else if(request.action == "favorite-track"){
-		  		that.favoriteTrack();
-		  }
-		  else if(request.action == "unfavorite-track"){
-		  		that.unfavoriteTrack();
-		  }
-		  else if(request.action == "playlist-clear"){
-		  		that.playlist.clear();
-		  		that.UPDATE_MIX_INFO();
-		  		that.UPDATE_TRACK_INFO();
-		  }
-		  else if(request.action == "playlist-get"){
-		  	if(request.type == "spotify")
-		  		sendResponse({"playlist": that.playlist.getSpotify()});
-		  	else if(request.type == "tab")
-		  		sendResponse({"playlist": that.playlist.getTabDelimited()});
-		  	else if(request.type == "obj")
-		  		sendResponse({"playlist": that.playlist.getObject()});
-		  }
-		});
+		  function(request, sender, sendResponse) {
+			  if(request.action == "play"){
+			  		that.mix(request.id, request.smart_id);
+			  }
+			  else if(request.action == "resume"){
+			  		that.resume();
+			  }
+			  else if(request.action == "pause"){
+			  		that.pause();
+			  }
+			  else if(request.action == "next-mix"){
+			  		that.nextMix();
+			  }
+			  else if(request.action == "skip"){
+			  		that.skip();
+			  }
+			  else if(request.action == "reload"){
+			  		that.reload();
+			  }
+			  else if(request.action == "set-time"){
+			  		that.setTime(request.percent);
+			  }
+			  else if(request.action == "set-volume"){
+			  		that.setVolume(request.percent);
+			  }
+			  else if(request.action == "get-track-info"){
+			  		sendResponse(that.getTrackInfo());
+			  }
+			  else if(request.action == "like-mix"){
+			  		that.likeMix();
+			  }
+			  else if(request.action == "unlike-mix"){
+			  		that.unlikeMix();
+			  }
+			  else if(request.action == "favorite-track"){
+			  		that.favoriteTrack();
+			  }
+			  else if(request.action == "unfavorite-track"){
+			  		that.unfavoriteTrack();
+			  }
+			  else if(request.action == "playlist-clear"){
+			  		that.playlist.clear();
+			  		that.UPDATE_MIX_INFO();
+			  		that.UPDATE_TRACK_INFO();
+			  }
+			  else if(request.action == "playlist-get"){
+			  	if(request.type == "spotify")
+			  		sendResponse({"playlist": that.playlist.getSpotify()});
+			  	else if(request.type == "tab")
+			  		sendResponse({"playlist": that.playlist.getTabDelimited()});
+			  	else if(request.type == "obj")
+			  		sendResponse({"playlist": that.playlist.getObject()});
+			  }
+			});
 		this.player.bind("ended", function () {
 	        that.nextTrack();
 	    });
@@ -126,6 +149,7 @@ function MusicPlayer(){
 	}
 	this.SET_TRACK_INFO = function(setdata, trackdata){
 		this.track_info = trackdata;
+		console.log(setdata);
 		this.other_info = {
 			isBeginning: setdata.at_beginning,
 			isEnd: setdata.at_end,

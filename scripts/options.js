@@ -461,7 +461,6 @@ function OptionsInterface(){
             var html_img = $('<img/>').addClass("result-img").attr("src", cmix.cover_urls.sq250);
             var html_div = $('<div/>').addClass("result show").addClass("text black small");
 
-            html_div.append(html_img);
 
             var html_title = $('<div/>').addClass("med").html(cmix.name);
             var html_tags = $('<div/>').addClass("small faint").html(cmix.tag_list_cache);
@@ -502,7 +501,7 @@ function OptionsInterface(){
                 .append(track_count + "/"+cmix.tracks_count);
             html_icon_overlay.append(ov_tracks)
 
-            html_div.append(html_info, html_icon_overlay);
+            html_div.append(html_img, html_info, html_icon_overlay);
             html_div.click(function(myelem){
                 return function(){
                     that.selector.select(myelem);

@@ -217,6 +217,7 @@ input[type="text"], input[type="password"]{
     height: 200px;
     display: inline-block;
     overflow: hidden;
+    z-index: 0;
     border-radius: 15px;
 }
 .hide {
@@ -232,10 +233,6 @@ input[type="text"], input[type="password"]{
     z-index: 5;
     word-wrap: break-word;
     border-radius: 15px;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
 }
 .result-img {
     width: 200px;

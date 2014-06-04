@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "8Tracks Virtuoso",
-  "description": "An unobtrusive and powerful player for listening to 8tracks mixes. Also supports exporting tracks to Spotify and plaintext.",
-  "version": "1.20",
+  "description": "An unobtrusive and powerful player for listening to, managing and exporting 8tracks mixes.",
+  "version": "1.22",
 
   "permissions": [
 	  "storage",
@@ -19,5 +19,8 @@
     "scripts": ["scripts/lib/jquery-1.10.2.js", "scripts/spotify.js", 
       "scripts/playlist.js", "scripts/8tracks.js", "scripts/musicplayer.js"],
     "persistent": true
-  }
+  },
+  "icons": { "16": "icon.png",
+           "48": "icon.png",
+          "128": "icon.png" }
 }
