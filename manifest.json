@@ -16,7 +16,7 @@
   },
   "options_page": "options.html",
   "background": {
-    "scripts": ["scripts/lib/jquery-1.10.2.js", "scripts/spotify.js", 
+    "scripts": ["scripts/lib/jquery-1.10.2.js", "scripts/lib/jquery.jplayer.js", "scripts/spotify.js", 
       "scripts/playlist.js", "scripts/8tracks.js", "scripts/musicplayer.js"],
     "persistent": true
   },

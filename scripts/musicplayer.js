@@ -34,6 +34,8 @@ function MusicPlayer(){
 
 		this.player.error(function(e) { 
                console.log("Logging playback error: ", e); 
+               console.log(that.player[0].error);
+               that.nextTrack();
 		})
 
 		chrome.extension.onMessage.addListener(
