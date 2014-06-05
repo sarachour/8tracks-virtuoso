@@ -86,7 +86,7 @@ function EightTracks(){
 			   cbk(data);
 			}
 		).fail(function(){ 
-  			cbk({});
+  			cbk(null, e);
 		});;	
 		
 	}
@@ -102,8 +102,8 @@ function EightTracks(){
 			function(data) {
 			   cbk(data);
 			}
-		).fail(function(){ 
-  			cbk({});
+		).fail(function(e){ 
+  			cbk(null, e);
 		});;	
 		
 	}
@@ -126,7 +126,9 @@ function EightTracks(){
 			   console.log("nextmix:",data);
 			   cbk(data);
 			}
-		);	
+		).fail(function(e){ 
+			cbk(null, e);
+		});	
 
 	}
 	this.check = function(){
@@ -147,7 +149,7 @@ function EightTracks(){
 				return;
 			}
 			
-			this.getNextMix(mid, smartid, function(mixdata){
+			this.getNextMix(mid, smartid, function(mixdata, e){
 				url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
 				console.log(mixdata)
 				$.get(
@@ -161,7 +163,9 @@ function EightTracks(){
 					function(data) {
 						cbk(mixdata, data);
 					}
-				);	
+				).fail(function(e){ 
+	  				cbk(null, null, e);
+				});	
 			});
 		
 	}
@@ -181,7 +185,9 @@ function EightTracks(){
 				function(data) {
 					cbk(data);
 				}
-			);
+			).fail(function(e){ 
+  				cbk(null, e);
+			});
 			
 	}
 	this.report = function(mid, tid){
@@ -201,8 +207,27 @@ function EightTracks(){
 			function(data) {
 				
 			}
-		).fail(function(){ 
-  			
+		).fail(function(e){ 
+  			cbk(null,e);
+		});	
+	}
+
+	this.reportError = function(track_id, cbk){
+		var that = this;
+		url = "http://8tracks.com/tracks/"+track_id+"/report_error"
+		$.get(
+			url,
+			{
+				api_key : that.API_KEY,
+				user_token : that.user_token,
+				api_version: 3,
+				format: "jsonh"
+			},
+			function(data) {
+				cbk(data);
+			}
+		).fail(function(e){ 
+  			cbk(null, e);
 		});	
 	}
 	this.nextTrack = function(mid, smartid, cbk){
@@ -221,8 +246,8 @@ function EightTracks(){
 			function(data) {
 				cbk(data);
 			}
-		).fail(function(){ 
-  			cbk(null);
+		).fail(function(e){ 
+  			cbk(null,e);
 		});	
 		
 		//TODO report
@@ -268,7 +293,9 @@ function EightTracks(){
 			function(data) {
 				cbk(data);
 			}
-		);	
+		).fail(function(e){ 
+				cbk(null, e);
+		});	
 	}
 	this._favoriteTrack = function(isfav, trackid, cbk){
 		if(isfav)
@@ -288,7 +315,9 @@ function EightTracks(){
 			function(data) {
 				cbk(data);
 			}
-		);	
+		).fail(function(e){ 
+				cbk(null, e);
+		});		
 	}
 	this.getTags = function(key, cbk){
 		var that = this;

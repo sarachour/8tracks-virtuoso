@@ -4,42 +4,50 @@ function UserInterface(){
 		if(localStorage.hasOwnProperty("ui_openTab"))
 			this.openTab = parseInt(localStorage.ui_openTab);
 		else this.openTab = null;
-		console.log(this.openTab);
+		this.synced = false;
 	}
 	this.sync = function(){
-		function setMix(name, artist){
-			eightTracks.getMixByName(artist, name, function(data){
-				console.log(data);
-				var id = data.mix.id;
-				var smartid = "similar:"+id;
-				chrome.extension.sendMessage({action: "play", id: id, smart_id: smartid});
+		if(this.synced) return;
+
+		function getMix(tablink, j){
+			tabarr = tablink.split("/");
+	    	mixname = tabarr[tabarr.length-1];
+	    	artistname = tabarr[tabarr.length-2];
+	    	eightTracks.getMixByName(artistname, mixname, function(data){
+				console.log(artistname, mixname, data);
+				if(data.hasOwnProperty("mix")){
+					var id = data.mix.id;
+					var smartid = "similar:"+data.mix.id;
+					chrome.extension.sendMessage({action: "play", id: id, smart_id: smartid});
+				}
+				else{
+					lookThroughTabs(j);
+				}
 			})
+
+		}
+		function lookThroughTabs(j){
+			chrome.tabs.getAllInWindow(undefined, function(tabs) {
+				for(var i=j; i < tabs.length; i++){
+					tab = tabs[i];
+					var tablink = tab.url;
+					console.log(i, tabs.length);
+				    if(tablink.indexOf("8tracks.com") > -1){
+				    	getMix(tablink, i+1);
+					}
+				}
+			})
+
 		}
 		chrome.tabs.getSelected(null,function(tab) {
 		    var tablink = tab.url;
 		    if(tablink.indexOf("8tracks.com") > -1){
-		    	tabarr = tablink.split("/");
-		    	mixname = tabarr[tabarr.length-1];
-		    	artistname = tabarr[tabarr.length-2];
-		    	setMix(mixname, artistname);
-		    	return;
+		    	getMix(tablink, 0);
 		    }
-		    chrome.tabs.getAllInWindow(undefined, function(tabs) { 
-				for(var i=0; i < tabs.length; i++){
-					tab = tabs[i];
-					var tablink = tab.url;
-				    if(tablink.indexOf("8tracks.com") > -1){
-				    	tabarr = tablink.split("/");
-				    	mixname = tabarr[tabarr.length-1];
-				    	artistname = tabarr[tabarr.length-2];
-				    	setMix(mixname, artistname);
-				    	return;
-				    }
-				}
-
-			});
+		    else
+		    	lookThroughTabs(0);
 		});
-
+		this.synced = true;
 		
 	}
 	//var RTM_URL_RE_ = /http?\:\/\/www.8tracks.com\//; 

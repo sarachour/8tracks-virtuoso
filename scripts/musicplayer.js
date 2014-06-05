@@ -1,3 +1,10 @@
+function toast (){
+
+
+
+
+}
+
 function MusicPlayer(){
 	this.init = function(){
 		this.player = $('<audio>', {
@@ -34,8 +41,10 @@ function MusicPlayer(){
 
 		this.player.error(function(e) { 
                console.log("Logging playback error: ", e); 
-               console.log(that.player[0].error);
-               that.nextTrack();
+               console.log("     ", that.player[0].error);
+               eightTracks.reportError(that.track_info.id, function(){
+               		that.nextTrack();
+               })
 		})
 
 		chrome.extension.onMessage.addListener(
@@ -171,25 +180,50 @@ function MusicPlayer(){
 	this.nextMix = function(){
 		mplayer = this;
 
-		eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data){
-			mplayer.SET_MIX_INFO(mixdata.next_mix);
-			mplayer.SET_TRACK_INFO(data.set, data.set.track);
+		eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data, e){
+			if(mixdata == null || data == null){
+				console.log("REPORT ERROR", e);
+				return;
+			}
+
+			if(mixdata != null)
+				mplayer.SET_MIX_INFO(mixdata.next_mix);
+			
+			if(data != null)
+				mplayer.SET_TRACK_INFO(data.set, data.set.track);
+			
+
 		});
 	}
 	this.mix = function(mixid, smartmixid){
 		mplayer = this;
 		this.smart_mix_id = smartmixid;
-		eightTracks.getMix(mixid, function(data){
-			mplayer.SET_MIX_INFO(data.mix);
-			eightTracks.playMix(mixid, function(data){
-				mplayer.SET_TRACK_INFO(data.set, data.set.track);
-			});
+		eightTracks.getMix(mixid, function(data, e){
+			if(data != null){
+				mplayer.SET_MIX_INFO(data.mix);
+				eightTracks.playMix(mixid, function(data, e){
+					if(data != null){
+						mplayer.SET_TRACK_INFO(data.set, data.set.track);
+					}
+					else{
+						console.log("REPORT ERROR", e)
+					}
+				});
+			}
+			else{
+				console.log("REPORT ERROR", e)
+			}
 		})
 		
 	}
 	this.skip = function(){
-		eightTracks.skipTrack(this.mix_info.id, function(data){
-			mplayer.SET_TRACK_INFO(data.set, data.set.track);
+		eightTracks.skipTrack(this.mix_info.id, function(data, e){
+			if(data != null){
+				mplayer.SET_TRACK_INFO(data.set, data.set.track);
+			}
+			else{
+				console.log("REPORT ERROR", e)
+			}
 		});
 	}
 	this.resume = function(){
@@ -237,7 +271,7 @@ function MusicPlayer(){
 			eightTracks.report(this.mix_info.id, this.track_info.id);
 		}
 		if(this.other_info.isEnd == true || this.other_info.isLastTrack == true){
-			eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data){
+			eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data, e){
 				mplayer.SET_MIX_INFO(mixdata.next_mix);
 				if(data != null  && data.set.track.hasOwnProperty("track_file_stream_url")){
 					mplayer.SET_TRACK_INFO(data.set, data.set.track);
@@ -245,16 +279,20 @@ function MusicPlayer(){
 				else{
 					mplayer.nextTrack();
 				}
+				if(mixdata == null || data == null){
+					console.log("REPORT ERROR", e);
+				}
 			});
 		}
 		else{
-			eightTracks.nextTrack(this.mix_info.id, this.smart_mix_id, function(data){
+			eightTracks.nextTrack(this.mix_info.id, this.smart_mix_id, function(data, e){
 				if(data != null && data.set.track.hasOwnProperty("track_file_stream_url")){
 					mplayer.SET_TRACK_INFO(data.set, data.set.track);
 				}
 				else{
 					mplayer.other_info.isEnd = mplayer.other_info.isLastTrack = true;
 					mplayer.nextTrack();
+					console.log("REPORT ERROR", e);
 				}
 			});
 		}
