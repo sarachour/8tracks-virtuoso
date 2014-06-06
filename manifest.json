@@ -16,26 +16,31 @@
       "suggested_key" : {
         "default": "Alt+M"
       },
-      "description" : "jump to next mix"
+      "description" : "jump to next mix",
+      "global": true
     },
     "next-track": {
       "suggested_key" : {
         "default": "Alt+T"
       },
-      "description" : "jump to next track"
+      "description" : "jump to next track",
+      "global": true
     },
     "like-mix": {
       "suggested_key" : {
         "default": "Alt+Shift+L"
       },
-      "description" : "like/unlike mix."
+      "description" : "like/unlike mix.",
+      "global": true
     },
     "fav-track": {
       "suggested_key" : {
         "default": "Alt+Shift+F"
       },
-      "description" : "favorite/unfavorite track."
+      "description" : "favorite/unfavorite track.",
+      "global": true
     }
+
   },
   "browser_action": {
     "default_icon": "icon.png",
