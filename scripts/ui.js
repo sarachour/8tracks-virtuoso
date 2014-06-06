@@ -157,17 +157,18 @@ function SetupSearch(){
       //make textbox visible
       $("#search-text-container").fadeIn(200);
     }
+    else{
+      $("#search-text-container").fadeOut(200);
+    }
     doSearch();
   });
   $("#search-text").on('change', function(){
     var term = $('#search-text').val();
-    console.log("search:"+term);
     doSearch();
   })
   $("#search-text-container").hide();
   $("#search-sort").on('change', function(){
     var type = $('#search-sort').val();
-    console.log("sort:"+type);
     doSearch();
   })
   doSearch();
