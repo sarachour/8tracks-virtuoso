@@ -146,7 +146,14 @@ function UserInterface(){
 	this.updateView = function(){
 		var that = this;
 		chrome.extension.sendMessage({action: "get-track-info"}, function(data){
-			console.log("update view");
+			console.log("update view", data);
+			that.data = data;
+			if(data == null){
+				if(that.synced == false)
+					that.sync();
+				return;
+			}
+
 	    	$("#mix-title").html(data.mix_name);
 			$("#track-title").html(data.track_name);
 			$("#track-artist").html(data.track_artist);
@@ -213,7 +220,7 @@ function UserInterface(){
 	    	else if(data.mix_rank == "bronze"){
 	    		$("#mix_rank").attr("src", "images/bronze.png");
 	    	}
-			if(that.timer == null && data.hasOwnProperty('mix_name')){
+			if(that.timer == null){
 				that.timer = window.setInterval(function(){
 					chrome.extension.sendMessage({action: "get-track-info"}, function(data){
 						console.log(data);
@@ -221,10 +228,7 @@ function UserInterface(){
 				    });
 				}, 1000);
 			}
-			else if(!data.hasOwnProperty('mix_name')){
-				if(that.synced == false)
-					that.sync();
-			}
+
 	    });
 	    
 	}

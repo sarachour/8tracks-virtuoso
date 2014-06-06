@@ -84,8 +84,8 @@ function SetupLogin(){
       chrome.extension.sendMessage({action: "reload"})
       $("#login-indicator").attr("src", "images/dot-ok.png");
       $("#login-overlay").fadeOut(200);
-      userInterface.updateView();
-      doSearch();
+      if(userInterface.data == null)
+        userInterface.sync();
     });
   });
   $('#login-back').click(function(){

@@ -238,10 +238,10 @@ function MusicPlayer(){
 	    });
 	}
 	this.getTrackInfo = function(){
-		data = {};
 		if(this.mix_info == null || this.track_info == null){
-			return data;
+			return null;
 		}
+		var data = {};
 		data.mix_rank = this.mix_info.certification; //gold, silver, platinum
 		data.mix_description = this.mix_info.description;
 		data.mix_likes_count = this.mix_info.likes_count;
