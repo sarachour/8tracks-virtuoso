@@ -159,7 +159,7 @@ function MusicPlayer(){
 					var liked = that.track_info.faved_by_current_user;
 					var name = that.track_info.name;
 					var cover = that.mix_info.cover_urls.sq56;
-					var artist = that.mix_info.performer;
+					var artist = that.track_info.performer;
 					if(!liked){
 						that.favoriteTrack();
 					}
