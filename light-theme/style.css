@@ -1,3 +1,30 @@
+
+div::-webkit-scrollbar {
+    border-radius: 10px;
+    width: 0.5em;
+    height: 0.5em;
+    background: rgb(20,20,20); 
+    opacity: 0.0;
+}
+div::-webkit-scrollbar:hover {
+    opacity: 1.0;
+}
+div::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(50,50,50); 
+    border-radius: 10px;
+    
+}
+div::-webkit-scrollbar-corner {
+    opacity: 0;
+}
+
+div::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 3px rgba(100,100,100); 
+    background: rgba(70,70,70,1.0); 
+    
+}
+
 html, body {	
 	width: 100%;
 	height: 100%;

@@ -139,7 +139,6 @@ function MusicPlayer(){
                })
 		})
 		chrome.commands.onCommand.addListener(function(command) {
-			console.log('Command:', command);
 			if(command == "like-mix"){
 				if(that.mix_info.hasOwnProperty("liked_by_current_user")){
 					var liked = that.mix_info.liked_by_current_user;
