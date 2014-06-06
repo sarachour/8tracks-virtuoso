@@ -1,24 +1,92 @@
 function Toast (){
-	this.error = function(status, message){
-		var not = new Notification(status, 
-		   {icon: "images/error.png", //"images/play.png"
-			body: message, 
+	this.waitTime = 5000;
+	this.nextTrack = function(){
+		var ic = "images/ffwd-track.png"
+		var not = new Notification("Next Track", 
+		   {icon: ic, //"images/play.png"
+			body: "skipping to the next track.", 
+		});
+		var that = this;
+		not.onshow = function() {
+			setTimeout(function() {not.close();}, that.waitTime);
+			//setTimeout(not.close, 1500) 
+		}
+	}
+	this.nextMix = function(){
+		var ic = "images/ffwd-mix.png"
+		var not = new Notification("Next Mix", 
+		   {icon: ic, //"images/play.png"
+			body: "skipping to the next mix.", 
+		});
+		var that = this;
+		not.onshow = function() {
+			setTimeout(function() {not.close();}, that.waitTime);
+			//setTimeout(not.close, 1500) 
+		}
+	}
+	this.favorite = function(cover_url, liked, trackname, trackartist){
+		var desc = "unfavorited track"
+		var ic = "images/star.png"
+		if(liked){
+			desc = "favorited track"
+			ic = "images/star-on.png"
+		}
+		var not = new Notification(trackname, 
+		   {icon: ic, //"images/play.png"
+			body: trackartist, 
+			tag: "STAR"
 			//tag: "ERROR"
 		});
+		var that = this;
 		not.onshow = function() {
-			setTimeout(function() {not.close();}, 10000);
+			setTimeout(function() {not.close();}, that.waitTime);
+			//setTimeout(not.close, 1500) 
+		}
+	}
+	this.like = function(cover_url, liked, mixname){
+		var desc = "unliked mix"
+		var ic = "images/heart.png"
+		if(liked){
+			desc = "liked mix"
+			ic = "images/heart-on.png"
+		}
+		var not = new Notification(mixname, 
+		   {icon: ic, //"images/play.png"
+			body: "", 
+			tag: "LIKE"
+			//tag: "ERROR"
+		});
+		var that = this;
+		not.onshow = function() {
+			setTimeout(function() {not.close();}, that.waitTime);
 			//setTimeout(not.close, 1500) 
 		}
 
 	}
+	this.error = function(status, message){
+		var not = new Notification(status, 
+		   {icon: "images/error.png", //"images/play.png"
+			body: message, 
+			tag: message
+			//tag: "ERROR"
+		});
+		var that = this;
+		not.onshow = function() {
+			setTimeout(function() {not.close();}, that.waitTime);
+			//setTimeout(not.close, 1500) 
+		}
+
+	}
+
 	this.track = function(icon, track, artist){
 		var not = new Notification(track, 
 		   {icon: icon, //"images/play.png"
 			body: artist, 
-			tag: "TRACK"
+			//tag: "TRACK"
 		});
+		var that = this;
 		not.onshow = function() {
-			setTimeout(function() {not.close();}, 10000);
+			setTimeout(function() {not.close();}, that.waitTime);
 			//setTimeout(not.close, 1500) 
 		}
 	}
@@ -65,11 +133,51 @@ function MusicPlayer(){
 		this.player.error(function(e) { 
                console.log("Logging playback error: ", e); 
                console.log("     ", that.player[0].error);
+               toast.error("Playback Error", "the streaming link is broken.")
                eightTracks.reportError(that.track_info.id, function(){
                		that.nextTrack();
                })
 		})
-
+		chrome.commands.onCommand.addListener(function(command) {
+			console.log('Command:', command);
+			if(command == "like-mix"){
+				if(that.mix_info.hasOwnProperty("liked_by_current_user")){
+					var liked = that.mix_info.liked_by_current_user;
+					var name = that.mix_info.name;
+					var cover = that.mix_info.cover_urls.sq56;
+					if(!liked){
+						that.likeMix();
+					}
+					else{
+						that.unlikeMix();
+					}
+					toast.like(cover, !liked, name);
+				}
+			}
+			else if(command == "fav-track"){
+				if(that.track_info.hasOwnProperty("faved_by_current_user")){
+					var liked = that.track_info.faved_by_current_user;
+					var name = that.track_info.name;
+					var cover = that.mix_info.cover_urls.sq56;
+					var artist = that.mix_info.performer;
+					if(!liked){
+						that.favoriteTrack();
+					}
+					else{
+						that.unfavoriteTrack();
+					}
+					toast.favorite(cover, !liked, name, artist);
+				}
+			}
+			else if(command == "next-mix"){
+				toast.nextMix();
+				that.nextMix();
+			}
+			else if(command == "next-track"){
+				toast.nextTrack();
+				that.skip();
+			}
+		});
 		chrome.extension.onMessage.addListener(
 		  function(request, sender, sendResponse) {
 			  if(request.action == "play"){

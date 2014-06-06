@@ -9,8 +9,34 @@
 	  "storage",
      "tabs",
      "clipboardWrite",
-     "notifications" 
+     "notifications"
 	],
+  "commands" : {
+    "next-mix": {
+      "suggested_key" : {
+        "default": "Alt+M"
+      },
+      "description" : "jump to next mix"
+    },
+    "next-track": {
+      "suggested_key" : {
+        "default": "Alt+T"
+      },
+      "description" : "jump to next track"
+    },
+    "like-mix": {
+      "suggested_key" : {
+        "default": "Alt+Shift+L"
+      },
+      "description" : "like/unlike mix."
+    },
+    "fav-track": {
+      "suggested_key" : {
+        "default": "Alt+Shift+F"
+      },
+      "description" : "favorite/unfavorite track."
+    }
+  },
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "index.html"
