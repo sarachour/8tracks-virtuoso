@@ -334,7 +334,9 @@ function EightTracks(){
 				console.log(data);
 				cbk(data);
 			}
-		);
+		).fail(function(e){ 
+				cbk(null, e);
+		});		
 	}
 	this.likeMix = function(mixid, cbk){
 		this._likeMix(true, mixid, cbk);
