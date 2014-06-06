@@ -7,7 +7,7 @@ function UserInterface(){
 		this.synced = false;
 	}
 	this.sync = function(){
-		if(this.synced) return;
+		
 
 		function getMix(tablink, j){
 			tabarr = tablink.split("/");
@@ -48,7 +48,6 @@ function UserInterface(){
 		    	lookThroughTabs(0);
 		});
 		this.synced = true;
-		
 	}
 	//var RTM_URL_RE_ = /http?\:\/\/www.8tracks.com\//; 
 
@@ -214,20 +213,20 @@ function UserInterface(){
 	    	else if(data.mix_rank == "bronze"){
 	    		$("#mix_rank").attr("src", "images/bronze.png");
 	    	}
-			if(!data.hasOwnProperty("mix_name")){
-				//autoload
-				that.sync();
+			if(that.timer == null && data.hasOwnProperty('mix_name')){
+				that.timer = window.setInterval(function(){
+					chrome.extension.sendMessage({action: "get-track-info"}, function(data){
+						console.log(data);
+						that.updateTime(data);
+				    });
+				}, 1000);
+			}
+			else if(!data.hasOwnProperty('mix_name')){
+				if(that.synced == false)
+					that.sync();
 			}
 	    });
-	    if(this.timer == null){
-	    	var that = this;
-			this.timer = window.setInterval(function(){
-				chrome.extension.sendMessage({action: "get-track-info"}, function(data){
-					console.log(data);
-					that.updateTime(data);
-			    });
-			}, 1000);
-		}
+	    
 	}
 	this.init();
 }

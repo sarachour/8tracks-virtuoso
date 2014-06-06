@@ -1,9 +1,32 @@
-function toast (){
+function Toast (){
+	this.error = function(status, message){
+		var not = new Notification(status, 
+		   {icon: "images/error.png", //"images/play.png"
+			body: message, 
+			//tag: "ERROR"
+		});
+		not.onshow = function() {
+			setTimeout(function() {not.close();}, 10000);
+			//setTimeout(not.close, 1500) 
+		}
 
+	}
+	this.track = function(icon, track, artist){
+		var not = new Notification(track, 
+		   {icon: icon, //"images/play.png"
+			body: artist, 
+			tag: "TRACK"
+		});
+		not.onshow = function() {
+			setTimeout(function() {not.close();}, 10000);
+			//setTimeout(not.close, 1500) 
+		}
+	}
 
 
 
 }
+toast = new Toast();
 
 function MusicPlayer(){
 	this.init = function(){
@@ -167,6 +190,7 @@ function MusicPlayer(){
 			isLastTrack: setdata.at_last_track,
 			isSkipOk: setdata.skip_allowed,
 		};
+		toast.track(this.mix_info.cover_urls.sq56, this.track_info.name, this.track_info.performer);
 		this.play(this.track_info.track_file_stream_url );
 		this.UPDATE_TRACK_INFO();
 		
@@ -178,11 +202,11 @@ function MusicPlayer(){
 			});
 	}
 	this.nextMix = function(){
-		mplayer = this;
+		var mplayer = this;
 
 		eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data, e){
 			if(mixdata == null || data == null){
-				console.log("REPORT ERROR", e);
+				mplayer.reportError(e);
 				return;
 			}
 
@@ -206,12 +230,12 @@ function MusicPlayer(){
 						mplayer.SET_TRACK_INFO(data.set, data.set.track);
 					}
 					else{
-						console.log("REPORT ERROR", e)
+						mplayer.reportError(e);
 					}
 				});
 			}
 			else{
-				console.log("REPORT ERROR", e)
+				mplayer.reportError(e);
 			}
 		})
 		
@@ -222,7 +246,7 @@ function MusicPlayer(){
 				mplayer.SET_TRACK_INFO(data.set, data.set.track);
 			}
 			else{
-				console.log("REPORT ERROR", e)
+				mplayer.reportError(e);
 			}
 		});
 	}
@@ -280,7 +304,7 @@ function MusicPlayer(){
 					mplayer.nextTrack();
 				}
 				if(mixdata == null || data == null){
-					console.log("REPORT ERROR", e);
+					mplayer.reportError(e);
 				}
 			});
 		}
@@ -292,11 +316,20 @@ function MusicPlayer(){
 				else{
 					mplayer.other_info.isEnd = mplayer.other_info.isLastTrack = true;
 					mplayer.nextTrack();
-					console.log("REPORT ERROR", e);
+					mplayer.reportError(e);
+					
 				}
 			});
 		}
 		
+	}
+	this.reportError = function(e){
+		console.log("REPORT ERROR", e);
+		var status = e.responseJSON.status;
+		var msg = "";
+		if(e.responseJSON.errors != null) msg= e.responseJSON.errors;
+		else if(e.responseJSON.notices != null) msg= e.responseJSON.notices;
+		toast.error(status, msg);
 	}
 	this.setVolume = function(pct){
 		this.player[0].volume = pct;

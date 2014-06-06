@@ -270,8 +270,8 @@ function EightTracks(){
 			function(data) {
 				cbk(data);
 			}
-		).fail(function(){ 
-  			cbk(null);
+		).fail(function(e){ 
+  			cbk(null, e);
 		});	
 
 	}
