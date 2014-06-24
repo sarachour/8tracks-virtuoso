@@ -85,7 +85,7 @@ function EightTracks(){
 			function(data) {
 			   cbk(data);
 			}
-		).fail(function(){ 
+		).fail(function(e){ 
   			cbk(null, e);
 		});;	
 		
