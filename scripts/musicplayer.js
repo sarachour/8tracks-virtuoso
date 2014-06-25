@@ -108,9 +108,7 @@ function MusicPlayer(){
 	    this.is_paused = false;
 	    this.playlist = new Playlist("persist_playlist", true);
 	    var that = this;
-	    eightTracks.createPlaybackStream(function(data){
-			console.log("created playback stream.");
-		});
+
 		chrome.runtime.onSuspend.addListener(function(){
 			var currentdate = new Date();
 			var datetime = "Suspend: " + currentdate.getDay() + "/"+currentdate.getMonth() 
@@ -177,13 +175,17 @@ function MusicPlayer(){
 				that.skip();
 			}
 		});
+
+		eightTracks.createPlaybackStream(function(data){
+			console.log("created playback stream.");
+		});
 		chrome.extension.onMessage.addListener(
 		  function(request, sender, sendResponse) {
 			  if(request.action == "play"){
 			  		that.mix(request.id, request.smart_id);
 			  }
 			  else if(request.action == "login"){
-			  		that.login(request, sendResponse);
+			  		that.login(request);
 			  }
 			  else if(request.action == "resume"){
 			  		that.resume();
@@ -196,9 +198,6 @@ function MusicPlayer(){
 			  }
 			  else if(request.action == "skip"){
 			  		that.skip();
-			  }
-			  else if(request.action == "reload"){
-			  		that.reload();
 			  }
 			  else if(request.action == "set-time"){
 			  		that.setTime(request.percent);
@@ -239,27 +238,42 @@ function MusicPlayer(){
 	        that.nextTrack();
 	    });
 	}
-	this.login = function(info, cbk){
+	this.login = function(info){
 		if(info.type == "lastfm"){
-			console.log("logging into lastfm");
 			if(info.stage == "auth"){
 				lastFm.auth(function(data, status){
 					console.log("authed in");
-					cbk(data, status);
+					
 				});
 			}
 			else if(info.stage == "session"){
 				lastFm.session(function(data, status){
-					console.log("logged in");
-					cbk(data, status);
+					chrome.extension.sendMessage({
+						action: "login-client", 
+						type:"lastfm",
+						stage:"session",
+						data:data, 
+						status:status});
 				});
 			}
 		}
 		else if(info.type == "8tracks"){
 			var username = info.username;
-			var passwd = info.passwd;
+			var passwd = info.password;
 			eightTracks.login(username, passwd, function(data, status){
-				cbk(data, status);
+				if(data != null){
+					eightTracks.createPlaybackStream(function(data, status){
+						if(data != null){
+							chrome.extension.sendMessage({action: "login-client", type:"8tracks", "data":data, "status":status});
+						}
+						else {
+							chrome.extension.sendMessage({action: "login-client", type:"8tracks", "data":data, "status":status});
+						}
+					});
+				}
+				else{
+					chrome.extension.sendMessage({action: "login-client", type:"8tracks", data:data, status:status});
+				}
 			});
 
 		}
@@ -291,9 +305,6 @@ function MusicPlayer(){
 		data.player_volume = this.player[0].volume;
 		//data.player = this.player;
 		return data;
-	}
-	this.reload = function(){
-		eightTracks.reload();
 	}
 	this.play = function(src){
 		var that = this;
@@ -327,6 +338,11 @@ function MusicPlayer(){
 		};
 		toast.track(this.mix_info.cover_urls.sq56, this.track_info.name, this.track_info.performer);
 		this.play(this.track_info.track_file_stream_url );
+		if(lastFm.isLoggedIn()){
+			lastFm.scrobble(this.track_info.name, this.track_info.performer, function(data, status){
+
+			});
+		}
 		this.UPDATE_TRACK_INFO();
 		
 	}
@@ -399,6 +415,7 @@ function MusicPlayer(){
 			mplayer.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
 			mplayer.UPDATE_MIX_INFO();
 		});
+		
 	}
 	this.unlikeMix = function(){
 		var mplayer = this;
@@ -406,6 +423,7 @@ function MusicPlayer(){
 			mplayer.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
 			mplayer.UPDATE_MIX_INFO();
 		});
+		
 	}
 	this.favoriteTrack = function(){
 		var mplayer = this;
@@ -414,6 +432,11 @@ function MusicPlayer(){
 			mplayer.UPDATE_TRACK_INFO();
 
 		})
+		if(lastFm.isLoggedIn()){
+			lastFm.love(this.track_info.name, this.track_info.performer, function(data, status){
+
+			});
+		}
 	}
 	this.unfavoriteTrack = function(){
 		var mplayer = this;
@@ -422,6 +445,11 @@ function MusicPlayer(){
 			mplayer.UPDATE_TRACK_INFO();
 
 		})
+		if(lastFm.isLoggedIn()){
+			lastFm.unlove(this.track_info.name, this.track_info.performer, function(data, status){
+
+			});
+		}
 	}
 	this.nextTrack = function(){
 		var mplayer = this;

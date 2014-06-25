@@ -8,9 +8,6 @@ function EightTracks(){
 		//this.play_token = localStorage.play_token
 		this.user_token = localStorage.user_token
 	}
-	this.reload = function(){
-		this.user_token = localStorage.user_token
-	}
 	this.isUndefined = function(x){return (x == undefined);}
 
 	this.login = function(uname, pass, cbk){

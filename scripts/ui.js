@@ -4,6 +4,26 @@ chrome.extension.onMessage.addListener(
         if(request.action == "update"){
             userInterface.updateView();
         }
+        if(request.action == "login-client"){
+          var data = request.data;
+          var status = request.status;
+          if(request.type == "8tracks"){
+            console.log("logging in");
+            if(data != null){
+              $("#login-indicator").attr("src", "images/dot-ok.png");
+              $("#login-page").fadeOut(200);
+              if(userInterface.data == null)
+                userInterface.sync();
+            }
+            else{
+              console.log("Error", status);
+              $("#login-status").html(status.responseJSON.errors);
+            }
+          }
+        }
+        else{
+          console.log("UNKNOWN REQUEST:", request);
+        }
   }
 )
 
@@ -83,20 +103,12 @@ function SetupLogin(){
       $("#login-status").html("Login failed: username or password is blank.");
       return;
     }
-    eightTracks.login(uname, pass, function(data, err){
-      //reload persistant data
-      if(data != null){
-        chrome.extension.sendMessage({action: "reload"})
-        $("#login-indicator").attr("src", "images/dot-ok.png");
-        $("#login-page").fadeOut(200);
-        if(userInterface.data == null)
-          userInterface.sync();
-      }
-      else{
-        console.log("Error", err);
-        $("#login-status").html(err.statusText);
-      }
-    });
+    chrome.extension.sendMessage({
+        action: "login", 
+        type: "8tracks", 
+        username: uname, 
+        password:pass
+      })
   });
   $('#login-back').click(function(){
       $("#login-page").fadeOut(200);
@@ -134,17 +146,7 @@ function SetupLayout(){
     $("#login-indicator").attr("src", "images/dot-ok.png");
   }
   else{
-    eightTracks.login(null, null, function(data, err){
-      //reload persistant data
-      console.log("INFO:",data,err);
-      if(data != null){
-        chrome.extension.sendMessage({action: "reload"})
-        $("#login-indicator").attr("src", "images/dot-ok.png");
-        $('#login-page').hide();
-        if(userInterface.data == null)
-          userInterface.sync();
-      }
-    });
+    chrome.extension.sendMessage({action: "login", type: "8tracks", username: null, password:null})
 
   }
   var outerContainer = $('.player-page').layout({resize: false});
