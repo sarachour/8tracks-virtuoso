@@ -338,11 +338,6 @@ function MusicPlayer(){
 		};
 		toast.track(this.mix_info.cover_urls.sq56, this.track_info.name, this.track_info.performer);
 		this.play(this.track_info.track_file_stream_url );
-		if(lastFm.isLoggedIn()){
-			lastFm.scrobble(this.track_info.name, this.track_info.performer, function(data, status){
-
-			});
-		}
 		this.UPDATE_TRACK_INFO();
 		
 	}
@@ -456,6 +451,11 @@ function MusicPlayer(){
 		if(this.isWellPlayed()){
 			//report if song has been played
 			eightTracks.report(this.mix_info.id, this.track_info.id);
+			if(lastFm.isLoggedIn()){
+				lastFm.scrobble(this.track_info.name, this.track_info.performer, function(data, status){
+
+				});
+			}
 		}
 		if(this.other_info.isEnd == true || this.other_info.isLastTrack == true){
 			eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data, e){
