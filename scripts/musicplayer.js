@@ -329,7 +329,7 @@ function MusicPlayer(){
 	}
 	this.SET_TRACK_INFO = function(setdata, trackdata){
 		this.track_info = trackdata;
-		console.log(setdata);
+		console.log("set track");
 		this.other_info = {
 			isBeginning: setdata.at_beginning,
 			isEnd: setdata.at_end,
@@ -339,13 +339,21 @@ function MusicPlayer(){
 		toast.track(this.mix_info.cover_urls.sq56, this.track_info.name, this.track_info.performer);
 		this.play(this.track_info.track_file_stream_url );
 		this.UPDATE_TRACK_INFO();
+		if(lastFm.isLoggedIn()){
+			if(this.track_info.faved_by_current_user){
+				lastFm.love(this.track_info.name, this.track_info.performer, function(data, status){
+
+				});
+			}
+			
+		}
 		
 	}
 	this.UPDATE_TRACK_INFO = function(){
 		this.playlist.addTrack(this.mix_info.name,this.track_info.performer, this.track_info.name, this.track_info,
 			function(){
 				chrome.extension.sendMessage({action: "update"})
-			});
+		});
 	}
 	this.nextMix = function(){
 		var mplayer = this;
