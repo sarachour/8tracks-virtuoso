@@ -95,7 +95,7 @@ function SetupLogin(){
       }
       else{
         console.log("Error", err);
-        $("#login-status").html(err);
+        $("#login-status").html(err.statusText);
       }
     });
   });

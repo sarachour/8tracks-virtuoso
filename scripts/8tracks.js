@@ -27,7 +27,9 @@ function EightTracks(){
 			   	cbk(data);
 			   
 			}
-		);
+		).fail(function(e){ 
+				cbk(null, e);
+		});
 	}
 	this.search = function(type, slug, sort, cbk){
 		url="http://8tracks.com/mix_sets/"+type+":"
@@ -47,7 +49,9 @@ function EightTracks(){
 				function(data){
 					cbk(data);
 				}
-			)
+			).fail(function(e){ 
+  				cbk(null, e);
+			});
 	}
 	this.createPlaybackStream = function(cbk, forceCreate){
 		url = "http://8tracks.com/sets/new.json"

@@ -13,9 +13,10 @@ function UserInterface(){
 			tabarr = tablink.split("/");
 	    	mixname = tabarr[tabarr.length-1];
 	    	artistname = tabarr[tabarr.length-2];
+	    	console.log("URL:", tablink);
 	    	eightTracks.getMixByName(artistname, mixname, function(data){
 				console.log(artistname, mixname, data);
-				if(data.hasOwnProperty("mix")){
+				if(data != null && data.hasOwnProperty("mix")){
 					var id = data.mix.id;
 					var smartid = "similar:"+data.mix.id;
 					chrome.extension.sendMessage({action: "play", id: id, smart_id: smartid});
@@ -23,6 +24,7 @@ function UserInterface(){
 				else{
 					lookThroughTabs(j);
 				}
+
 			})
 
 		}
@@ -34,6 +36,7 @@ function UserInterface(){
 					console.log(i, tabs.length);
 				    if(tablink.indexOf("8tracks.com") > -1){
 				    	getMix(tablink, i+1);
+				    	return;
 					}
 				}
 			})
