@@ -17,8 +17,8 @@
   <script src="scripts/ui.js"></script>
 </head>
 <body>
-<div id='search-overlay' class="layout-overlay">
-  <div style="height:10%;">
+<div id='search-page' data-layout='{"type": "border", "hgap": 3, "vgap": 3}'  class="search-overlay">
+  <div class="north">
     <label class="medium text white">search by</label>
     <select id="search-type">
       <option value="liked">liked</option>
@@ -32,49 +32,59 @@
       <option value="hot" selected>hot</option> 
       <option value="recent">recent</option>
       <option value="popular">popular</option>
-    </select> 
+    </select>
     <div class="ui-widget" id="search-text-container">
       <label class="medium text white" for="search-text">with</label>
       <input type="text" class="small" style="height:20px; width:200px;font-size:8pt;" id="search-text" hint="search term here"></input>  
     </div>
+    <br>
+    <div id='search-page-description' class="text medium white"></div>
+  </div> 
+  <div id='search-page-results' style="overflow:scroll;" class="center" 
+    data-layout='{"type": "grid", "hgap": 3, "vgap": 3}'>
   </div>
-  <div id='search-overlay-description' class="text medium white"></div>
-  <div style="overflow:scroll; height:80%; width:90%;" > 
-    <div id='search-overlay-results' style="overflow:scroll; height:100%; width:90%;" 
-      data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
-    </div>
-    <div id="search-back" title="return to player" style="position:absolute; top:10px;left:10px;" class="icon-med">
-      <img src="images/back-white.png"/>
-    </div>
+  <div id="search-back" title="return to player" style="position:absolute; top:5px;left:5px;" class="icon-med">
+    <img src="images/back-white.png"/>
   </div>
 </div>
 
-<div id='login-overlay' class="layout-overlay" >
-  <div id="login-text" class="text large white" style="">
-    <div title="is logged in" class="icon-med">
-        <img id="login-indicator" src="images/dot-err.png"/>
-     </div>
-     8Tracks Login
+<div id='login-page' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="login-overlay" >
+  <div class="huge text north">
+  Login Info:
   </div>
-  <div class="center" style="position:absolute; top:25%;left:25%; width:50%;"><br>
-    <input placeholder="username" type="text" id="login_username" name="username" />
-    <input placeholder="password" type="password" id="login_password" name="password" /><br>
-    <button id="player_log_in" style="position:absolute; right:10px;">Log In</button>
+  <div class="center">
+    <div id="login-8tracks">
+      <div id="login-text" class="text medium white">
+        <div title="is logged in" class="icon-med">
+            <img id="login-indicator" src="images/dot-err.png"/>
+         </div>
+         8Tracks Login
+      </div><br>
+      <input placeholder="username" type="text" id="login_username" name="username" />
+      <input placeholder="password" type="password" id="login_password" name="password" />
+      <button id="player_log_in">Log In</button>
+    </div>
+    <div id="login-lastfm">
+      <div id="login-text" class="text medium white">
+        <div title="is logged in" class="icon-med">
+            <img id="lastfm-indicator" src="images/dot-err.png"/>
+         </div>
+         LastFM Login
+      </div><br>
+      <button class="red-button" id="player_lastfm_perm">Authenticate</button>
+    </div>
   </div>
-  <!--
-   <div title="is logged in" class="icon-med">
-        <img id="login-indicator" src="images/dot-err.png"/>
-     </div>
-     LastFM Login
+  <div class="south text medium">
+    Status info here.
   </div>
-  -->
-  <button id="player_log_in" style="position:absolute; right:10px;">Log In</button>
+  
+  
   <div id="login-back" title="return to player" style="position:absolute; top:10px;left:10px;" class="icon-med">
     <img src="images/back-white.png"/>
   </div>
 </div>
 
-<div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
+<div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="player-page">
   <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north">
     <div class="north" style="height:25px; background-color:#434343;border-radius: 10px; margin-bottom:20px">
       

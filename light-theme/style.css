@@ -3,11 +3,11 @@ div::-webkit-scrollbar {
     border-radius: 10px;
     width: 0.5em;
     height: 0.5em;
-    background: rgb(20,20,20); 
+    background: rgba(20,20,20,0.1); 
     opacity: 0.0;
 }
 div::-webkit-scrollbar:hover {
-    opacity: 1.0;
+    opacity: 0.3;
 }
 div::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgb(50,50,50); 
@@ -20,10 +20,11 @@ div::-webkit-scrollbar-corner {
 
 div::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    box-shadow: inset 0 0 3px rgba(100,100,100); 
-    background: rgba(70,70,70,1.0); 
+    box-shadow: inset 0 0 3px rgba(100,100,100, 0.3); 
+    background: rgba(250,250,250,0.5); 
     
 }
+
 
 html, body {	
 	width: 100%;
@@ -97,12 +98,18 @@ img {
     opacity:1;
 }
 
-.layout-overlay {
-	height: 100%;
+
+.player-page {
+    height: 100%;
+}
+
+
+.search-overlay, .login-overlay {
+	height: 95%;
+    width: 95%;
 	background-color:rgba(0,0,0,1.0);
 	color:#fff;
     opacity:0.85;
-    width: 100%;
 	top:0;
     left:0;
     text-align: center;
@@ -112,10 +119,6 @@ img {
 }
 
 
-.layout-outer {
-	height: 100%;
-}
-
 .center, .east, .west, .north, .south {
 	/*background-color: rgb(220,220,220);
 	border: 1px solid rgb(200,200,200);
@@ -123,18 +126,34 @@ img {
 	text-align: center;
     display: inline-block;
 }
+.search-overlay .north, .login-overlay .south {
+    height: 20%;
+}
+.search-overlay .center {
 
-.west, .east {
+}
+
+.search-overlay .east, .search-overlay .west {
+    
+}
+
+.login-overlay .north, .login-overlay .south {
+    height: 10%;
+}
+
+.player-page .west, .east {
 	width: 15%;
 }
-.south {
+.player-page .south {
 	height: 9%;
     background-color:#434343;
     border-radius: 15px;
 }
-.north {
+
+.player-page .north {
 	height: 40%;
 }
+
 .huge {
     font-size:36px;
 }
@@ -164,7 +183,16 @@ img {
 .white{
     color:#DEDEDE;
 }
-
+.red-button {
+    color:#110000;
+    background-color:#814141;
+    border-color:#814141;
+}
+.green-button {
+    color:#001100;
+    background-color:#418141;
+    border-color:#418141;
+}
 .search-result {
     text-align: center;
     width: 100px;

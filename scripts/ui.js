@@ -8,11 +8,12 @@ chrome.extension.onMessage.addListener(
 )
 
 function doSearch(){
-    var grid = $("#search-overlay-results");
-    var desc = $("#search-overlay-description");
+    var grid = $("#search-page-results");
+    var desc = $("#search-page-description");
     var type = $('#search-type').val();
     var term = $('#search-text').val();
     var sort = $('#search-sort').val();
+    var page = $("#search-page");
     grid.empty();
     eightTracks.search(type, term, sort, function(data){
       var description = data.mix_set.name;
@@ -61,15 +62,18 @@ function doSearch(){
   }
 
 function ShowLogin(){
-  $('#login-overlay').fadeIn(200);
+  $('#login-page').fadeIn(200);
+  
+}
+function ShowSearch(){
+  $('#search-page').fadeIn(200);
   
 }
 function SetupLogin(){
-  $("#login-overlay").click(function(e){
+  $("#login-page").click(function(e){
     if(e.target !== this)
       return;
-
-    $("#login-overlay").fadeOut(200);
+    $("#login-page").fadeOut(200);
   })
   $("#player_log_in").click(function(){
     var uname = $('#login_username').val();
@@ -89,23 +93,22 @@ function SetupLogin(){
     });
   });
   $('#login-back').click(function(){
-      $("#login-overlay").fadeOut(200);
+      $("#login-page").fadeOut(200);
   })
   
 }
 function SetupLayout(){
   $('#player-controls').layout();
   $('#player-title').layout();
-  $('#search-overlay-results').layout();
-  $('#search-overlay').hide();
+  $('#search-page-results').layout();
+  $('.login-overlay, .search-overlay').layout({resize: false}).hide();
   $('#player_volume_controls').hide();
   if(localStorage.hasOwnProperty("user_token")){
     $('#login-overlay').hide();
     $("#login-indicator").attr("src", "images/dot-ok.png");
   }
 
-  var outerContainer = $('#player').layout({resize: false});
-
+  var outerContainer = $('.player-page').layout({resize: false});
 }
 
 
@@ -150,6 +153,15 @@ function SetupSearch(){
         console.log("sufficient pause");
     }
   }
+  $('#search-back').click(function(){
+      $("#search-page").fadeOut(200);
+  })
+  $("#search-page").click(function(e){
+    if(e.target !== this)
+      return;
+
+    $("#search-page").fadeOut(200);
+  })
   $("#search-type").on('change', function(){
     var name = $('#search-type').val();
     console.log("type:"+name);
@@ -214,16 +226,7 @@ function SetupPlayer(){
     });
 
     $( "#player_search" ).click(function() { 
-      $("#search-overlay").fadeIn(200);
-      $('#search-back').click(function(){
-          $("#search-overlay").fadeOut(200);
-      })
-      $("#search-overlay").click(function(e){
-        if(e.target !== this)
-          return;
-
-        $("#search-overlay").fadeOut(200);
-      })
+      ShowSearch();
     });
     $("#player_sync").click(function(){
       userInterface.sync();
