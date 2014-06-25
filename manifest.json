@@ -12,6 +12,12 @@
      "notifications",
      "*://*/*"
 	],
+  "content_scripts": [
+    {
+      "matches": ["http://www.last.fm/api/grantaccess"],
+      "js": ["scripts/lastfmAuth.js"]
+    }
+  ],
   "commands" : {
     "next-mix": {
       "suggested_key" : {

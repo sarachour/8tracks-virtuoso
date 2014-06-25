@@ -63,6 +63,14 @@ function LastFM()	{
 			})
 
 	}
+	this.isLoggedIn = function(){
+		if(this.session_key != null){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	this.session = function(cbk){
 		if(this.token == null) return;
 		var that = this;
@@ -75,7 +83,7 @@ function LastFM()	{
 				token: this.token
 		}
 		args.api_sig = this.gen_sig(args);
-		
+	
 		$.get(
 			url,
 			args,
@@ -83,11 +91,11 @@ function LastFM()	{
 				that.user_name = data.getElementsByTagName("name")[0].innerHTML;
 				that.session_key = data.getElementsByTagName("key")[0].innerHTML;
 				localStorage["LASTFM_SESSION_KEY"] = that.session_key;
+				console.log(data);
 				if(cbk != undefined) cbk(data);
 			})
 		.fail(function(e){ 
 			console.log(e);
-			console.log("you did not authenticate");
 			if(cbk != undefined) cbk(null, e);
 		});	
 

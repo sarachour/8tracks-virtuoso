@@ -85,11 +85,10 @@ function SetupLogin(){
     }
     eightTracks.login(uname, pass, function(data, err){
       //reload persistant data
-      console.log("INFO:",data,err);
       if(data != null){
         chrome.extension.sendMessage({action: "reload"})
         $("#login-indicator").attr("src", "images/dot-ok.png");
-        $("#login-overlay").fadeOut(200);
+        $("#login-page").fadeOut(200);
         if(userInterface.data == null)
           userInterface.sync();
       }
@@ -102,6 +101,25 @@ function SetupLogin(){
   $('#login-back').click(function(){
       $("#login-page").fadeOut(200);
   })
+  $('#login-lastfm-perm').click(function(){
+      chrome.extension.sendMessage({
+        action: "login", 
+        type: "lastfm",
+        stage: "auth"
+      }, 
+      function(d, e){
+        alert("logged in")
+        console.log(d,e);
+      }
+    );
+  })
+  if(lastFm.isLoggedIn()){
+    $('#login-lastfm-perm').addClass('green-button');
+    $("#login-lastfm-indicator").attr("src", "images/dot-ok.png");
+  }
+  else{
+    $('#login-lastfm-perm').addClass('red-button');
+  }
   
 }
 function SetupLayout(){
@@ -122,6 +140,7 @@ function SetupLayout(){
       if(data != null){
         chrome.extension.sendMessage({action: "reload"})
         $("#login-indicator").attr("src", "images/dot-ok.png");
+        $('#login-page').hide();
         if(userInterface.data == null)
           userInterface.sync();
       }

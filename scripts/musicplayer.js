@@ -182,6 +182,9 @@ function MusicPlayer(){
 			  if(request.action == "play"){
 			  		that.mix(request.id, request.smart_id);
 			  }
+			  else if(request.action == "login"){
+			  		that.login(request, sendResponse);
+			  }
 			  else if(request.action == "resume"){
 			  		that.resume();
 			  }
@@ -235,6 +238,31 @@ function MusicPlayer(){
 		this.player.bind("ended", function () {
 	        that.nextTrack();
 	    });
+	}
+	this.login = function(info, cbk){
+		if(info.type == "lastfm"){
+			console.log("logging into lastfm");
+			if(info.stage == "auth"){
+				lastFm.auth(function(data, status){
+					console.log("authed in");
+					cbk(data, status);
+				});
+			}
+			else if(info.stage == "session"){
+				lastFm.session(function(data, status){
+					console.log("logged in");
+					cbk(data, status);
+				});
+			}
+		}
+		else if(info.type == "8tracks"){
+			var username = info.username;
+			var passwd = info.passwd;
+			eightTracks.login(username, passwd, function(data, status){
+				cbk(data, status);
+			});
+
+		}
 	}
 	this.getTrackInfo = function(){
 		if(this.mix_info == null || this.track_info == null){

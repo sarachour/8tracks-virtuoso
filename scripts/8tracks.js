@@ -25,7 +25,6 @@ function EightTracks(){
 			   	sthat.user_token = data.user.user_token;
 			   	localStorage.user_token = data.user.user_token;
 			   	cbk(data);
-			   
 			}
 		).fail(function(e){ 
 				cbk(null, e);

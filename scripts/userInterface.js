@@ -149,7 +149,6 @@ function UserInterface(){
 	this.updateView = function(){
 		var that = this;
 		chrome.extension.sendMessage({action: "get-track-info"}, function(data){
-			console.log("update view", data);
 			that.data = data;
 			if(data == null){
 				if(that.synced == false)

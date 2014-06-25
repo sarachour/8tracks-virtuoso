@@ -10,9 +10,11 @@
 
   
   <script src="scripts/lib/jlayout/jquery.sizes.js"></script>
-   <script src="scripts/lib/jlayout/jlayout.border.js"></script>
+  <script src="scripts/lib/jlayout/jlayout.border.js"></script>
   <script src="scripts/lib/jlayout/jquery.jlayout.js"></script>
+  <script src="scripts/lib/md5.js"></script>
   <script src="scripts/8tracks.js"></script>
+  <script src="scripts/lastfm.js"></script>
   <script src="scripts/userInterface.js"></script>
   <script src="scripts/ui.js"></script>
 </head>
@@ -67,11 +69,11 @@
     <div id="login-lastfm">
       <div id="login-text" class="text large white">
         <div title="is logged in" class="icon-med">
-            <img id="lastfm-indicator" src="images/dot-err.png"/>
+            <img id="login-lastfm-indicator" src="images/dot-err.png"/>
          </div>
          LastFM Login
       </div><br>
-      <button class="red-button small text" id="player_lastfm_perm">Authenticate</button>
+      <button class="small text" id="login-lastfm-perm">Authenticate</button>
     </div>
   </div>
   <div id="login-status" class="south text medium">
