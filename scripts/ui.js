@@ -80,16 +80,23 @@ function SetupLogin(){
     var pass = $('#login_password').val();
     var that = this;
     if(uname == "" || pass == ""){
-      console.log("Login failed: username, pass values do not exist.");
+      $("#login-status").html("Login failed: username or password is blank.");
       return;
     }
-    eightTracks.login(uname, pass, function(){
+    eightTracks.login(uname, pass, function(data, err){
       //reload persistant data
-      chrome.extension.sendMessage({action: "reload"})
-      $("#login-indicator").attr("src", "images/dot-ok.png");
-      $("#login-overlay").fadeOut(200);
-      if(userInterface.data == null)
-        userInterface.sync();
+      console.log("INFO:",data,err);
+      if(data != null){
+        chrome.extension.sendMessage({action: "reload"})
+        $("#login-indicator").attr("src", "images/dot-ok.png");
+        $("#login-overlay").fadeOut(200);
+        if(userInterface.data == null)
+          userInterface.sync();
+      }
+      else{
+        console.log("Error", err);
+        $("#login-status").html(err);
+      }
     });
   });
   $('#login-back').click(function(){
@@ -101,13 +108,26 @@ function SetupLayout(){
   $('#player-controls').layout();
   $('#player-title').layout();
   $('#search-page-results').layout();
-  $('.login-overlay, .search-overlay').layout({resize: false}).hide();
+  $('.login-overlay, .search-overlay').layout({resize: false})
+  $('.search-overlay').hide();
   $('#player_volume_controls').hide();
   if(localStorage.hasOwnProperty("user_token")){
-    $('#login-overlay').hide();
+    $('#login-page').hide();
     $("#login-indicator").attr("src", "images/dot-ok.png");
   }
+  else{
+    eightTracks.login(null, null, function(data, err){
+      //reload persistant data
+      console.log("INFO:",data,err);
+      if(data != null){
+        chrome.extension.sendMessage({action: "reload"})
+        $("#login-indicator").attr("src", "images/dot-ok.png");
+        if(userInterface.data == null)
+          userInterface.sync();
+      }
+    });
 
+  }
   var outerContainer = $('.player-page').layout({resize: false});
 }
 
