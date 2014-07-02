@@ -30,7 +30,7 @@ function EightTracks(){
 	this.search = function(type, slug, sort, cbk){
 		url="http://8tracks.com/mix_sets/"+type+":"
 		if(slug != null){
-			url+=slug+":"
+			url+=slug.replace(" ", "_")+":"
 		}
 		url+=sort+".json?include=mixes";
 		console.log(url);
@@ -190,7 +190,7 @@ function EightTracks(){
 			});
 			
 	}
-	this.report = function(mid, tid){
+	this.report = function(mid, tid, cbk){
 		var that = this;
 		var rurl = "http://8tracks.com/sets/"+this.play_token+"/next.json"
 		if(!this.check()){
@@ -205,7 +205,7 @@ function EightTracks(){
 			mix_id: mid,
 			track_id: tid},
 			function(data) {
-				
+				cbk(data);
 			}
 		).fail(function(e){ 
   			cbk(null,e);

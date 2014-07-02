@@ -112,7 +112,6 @@ function LastFM()	{
 		//http://www.last.fm/api/show/track.love
 		if(this.session_key == null) return;
 		var time = Math.round(Date.now()/1000);
-		console.log(time);
 		//var url = "http://www.last.fm/api/show/track.love"
 		var url = "https://ws.audioscrobbler.com/2.0/"
 		var args = {

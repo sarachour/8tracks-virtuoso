@@ -131,6 +131,7 @@ function MusicPlayer(){
 		this.player.error(function(e) { 
                console.log("Logging playback error: ", e); 
                console.log("     ", that.player[0].error);
+               console.log(that.player[0].src);
                toast.error("Playback Error", "the streaming link is broken.")
                eightTracks.reportError(that.track_info.id, function(){
                		that.nextTrack();
@@ -458,7 +459,14 @@ function MusicPlayer(){
 		var mplayer = this;
 		if(this.isWellPlayed()){
 			//report if song has been played
-			eightTracks.report(this.mix_info.id, this.track_info.id);
+			eightTracks.report(this.mix_info.id, this.track_info.id, function(data, status){
+				if(data != null){
+					console.log("REPORT: ", data);
+				}
+				else{
+					console.log("REPORT ERROR: ", data)
+				}
+			});
 			if(lastFm.isLoggedIn()){
 				lastFm.scrobble(this.track_info.name, this.track_info.performer, function(data, status){
 

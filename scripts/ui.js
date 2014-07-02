@@ -72,7 +72,7 @@ function doSearch(){
           html_div.click(function(myid){
             return function(){
               chrome.extension.sendMessage({action: "play", id:myid, smart_id:smartid})
-              $("#search-overlay").fadeOut(200);
+              $("#search-page").fadeOut(200);
             } 
           }(id));
           grid.append(html_div)
