@@ -3,7 +3,7 @@
 
   "name": "8Tracks Virtuoso",
   "description": "An unobtrusive and powerful player for listening to, managing and exporting 8tracks mixes.",
-  "version": "1.22",
+  "version": "1.23",
 
   "permissions": [
 	  "storage",
