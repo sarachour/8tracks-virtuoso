@@ -144,12 +144,15 @@ function MusicPlayer(){
 					var name = that.mix_info.name;
 					var cover = that.mix_info.cover_urls.sq56;
 					if(!liked){
+						var message = "Liked Mix"
 						that.likeMix();
 					}
 					else{
+						var message = "Unliked Mix"
 						that.unlikeMix();
 					}
-					toast.like(cover, !liked, name);
+					toast.track(that.mix_info.cover_urls.sq56, message, 
+					that.mix_info.name);
 				}
 			}
 			else if(command == "fav-track"){
@@ -160,19 +163,33 @@ function MusicPlayer(){
 					var artist = that.track_info.performer;
 					if(!liked){
 						that.favoriteTrack();
+						var message = "Favorited Track"
 					}
 					else{
 						that.unfavoriteTrack();
+						var message = "Unfavorited Track"
 					}
-					toast.favorite(cover, !liked, name, artist);
+					toast.track(that.mix_info.cover_urls.sq56, message, 
+					"\'"+that.track_info.name+"\' by "+that.track_info.performer);
 				}
 			}
-			else if(command == "next-mix"){
-				toast.nextMix();
-				that.nextMix();
+			else if(command == "pause-play-track"){
+
+				if(that.is_paused){
+					var message = "Resumed Track";
+					that.resume();
+				}
+				else {
+					var message = "Paused Track";
+					that.pause();
+				}
+				toast.track(that.mix_info.cover_urls.sq56, message, 
+					"\'"+that.track_info.name+"\' by "+that.track_info.performer);
 			}
 			else if(command == "next-track"){
-				toast.nextTrack();
+				var message = "Skipping Track"
+				toast.track(that.mix_info.cover_urls.sq56, message, 
+					"\'"+that.track_info.name+"\' by "+that.track_info.performer);
 				that.skip();
 			}
 		});
@@ -337,7 +354,8 @@ function MusicPlayer(){
 			isLastTrack: setdata.at_last_track,
 			isSkipOk: setdata.skip_allowed,
 		};
-		toast.track(this.mix_info.cover_urls.sq56, this.track_info.name, this.track_info.performer);
+		toast.track(this.mix_info.cover_urls.sq56, "Now Playing",
+			"\'"+this.track_info.name+"\' by "+ this.track_info.performer);
 		this.play(this.track_info.track_file_stream_url );
 		this.UPDATE_TRACK_INFO();
 		if(lastFm.isLoggedIn()){
