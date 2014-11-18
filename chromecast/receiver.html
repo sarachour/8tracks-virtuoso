@@ -2,12 +2,35 @@
 <head>
 <title>8Tracks Player</title>
 <link rel="stylesheet" href="css/cast_style.css" />
-<script src="scripts/lib/cast_receiver.js"></script>
-<script src="scripts/lib/receiver.js"></script>
+<script src="lib/jquery-1.10.2.js"></script>
+<script src="lib/jquery-ui-1.10.4.min.js"></script>
+<script src="lib/jlayout/jlayout.border.js"></script>
+<script src="lib/jlayout/jquery.sizes.js"></script>
+<script src="lib/jlayout/jquery.jlayout.js"></script>
+<script src="lib/cast_receiver.js"></script>
+<script src="js/receiver.js"></script>
 </head>
 
-<body>
-	
+<body class="black-bg">
+<div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="white text">
+  <div class="north huge">
+  8Tracks Virtuoso
+  </div>
+  <div class="west">
+  Played List
+
+  </div>
+  <div class="east">
+  More Info
+
+  </div>
+   <div class="center">
+  	<video id='media'>
+
+  	</video>
+  	Playlist Info
+  </div>
+</div>
 
 </body>
 </html>

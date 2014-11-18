@@ -1,4 +1,11 @@
+function bind_jlayout(){
+
+  $('#player').layout();
+}
+
 window.onload = function() {
+  bind_jlayout();
+  
   cast.receiver.logger.setLevelValue(0);
   window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
   console.log('Starting Receiver Manager');
@@ -54,4 +61,5 @@ window.onload = function() {
   console.log(text);
   document.getElementById("message").innerHTML=text;
   window.castReceiverManager.setApplicationState(text);
+  
 };

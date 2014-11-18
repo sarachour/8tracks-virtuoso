@@ -1,0 +1,42 @@
+.center, .east, .west, .north, .south {
+    /*background-color: rgb(220,220,220);
+    border: 1px solid rgb(200,200,200);
+    */
+    text-align: center;
+    display: inline-block;
+}
+.west {
+    width:20%;
+}
+.north {
+    height:20%;
+}
+.huge {
+    font-size:36px;
+}
+.large {
+	font-size:16px;
+}
+.medium {
+	font-size:14px;
+}
+.text {
+    margin: auto; 
+    font-family:"Lucida Grande";
+    font-variant:small-caps;
+}
+.tiny {
+    font-size:10px;
+}
+.small {
+	font-size:12px;
+}
+.black-bg {
+    background-color:#414141;
+}
+.faint {
+	color:#4D4D4D;
+}
+.white{
+    color:#DEDEDE;
+}

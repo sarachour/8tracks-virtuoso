@@ -227,6 +227,12 @@ function Selector(){
                             if(is_starred){
                                 this.selection[artist][track].faved_by_current_user = is_starred;
                             }
+                            var cmix = {};
+                            cmix.is_loved = mix.liked_by_current_user
+                            cmix.name = mix.name; 
+                            cmix.tags = mix.tag_list_cache;
+                            cmix.url = "http://8tracks.com/"+mix.web_path;
+                            this.selection[artist][track].mix = cmix;
                         }
                     }
                 }
@@ -339,10 +345,31 @@ function OptionsInterface(){
             this.setClipboard(str, "Copied to clipboard. Now paste into Spotify playlist.");
         }
     }
+    this.exportDownloadScript = function(){
+        var sel = this.selector.getSelectionFromHTML();
+        var text = "";
+        for(var artist in sel){
+            for(var track in sel[artist]){
+                var command = "";
+                var msel = sel[artist][track];
+                var url = msel.track_file_stream_url;
+                var name = artist+ "-" + track;
+                var mix = msel.mix.name;
+                name=name.replace(/[^A-Za-z\'-]/g, "_").replace(/\_+/, '_');
+                ext = url.split(".");
+                ext = ext[ext.length-1];
+                console.log(name, url,mix,ext);
+
+            }
+        }
+        this.setClipboard(text, "Copied to clipboard. Paste into spreadsheet.");
+    }
     this.exportTabDelim = function(){
         var sel = this.selector.getSelectionFromHTML();
         var dat = [];
-        dat.push(['track', 'artist', 'starred', 'spotify']);
+        dat.push(['track-name', 'track-artist', 'track-starred', 
+            'track-url', 'track-buy','track-spotify-url',
+            'mix-name','mix-tags','mix-loved','mix-url']);
         for(var artist in sel){
             for(var track in sel[artist]){
                 var row = [];
@@ -351,12 +378,20 @@ function OptionsInterface(){
                 row.push(artist);
                 row.push(msel.faved_by_current_user);
 
+                row.push(msel.track_album);
+                row.push(msel.url);
+                row.push(msel.buy_link);
                 if(msel.hasOwnProperty("spotify")){
                     row.push(msel.spotify.track_id);
                 }
                 else{
                     row.push("");
                 }
+                row.push(msel.mix.name);
+                row.push(msel.mix.tags);
+                row.push(msel.mix.is_loved);
+                row.push(msel.mix.url);
+
                 dat.push(row);
             }
         }

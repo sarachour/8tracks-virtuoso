@@ -106,6 +106,7 @@ function MusicPlayer(){
 	    this.track_info = null;
 	    this.mix_info = null;
 	    this.is_paused = false;
+	    this.is_casting = false;
 	    this.playlist = new Playlist("persist_playlist", true);
 	    var that = this;
 
@@ -202,6 +203,9 @@ function MusicPlayer(){
 			  if(request.action == "play"){
 			  		that.mix(request.id, request.smart_id);
 			  }
+			  else if(request.action == "cast"){
+			  		that.cast(request);
+			  }
 			  else if(request.action == "login"){
 			  		that.login(request);
 			  }
@@ -255,6 +259,13 @@ function MusicPlayer(){
 		this.player.bind("ended", function () {
 	        that.nextTrack();
 	    });
+	}
+	this.cast = function(obj){
+		this.is_casting = !this.is_casting;
+		if(this.is_casting){
+			chromeCaster.play({mix:this.mix_info, track:this.track_info});
+		}
+		console.log("cast",this.is_casting);
 	}
 	this.login = function(info){
 		if(info.type == "lastfm"){
@@ -347,7 +358,6 @@ function MusicPlayer(){
 	}
 	this.SET_TRACK_INFO = function(setdata, trackdata){
 		this.track_info = trackdata;
-		console.log("set track");
 		this.other_info = {
 			isBeginning: setdata.at_beginning,
 			isEnd: setdata.at_end,
@@ -365,6 +375,9 @@ function MusicPlayer(){
 				});
 			}
 			
+		}
+		if(mplayer.is_casting){ // cast next track.
+			chromeCaster.play({mix:this.mix_info, track:this.track_info});
 		}
 		
 	}

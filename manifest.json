@@ -59,12 +59,14 @@
     "scripts": [
       "scripts/lib/jquery-1.10.2.js", 
       "scripts/lib/jquery.jplayer.js", 
+      "scripts/lib/cast_sender.js",
       "scripts/lib/md5.js",
       "scripts/spotify.js", 
       "scripts/playlist.js", 
       "scripts/8tracks.js", 
       "scripts/lastfm.js", 
-      "scripts/musicplayer.js"
+      "scripts/musicplayer.js",
+      "scripts/chromecast.js"
       ],
     "persistent": true
   },

@@ -265,7 +265,9 @@ function SetupPlayer(){
       var value = e.target.value;
       chrome.extension.sendMessage({action: "set-time", percent:(value/100)})
     });
-
+    $("#player_cast").click(function() {
+      chrome.extension.sendMessage({action: "cast"});
+    })
     $( "#player_search" ).click(function() { 
       ShowSearch();
     });
