@@ -225,7 +225,6 @@ function UserInterface(){
 			if(that.timer == null){
 				that.timer = window.setInterval(function(){
 					chrome.extension.sendMessage({action: "get-track-info"}, function(data){
-						console.log(data);
 						that.updateTime(data);
 				    });
 				}, 1000);

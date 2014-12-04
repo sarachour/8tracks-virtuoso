@@ -76,6 +76,12 @@ input[type="range"]::-webkit-slider-thumb {
     background-color: #FEFEFE;
 }
 
+.dummy {
+    display:none;
+}
+.vert-pad{
+    margin-bottom:5px;
+}
 .icon-tiny {
     width:5px; 
     display: inline-block;
@@ -160,7 +166,7 @@ input[type="range"]::-webkit-slider-thumb {
 	text-align: center;
     display: inline-block;
 }
-.search-overlay .north, .login-overlay .south {
+.login-overlay .south {
     height: 20%;
 }
 .search-overlay .center {

@@ -1,7 +1,20 @@
 
 
+DummyChromeCaster = function(){
+	this.init = function(){
 
-ChromeCaster = function(){
+	}
+	this.init_api = function(){
+
+	}
+	this.load = function(){
+
+	}
+	this.play = function(){
+
+	}
+}
+RealChromeCaster = function(){
 	this.init = function(){
 		this.initialized = false;
 		this.loaded = false;
@@ -11,28 +24,29 @@ ChromeCaster = function(){
 	  //are there any devices avaliable
 	  var receiverListener = function(e) {
 		  if( e === chrome.cast.ReceiverAvailability.AVAILABLE) {
-		  	console.log(e, " AVAILABLE");
+		  	console.log("RECIEVELISTENER: available");
+		  	if(cbk != undefined) {
+		  		cbk();
+		  	}
 		  }
 		}
 	  //we were able to establish a connection.
 	  var sessionListener = function(e) {
-		  session = e;
+		  that.session = e;
+		  console.log("SESSION LISTENER: found");
 		  if (session.media.length != 0) {
 		    onMediaDiscovered('onRequestSessionSuccess', session.media[0]);
 		  }
-		  console.log("SESSION",e);
 		}
 	  var onInitSuccess = function(e){
-	  	console.log("SUCCESS ",e);
+	  	console.log("INIT: Success ");
 	  	that.initialized = true;
-	  	if(cbk != undefined) 
-	  		cbk();
 	  }
 	  var onError = function(e){
-	  	console.log("ERROR ",e)
+	  	console.log("INIT: Failure")
 	  	that.initialized = false;
 	  }
-      applicationID = "37B7F2AC";
+      var applicationID = "37B7F2AC";
 	  var sessionRequest = new chrome.cast.SessionRequest(applicationID);
 	  var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
 	    sessionListener,
@@ -42,22 +56,27 @@ ChromeCaster = function(){
 	this.load = function(cbk){
 		var that = this;
 		var onRequestSessionSuccess = function(e) {
-		      session = e;
-		      console.log("success ",e);
+		      that.session = e;
+		      console.log("session success ",e);
 		      that.loaded = true;
 		      if(cbk != undefined) cbk();
 		 }
 		 var onLaunchError = function(e) {
 		 	 that.loaded = false;
-		      console.log("error ",e);
+		     console.log("session error ",e);
 		 }
 		 var loadReceiver = function(){
+		 		console.log("SESSION-REQUEST: opening");
 		 		chrome.cast.requestSession(onRequestSessionSuccess, onLaunchError);
 		 }
-		 if(this.initialized)
+		 if(this.initialized){
+		 	console.log("loading reciever");
 			loadReceiver();
-		 else
-		 	that.init_api(loadReceiver)		
+		}
+		 else{
+		 	console.log("loading receiver and initializing api");
+		 	that.init_api(loadReceiver)	
+		 }	
 	}
 	this.play = function(info){
 		var that = this;
@@ -74,5 +93,5 @@ ChromeCaster = function(){
 	this.init();
 
 }
-
+ChromeCaster = DummyChromeCaster
 chromeCaster = new ChromeCaster();

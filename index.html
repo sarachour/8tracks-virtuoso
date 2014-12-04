@@ -5,45 +5,63 @@
   <link rel="stylesheet" href="light-theme/jquery-ui-1.10.4.custom.min.css" />
   <link rel="stylesheet" href="light-theme/style.css" />
 
-  <script src="scripts/lib/jquery-1.10.2.js"></script>
-  <script src="scripts/lib/jquery-ui-1.10.4.min.js"></script>
+  <script src="lib/jquery-1.10.2.js"></script>
+  <script src="lib/jquery-ui-1.10.4.min.js"></script>
 
   
-  <script src="scripts/lib/jlayout/jquery.sizes.js"></script>
-  <script src="scripts/lib/jlayout/jlayout.border.js"></script>
-  <script src="scripts/lib/jlayout/jquery.jlayout.js"></script>
-  <script src="scripts/lib/md5.js"></script>
-  <script src="scripts/8tracks.js"></script>
-  <script src="scripts/lastfm.js"></script>
-  <script src="scripts/userInterface.js"></script>
-  <script src="scripts/ui.js"></script>
+  <script src="lib/jlayout/jquery.sizes.js"></script>
+  <script src="lib/jlayout/jlayout.border.js"></script>
+  <script src="lib/jlayout/jquery.jlayout.js"></script>
+
+  <script src="lib/md5.js"></script>
+  <script src="src/8tracks.js"></script>
+  <script src="src/lastfm.js"></script>
+  <script src="src/userInterface.js"></script>
+  <script src="src/ui.js"></script>
 </head>
 <body>
 <div id='search-page' data-layout='{"type": "border", "hgap": 3, "vgap": 3}'  class="search-overlay">
   <div class="north">
-    <label class="medium text white">search by</label>
-    <select id="search-type">
+    <label class="medium text white vert-pad">search by</label>
+    <select id="search-type" class="vert-pad">
       <option value="liked">liked</option>
       <option value="listened" selected>listened to</option>
       <option value="recommended">recommended</option>
       <option value="all">all mixes</option> 
       <option value="tags">tag</option> 
     </select>
-     <label class="medium text white" for="search-sort">sorted by</label>
-     <select id="search-sort" name="select">
+     <label class="medium text white vert-pad" for="search-sort">sorted by</label>
+     <select class="vert-pad" id="search-sort" name="select">
       <option value="hot" selected>hot</option> 
       <option value="recent">recent</option>
       <option value="popular">popular</option>
     </select>
-    <div class="ui-widget" id="search-text-container">
+    <div class="vert-pad ui-widget" id="search-text-container">
       <label class="medium text white" for="search-text">with</label>
       <input type="text" class="small" style="height:20px; width:200px;font-size:8pt;" id="search-text" hint="search term here"></input>  
     </div>
-    <br>
-    <div id='search-page-description' class="text medium white"></div>
+    <div class="vert-pad" id='search-page-description' class="vert-pad text medium white"></div>
   </div> 
+  <div id="search-element-template" class='search-result dummy text tiny black'>
+    <img class="" id="cover"></img>
+    <div class="search-result-text">
+      <div id="name"></div>
+      <hr>
+      <img id="badge" class="icon-tiny image-bronze"></img>
+      <span id="nlikes-text">nlikes</span>
+      <img id="nlikes-icon" class="icon-tiny" src="images/heart-on.png"></img>
+      <span id="nplays-text">ntimes</span>
+      <img id="nplays-icon" class="icon-tiny" src="images/play-black.png"></img>
+      <span id="ntracks-text">ntracks</span>
+      <img id="ntracks-icon" class="icon-tiny" src="images/music.png"></img>
+      <hr>
+      <div id="tags"></div>
+    </div>
+  </div>
   <div id='search-page-results' style="overflow:scroll;" class="center" 
     data-layout='{"type": "grid", "hgap": 3, "vgap": 3}'>
+    
+
   </div>
   <div id="search-back" title="return to player" style="position:absolute; top:5px;left:5px;" class="icon-med">
     <img src="images/back-white.png"/>

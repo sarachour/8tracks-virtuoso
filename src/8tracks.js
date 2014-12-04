@@ -27,12 +27,13 @@ function EightTracks(){
 				cbk(null, e);
 		});
 	}
-	this.search = function(type, slug, sort, cbk){
+	this.search = function(type, slug, sort, page, cbk){
 		url="http://8tracks.com/mix_sets/"+type+":"
 		if(slug != null){
-			url+=slug.replace(" ", "_")+":"
+			url+=slug.replace(/ /g, "_")+":"
 		}
-		url+=sort+".json?include=mixes";
+		url+=sort+".json?include=mixes+pagination&per_page=12";
+		if(page != undefined) url += "&page="+page;
 		console.log(url);
 		var that = this;
 		$.get(

@@ -15,7 +15,7 @@
   "content_scripts": [
     {
       "matches": ["http://www.last.fm/api/grantaccess"],
-      "js": ["scripts/lastfmAuth.js"]
+      "js": ["src/lastfmAuth.js"]
     }
   ],
   "commands" : {
@@ -57,16 +57,16 @@
   "options_page": "options.html",
   "background": {
     "scripts": [
-      "scripts/lib/jquery-1.10.2.js", 
-      "scripts/lib/jquery.jplayer.js", 
-      "scripts/lib/cast_sender.js",
-      "scripts/lib/md5.js",
-      "scripts/spotify.js", 
-      "scripts/playlist.js", 
-      "scripts/8tracks.js", 
-      "scripts/lastfm.js", 
-      "scripts/musicplayer.js",
-      "scripts/chromecast.js"
+      "lib/jquery-1.10.2.js", 
+      "lib/jquery.jplayer.js", 
+      "lib/cast_sender.js",
+      "lib/md5.js",
+      "src/spotify.js", 
+      "src/playlist.js", 
+      "src/8tracks.js", 
+      "src/lastfm.js", 
+      "src/musicplayer.js",
+      "src/chromecast.js"
       ],
     "persistent": true
   },

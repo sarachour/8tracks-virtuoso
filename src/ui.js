@@ -1,4 +1,139 @@
 
+SearchController = function(){
+  this.init = function(){
+    this.loading = false;
+  }
+  this.autocomplete = function(){
+    var that = this;
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 100;  //time in ms, 5 second for example
+
+    var doneTyping = function() {
+        var term = $('#search-text').val();
+        //do something
+        eightTracks.getTags(term, function(data){
+          availableTags = [];
+          for(var i=0; i< data.tag_cloud.tags.length; i++){
+            var tag = data.tag_cloud.tags[i];
+            availableTags.push(tag.name);
+          }
+          $( "#search-text" ).autocomplete({
+            source: availableTags,
+            select: function( event, ui ) {
+              $( "#search-text" ).val(ui.item.label);
+              that.update();
+              return false;
+            }
+          });
+        })
+        console.log("sufficient pause");
+    }
+    //on keyup, start the countdown
+    $('#search-text').keyup(function(){
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown 
+    $('#search-text').keydown(function(){
+        clearTimeout(typingTimer);
+    });
+
+    //user is "finished typing," do something
+    
+  }
+  this.update = function(){
+    this.grid = $("#search-page-results");
+    this.desc = $("#search-page-description");
+    this.type = $('#search-type').val();
+    this.term = $('#search-text').val();
+    this.sort = $('#search-sort').val();
+    this.page = $("#search-page");
+    this.grid.empty();
+    this.page.layout({resize:false});
+    this.n = 1;
+    this.search();
+  }
+
+  this.search = function(){
+    var that = this;
+    if(that.loading) return;
+
+    that.loading = true;
+    eightTracks.search(this.type, this.term, this.sort, this.n, function(data){
+      if(data == null){
+        that.loading = false;
+        return;
+      }
+      var description = data.mix_set.name;
+      var smartid = data.mix_set.smart_id;
+      that.desc.html(description);
+      console.log(data);
+      that.n = data.mix_set.pagination.next_page;
+
+      if(data.hasOwnProperty('mix_set')){
+        var mixes = data.mix_set.mixes;
+        for(var i=0; i < mixes.length; i++){
+          var nh = $("#search-element-template").clone();
+          var badge_class = "image-badge-"+mixes[i].certification;
+          $("#name",nh).html(mixes[i].name);
+          $("#badge-icon", nh).addClass(badge_class);
+          $("#cover", nh).attr('src',mixes[i].cover_urls.sq100);
+          $("#ntracks-text",nh).html(mixes[i].tracks_count);
+          $("#nlikes-text",nh).html(mixes[i].plays_count);
+          $("#nplays-text",nh).html(mixes[i].tracks_count);
+          $("#tags",nh).html(mixes[i].tag_list_cache);
+          nh.click((function(myid){
+            return function(){
+              chrome.extension.sendMessage({action: "play", id:myid, smart_id:smartid})
+              $("#search-page").fadeOut(200);
+            } 
+          })(mixes[i].id));
+          that.grid.append(nh.removeClass("dummy"));
+        }
+      }
+      that.loading = false;
+    });
+  }
+
+  this.setup = function(){
+    var that = this;
+    this.update();
+    this.grid.scroll(function() {
+       if(that.grid.scrollTop() + that.grid.height() >= that.grid[0].scrollHeight) {
+           that.search();
+       }
+    });
+    $("#search-type").on('change', function(){
+      var name = $('#search-type').val();
+      if(name == 'tags'){
+        $("#search-page-description").html("Tag Search");
+        $("#search-text-container").fadeIn(200);
+      }
+      else{
+        $("#search-text-container").fadeOut(200);
+      }
+      that.update();
+    })
+    
+    $("#search-sort").on('change', function(){
+      that.update();
+    })
+    
+    $("#search-text-container").hide();
+
+    $('#search-back').click(function(){ $("#search-page").fadeOut(200); })
+    $("#search-page").click(function(e){
+      if(e.target !== this) return;
+      $("#search-page").fadeOut(200);
+    })
+    this.autocomplete();
+    //$("#search-text").click(function(){that.update();})
+    this.n = 1;
+  }
+  this.init();
+}
+searchController = new SearchController();
 chrome.extension.onMessage.addListener(
   function(request, sender, sendResponse) {
         if(request.action == "update"){
@@ -27,59 +162,9 @@ chrome.extension.onMessage.addListener(
   }
 )
 
-function doSearch(){
-    var grid = $("#search-page-results");
-    var desc = $("#search-page-description");
-    var type = $('#search-type').val();
-    var term = $('#search-text').val();
-    var sort = $('#search-sort').val();
-    var page = $("#search-page");
-    grid.empty();
-    eightTracks.search(type, term, sort, function(data){
-      var description = data.mix_set.name;
-      var smartid = data.mix_set.smart_id;
-      desc.html(description);
-      if(data.hasOwnProperty('mix_set')){
-        var mixes = data.mix_set.mixes;
-        for(var i=0; i < mixes.length; i++){
-          var id = mixes[i].id;
-          var cover = mixes[i].cover_urls.sq100;
-          var name = mixes[i].name;
-          var cert = mixes[i].certification;
-          var badge_image = "images/no-rank.png";
-          if(cert == "gold"){
-            badge_image = "images/gold.png";
-          }
-          else if(cert == "silver"){
-            badge_image = "images/silver.png";
-          }
-          if(cert == "bronze"){
-            badge_image = "images/bronze.png";
-          }
-          var html_text = $('<div/>').addClass("search-result-text").addClass("text tiny black").html(name);
-          var html_img = $('<img/>').attr("src", cover);
-          var html_badge = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", badge_image));
-          var html_likes = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/heart-on.png"));
-          var html_plays = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/play-black.png"));
-          var html_tracks = $('<div/>').addClass("icon-tiny").append($('<img/>').attr("src", "images/music.png"));
-          html_text.append("<br>",
-            html_badge,"<br>", 
-            mixes[i].likes_count,html_likes,"&nbsp;", 
-            mixes[i].plays_count,html_plays,"&nbsp;", 
-            mixes[i].tracks_count, html_tracks, "<br>",
-            mixes[i].tag_list_cache);
-          var html_div = $('<div/>').addClass("search-result").append(html_img).append(html_text);
-          html_div.click(function(myid){
-            return function(){
-              chrome.extension.sendMessage({action: "play", id:myid, smart_id:smartid})
-              $("#search-page").fadeOut(200);
-            } 
-          }(id));
-          grid.append(html_div)
-        }
-      }
-    });
-  }
+function doSetup(){
+  searchController.setup();
+}
 
 function ShowLogin(){
   $('#login-page').fadeIn(200);
@@ -154,46 +239,7 @@ function SetupLayout(){
 
 
 function SetupSearch(){
-  function setupAutocomplete(){
-    var typingTimer;                //timer identifier
-    var doneTypingInterval = 100;  //time in ms, 5 second for example
-
-    //on keyup, start the countdown
-    $('#search-text').keyup(function(){
-        clearTimeout(typingTimer);
-        console.log("up");
-        typingTimer = setTimeout(doneTyping, doneTypingInterval);
-    });
-
-    //on keydown, clear the countdown 
-    $('#search-text').keydown(function(){
-        console.log("down");
-        clearTimeout(typingTimer);
-    });
-
-    //user is "finished typing," do something
-    function doneTyping () {
-        var term = $('#search-text').val();
-        //do something
-        eightTracks.getTags(term, function(data){
-          availableTags = [];
-          for(var i=0; i< data.tag_cloud.tags.length; i++){
-            var tag = data.tag_cloud.tags[i];
-            availableTags.push(tag.name);
-          }
-          console.log(availableTags);
-          $( "#search-text" ).autocomplete({
-            source: availableTags,
-            select: function( event, ui ) {
-              $( "#search-text" ).val(ui.item.label);
-              doSearch();
-              return false;
-            }
-          });
-        })
-        console.log("sufficient pause");
-    }
-  }
+  /*
   $('#search-back').click(function(){
       $("#search-page").fadeOut(200);
   })
@@ -213,19 +259,25 @@ function SetupSearch(){
     else{
       $("#search-text-container").fadeOut(200);
     }
+    doSetup();
     doSearch();
   });
   $("#search-text").on('change', function(){
     var term = $('#search-text').val();
+    doSetup();
     doSearch();
   })
   $("#search-text-container").hide();
   $("#search-sort").on('change', function(){
     var type = $('#search-sort').val();
+    doSetup();
     doSearch();
   })
+  doSetup();
   doSearch();
   setupAutocomplete();
+  */
+  searchController.setup();
 
 }
 function SetupPlayer(){
@@ -266,7 +318,7 @@ function SetupPlayer(){
       chrome.extension.sendMessage({action: "set-time", percent:(value/100)})
     });
     $("#player_cast").click(function() {
-      chrome.extension.sendMessage({action: "cast"});
+      chrome.tabs.create({ url: "sender.html" });
     })
     $( "#player_search" ).click(function() { 
       ShowSearch();
