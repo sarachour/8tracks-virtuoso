@@ -317,6 +317,10 @@ function SetupPlayer(){
       var value = e.target.value;
       chrome.extension.sendMessage({action: "set-time", percent:(value/100)})
     });
+    $("#player").click(function(){
+      $("#player_volume_controls").fadeOut();
+      return true;
+    })
     $("#player_cast").click(function() {
       chrome.tabs.create({ url: "sender.html" });
     })
@@ -339,7 +343,8 @@ function SetupPlayer(){
         var h= $("#player_volume_controls").height();
         $("#player_volume_controls").css('top',pos.top-h-10);
         $("#player_volume_controls").css('left',pos.left);
-        $("#player_volume_controls").fadeToggle("slow");
+        $("#player_volume_controls").fadeIn();
+        return false;
     });
     $( "#player_volume_slider" ).slider({
       range: "min",
