@@ -1,1 +1,1 @@
-zip -r 8tracks-package.zip images scripts light-theme *.html *.png *.mkd manifest.json
+zip -r 8tracks-package.zip images src css lib *.html *.png *.mkd manifest.json

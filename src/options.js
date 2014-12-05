@@ -251,15 +251,12 @@ function Selector(){
         var selection = $(selector(null));
         for(var i=0; i < selection.length; i++){
             var track = $(selector(i)).data("track");
-            console.log(track);
             if(!data.hasOwnProperty(track.performer)){
                 data[track.performer] = {};
             }
             data[track.performer][track.name] = track;
             
         }
-        console.log(selection.length);
-        console.log(data);
         return data;
     }
     
