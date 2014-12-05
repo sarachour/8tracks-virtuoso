@@ -65,19 +65,25 @@ SearchController = function(){
         that.loading = false;
         return;
       }
+      var resource = {
+        'gold': 'images/gold.png',
+        'silver': 'images/silver.png',
+        'bronze': 'images/bronze.png',
+        'gem': 'images/gem.png',
+        'diamond':'images/diamond.png',
+        null : 'images/no-rank.png'
+      }
       var description = data.mix_set.name;
       var smartid = data.mix_set.smart_id;
       that.desc.html(description);
-      console.log(data);
       that.n = data.mix_set.pagination.next_page;
 
       if(data.hasOwnProperty('mix_set')){
         var mixes = data.mix_set.mixes;
         for(var i=0; i < mixes.length; i++){
           var nh = $("#search-element-template").clone();
-          var badge_class = "image-badge-"+mixes[i].certification;
           $("#name",nh).html(mixes[i].name);
-          $("#badge-icon", nh).addClass(badge_class);
+          $("#badge-icon", nh).attr('src',resource[mixes[i].certification]);
           $("#cover", nh).attr('src',mixes[i].cover_urls.sq100);
           $("#ntracks-text",nh).html(mixes[i].tracks_count);
           $("#nlikes-text",nh).html(mixes[i].plays_count);
@@ -239,44 +245,6 @@ function SetupLayout(){
 
 
 function SetupSearch(){
-  /*
-  $('#search-back').click(function(){
-      $("#search-page").fadeOut(200);
-  })
-  $("#search-page").click(function(e){
-    if(e.target !== this)
-      return;
-
-    $("#search-page").fadeOut(200);
-  })
-  $("#search-type").on('change', function(){
-    var name = $('#search-type').val();
-    console.log("type:"+name);
-    if(name == 'tags' || name == 'artist' || name == 'mix'){
-      //make textbox visible
-      $("#search-text-container").fadeIn(200);
-    }
-    else{
-      $("#search-text-container").fadeOut(200);
-    }
-    doSetup();
-    doSearch();
-  });
-  $("#search-text").on('change', function(){
-    var term = $('#search-text').val();
-    doSetup();
-    doSearch();
-  })
-  $("#search-text-container").hide();
-  $("#search-sort").on('change', function(){
-    var type = $('#search-sort').val();
-    doSetup();
-    doSearch();
-  })
-  doSetup();
-  doSearch();
-  setupAutocomplete();
-  */
   searchController.setup();
 
 }

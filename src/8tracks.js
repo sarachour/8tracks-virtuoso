@@ -34,7 +34,6 @@ function EightTracks(){
 		}
 		url+=sort+".json?include=mixes+pagination&per_page=12";
 		if(page != undefined) url += "&page="+page;
-		console.log(url);
 		var that = this;
 		$.get(
 			url,

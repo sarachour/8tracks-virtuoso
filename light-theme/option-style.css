@@ -66,6 +66,9 @@ input[type="text"], input[type="password"]{
     border-radius: 5px;
 }
 
+.dummy{
+    display:none;
+}
 
 .view-overlay {
     position:absolute;

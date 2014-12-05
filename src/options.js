@@ -345,25 +345,7 @@ function OptionsInterface(){
             this.setClipboard(str, "Copied to clipboard. Now paste into Spotify playlist.");
         }
     }
-    this.exportDownloadScript = function(){
-        var sel = this.selector.getSelectionFromHTML();
-        var text = "";
-        for(var artist in sel){
-            for(var track in sel[artist]){
-                var command = "";
-                var msel = sel[artist][track];
-                var url = msel.track_file_stream_url;
-                var name = artist+ "-" + track;
-                var mix = msel.mix.name;
-                name=name.replace(/[^A-Za-z\'-]/g, "_").replace(/\_+/, '_');
-                ext = url.split(".");
-                ext = ext[ext.length-1];
-                console.log(name, url,mix,ext);
-
-            }
-        }
-        this.setClipboard(text, "Copied to clipboard. Paste into spreadsheet.");
-    }
+    
     this.exportTabDelim = function(){
         var sel = this.selector.getSelectionFromHTML();
         var dat = [];
@@ -377,8 +359,6 @@ function OptionsInterface(){
                 row.push(track);
                 row.push(artist);
                 row.push(msel.faved_by_current_user);
-
-                row.push(msel.track_album);
                 row.push(msel.url);
                 row.push(msel.buy_link);
                 if(msel.hasOwnProperty("spotify")){
