@@ -1,0 +1,5 @@
+1. Support infinite tag scroll
+2. Support multi-word tags
+3. Support casting.
+4. Debug hibernate bug.
+5. Debug open new browser bug.
