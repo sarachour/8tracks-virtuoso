@@ -2,44 +2,73 @@
 SearchController = function(){
   this.init = function(){
     this.loading = false;
+    this.handlers = {"keydown":[], "keyup":[]};
   }
-  this.autocomplete = function(){
+  this._do_searchbox = function(get_autocomplete_cbk){
     var that = this;
     var typingTimer;                //timer identifier
     var doneTypingInterval = 100;  //time in ms, 5 second for example
+    var searchbox = $("#search-text");
 
-    var doneTyping = function() {
-        var term = $('#search-text').val();
-        //do something
-        eightTracks.getTags(term, function(data){
-          availableTags = [];
-          for(var i=0; i< data.tag_cloud.tags.length; i++){
-            var tag = data.tag_cloud.tags[i];
-            availableTags.push(tag.name);
-          }
-          $( "#search-text" ).autocomplete({
-            source: availableTags,
-            select: function( event, ui ) {
-              $( "#search-text" ).val(ui.item.label);
-              that.update();
-              return false;
-            }
-          });
-        })
-        console.log("sufficient pause");
+    var set_autocomplete = function(availableTags){
+      searchbox.autocomplete({
+        source: availableTags,
+        select: function( event, ui ) {
+          searchbox.val(ui.item.label);
+          that.update();
+          return false;
+        }
+      });
     }
-    //on keyup, start the countdown
-    $('#search-text').keyup(function(){
+    var update_autocomplete = function() {
+      var term = searchbox.val();
+      get_autocomplete_cbk(term, set_autocomplete);
+    }
+    //unbind all events
+    var types = ["keydown","keyup"]
+    for(var j=0; j < types.length; j++){
+      var typ = types[j];
+      for(var i=0; i < this.handlers[typ].length; i++){
+        searchbox.unbind(typ, this.handlers[typ][i])
+      }
+      this.handlers[typ] = [];
+    }
+    var u = searchbox.keyup(function(e){
+        //if pressed enter, update
+        if(e.keyCode == 13)
+        {
+          that.update();
+        }
         clearTimeout(typingTimer);
-        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+        typingTimer = setTimeout(update_autocomplete, doneTypingInterval);
     });
 
     //on keydown, clear the countdown 
-    $('#search-text').keydown(function(){
+    var d = searchbox.keydown(function(e){
         clearTimeout(typingTimer);
     });
+    this.handlers["keydown"].push(d);
+    this.handlers["keyup"].push(u);
+  }
+  this.keyword_searchbox = function(){
+    var key_cbk = function(term,cbk){
+      cbk([]);
+    }
 
-    //user is "finished typing," do something
+    this._do_searchbox(key_cbk);
+  }
+  this.tag_searchbox = function(){
+    var tag_cbk = function(term, cbk){
+      eightTracks.getTags(term, function(data){
+        availableTags = [];
+        for(var i=0; i< data.tag_cloud.tags.length; i++){
+          var tag = data.tag_cloud.tags[i];
+          availableTags.push(tag.name);
+        }
+        cbk(availableTags);
+      })
+    }
+    this._do_searchbox(tag_cbk);
     
   }
   this.update = function(){
@@ -112,13 +141,21 @@ SearchController = function(){
     });
     $("#search-type").on('change', function(){
       var name = $('#search-type').val();
+      console.log(name)
       if(name == 'tags'){
         $("#search-page-description").html("Tag Search");
         $("#search-text-container").fadeIn(200);
+        that.tag_searchbox();
+      }
+      else if(name == 'keyword'){
+        $("#search-page-description").html("Keyword Search");
+        $("#search-text-container").fadeIn(200);
+        that.keyword_searchbox();
       }
       else{
         $("#search-text-container").fadeOut(200);
       }
+
       that.update();
     })
     
@@ -133,7 +170,6 @@ SearchController = function(){
       if(e.target !== this) return;
       $("#search-page").fadeOut(200);
     })
-    this.autocomplete();
     //$("#search-text").click(function(){that.update();})
     this.n = 1;
   }

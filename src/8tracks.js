@@ -49,33 +49,26 @@ function EightTracks(){
   				cbk(null, e);
 			});
 	}
-	this.createPlaybackStream = function(cbk, forceCreate){
-		url = "http://8tracks.com/sets/new.json"
+	this.createPlaybackStream = function(cbk){
+		var url = "http://8tracks.com/sets/new.json"
 		var that = this;
-		/*
-		if(!this.isUndefined(this.play_token)){
-			console.log("play token exists in storage");
-			return;
-		}
-		*/
 		$.get(
-			url,
-			{
-				api_key : that.API_KEY,
-				user_token : that.user_token,
-				api_version: 3
-			},
+				url,
+				{
+					api_key : that.API_KEY,
+					user_token : that.user_token,
+					api_version: 3
+				},
 				function(data){
 					that.play_token = data.play_token;
-					//localStorage.play_token = data.play_token;
-					console.log(that.play_token);
-					cbk(data);
+					console.log("token", that.play_token);
+					cbk();
 				}
 			)
 	}
 	this.getMixByName = function(artist, name, cbk){
 		var that = this;
-		url = "http://8tracks.com/"+artist+"/"+name+".json"
+		var url = "http://8tracks.com/"+artist+"/"+name+".json"
 		$.get(
 			url,
 			{
@@ -92,7 +85,7 @@ function EightTracks(){
 	}
 	this.getMix = function(id, cbk){
 		var that = this;
-		url = "http://8tracks.com/mixes/"+id+".json"
+		var url = "http://8tracks.com/mixes/"+id+".json"
 		$.get(
 			url,
 			{
@@ -113,7 +106,7 @@ function EightTracks(){
 		if(!this.check()){
 			return;
 		}
-		url = "http://8tracks.com/sets/"+this.play_token+"/next_mix.json";
+		var url = "http://8tracks.com/sets/"+this.play_token+"/next_mix.json";
 		$.get(
 			url,
 			{
@@ -148,8 +141,7 @@ function EightTracks(){
 			if(!this.check()){
 				return;
 			}
-			
-			this.getNextMix(mid, smartid, function(mixdata, e){
+			that.getNextMix(mid, smartid, function(mixdata, e){
 				url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
 				console.log(mixdata)
 				$.get(
@@ -167,6 +159,8 @@ function EightTracks(){
 	  				cbk(null, null, e);
 				});	
 			});
+
+			
 		
 	}
 	this.playMix = function(mix_id, cbk){
@@ -174,7 +168,7 @@ function EightTracks(){
 			if(!this.check()){
 				return;
 			}
-			url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
+			var url = "http://8tracks.com/sets/"+that.play_token+"/play.json"
 			$.get(
 				url,
 				{
@@ -188,6 +182,7 @@ function EightTracks(){
 			).fail(function(e){ 
   				cbk(null, e);
 			});
+			
 			
 	}
 	this.report = function(mid, tid, cbk){

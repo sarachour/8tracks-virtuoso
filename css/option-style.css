@@ -72,7 +72,7 @@ input[type="text"], input[type="password"]{
 
 .view-overlay {
     position:absolute;
-    background-color: rgba(0,0,0, 0.8);
+    background-color: rgba(0,0,0, 1);
     top:0;
     width:100%; 
     height:100%;
@@ -207,11 +207,10 @@ input[type="text"], input[type="password"]{
     border: solid 2px #333;
 }
 .south, .north{
-    background-color: rgb(60,60,60); 
     height: 5%;
 }
 .black {
-    color:#414141;
+    color:#222222;
 }
 .faint {
     color:#4D4D4D;

@@ -376,7 +376,7 @@ function MusicPlayer(){
 			}
 			
 		}
-		if(mplayer.is_casting){ // cast next track.
+		if(this.is_casting){ // cast next track.
 			chromeCaster.play({mix:this.mix_info, track:this.track_info});
 		}
 		
@@ -388,51 +388,53 @@ function MusicPlayer(){
 		});
 	}
 	this.nextMix = function(){
-		var mplayer = this;
+		var that = this;
 
-		eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data, e){
+		eightTracks.playNextMix(that.mix_info.id, that.smart_mix_id, function(mixdata, data, e){
 			if(mixdata == null || data == null){
-				mplayer.reportError(e);
+				that.reportError(e);
 				return;
 			}
 
 			if(mixdata != null)
-				mplayer.SET_MIX_INFO(mixdata.next_mix);
+				that.SET_MIX_INFO(mixdata.next_mix);
 			
 			if(data != null)
-				mplayer.SET_TRACK_INFO(data.set, data.set.track);
-			
+				that.SET_TRACK_INFO(data.set, data.set.track);
+		
 
 		});
 	}
 	this.mix = function(mixid, smartmixid){
-		mplayer = this;
+		var that = this;
 		this.smart_mix_id = smartmixid;
 		eightTracks.getMix(mixid, function(data, e){
 			if(data != null){
-				mplayer.SET_MIX_INFO(data.mix);
+				that.SET_MIX_INFO(data.mix);
 				eightTracks.playMix(mixid, function(data, e){
 					if(data != null){
-						mplayer.SET_TRACK_INFO(data.set, data.set.track);
+						console.log(data);
+						that.SET_TRACK_INFO(data.set, data.set.track);
 					}
 					else{
-						mplayer.reportError(e);
+						that.reportError(e);
 					}
 				});
 			}
 			else{
-				mplayer.reportError(e);
+				that.reportError(e);
 			}
 		})
 		
 	}
 	this.skip = function(){
+		var that = this;
 		eightTracks.skipTrack(this.mix_info.id, function(data, e){
 			if(data != null){
-				mplayer.SET_TRACK_INFO(data.set, data.set.track);
+				that.SET_TRACK_INFO(data.set, data.set.track);
 			}
 			else{
-				mplayer.reportError(e);
+				that.reportError(e);
 			}
 		});
 	}
@@ -445,26 +447,26 @@ function MusicPlayer(){
 		this.is_paused = true;
 	}
 	this.likeMix = function(){
-		var mplayer = this;
-		eightTracks.likeMix(mplayer.mix_info.id, function(data){
-			mplayer.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
-			mplayer.UPDATE_MIX_INFO();
+		var that = this;
+		eightTracks.likeMix(that.mix_info.id, function(data){
+			that.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
+			that.UPDATE_MIX_INFO();
 		});
 		
 	}
 	this.unlikeMix = function(){
-		var mplayer = this;
-		eightTracks.unlikeMix(mplayer.mix_info.id, function(data){
-			mplayer.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
-			mplayer.UPDATE_MIX_INFO();
+		var that = this;
+		eightTracks.unlikeMix(that.mix_info.id, function(data){
+			that.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
+			that.UPDATE_MIX_INFO();
 		});
 		
 	}
 	this.favoriteTrack = function(){
-		var mplayer = this;
-		eightTracks.favoriteTrack(mplayer.track_info.id, function(data){
-			mplayer.track_info.faved_by_current_user = data.track.faved_by_current_user;
-			mplayer.UPDATE_TRACK_INFO();
+		var that = this;
+		eightTracks.favoriteTrack(that.track_info.id, function(data){
+			that.track_info.faved_by_current_user = data.track.faved_by_current_user;
+			that.UPDATE_TRACK_INFO();
 
 		})
 		if(lastFm.isLoggedIn()){
@@ -474,10 +476,10 @@ function MusicPlayer(){
 		}
 	}
 	this.unfavoriteTrack = function(){
-		var mplayer = this;
-		eightTracks.unfavoriteTrack(mplayer.track_info.id, function(data){
-			mplayer.track_info.faved_by_current_user = data.track.faved_by_current_user;
-			mplayer.UPDATE_TRACK_INFO();
+		var that = this;
+		eightTracks.unfavoriteTrack(that.track_info.id, function(data){
+			that.track_info.faved_by_current_user = data.track.faved_by_current_user;
+			that.UPDATE_TRACK_INFO();
 
 		})
 		if(lastFm.isLoggedIn()){
@@ -487,10 +489,10 @@ function MusicPlayer(){
 		}
 	}
 	this.nextTrack = function(){
-		var mplayer = this;
+		var that = this;
 		if(this.isWellPlayed()){
 			//report if song has been played
-			eightTracks.report(this.mix_info.id, this.track_info.id, function(data, status){
+			eightTracks.report(that.mix_info.id, that.track_info.id, function(data, status){
 				if(data != null){
 					console.log("REPORT: ", data);
 				}
@@ -499,34 +501,34 @@ function MusicPlayer(){
 				}
 			});
 			if(lastFm.isLoggedIn()){
-				lastFm.scrobble(this.track_info.name, this.track_info.performer, function(data, status){
+				lastFm.scrobble(that.track_info.name, that.track_info.performer, function(data, status){
 
 				});
 			}
 		}
-		if(this.other_info.isEnd == true || this.other_info.isLastTrack == true){
-			eightTracks.playNextMix(this.mix_info.id, this.smart_mix_id, function(mixdata, data, e){
-				mplayer.SET_MIX_INFO(mixdata.next_mix);
+		if(that.other_info.isEnd == true || that.other_info.isLastTrack == true){
+			eightTracks.playNextMix(that.mix_info.id, that.smart_mix_id, function(mixdata, data, e){
+				that.SET_MIX_INFO(mixdata.next_mix);
 				if(data != null  && data.set.track.hasOwnProperty("track_file_stream_url")){
-					mplayer.SET_TRACK_INFO(data.set, data.set.track);
+					that.SET_TRACK_INFO(data.set, data.set.track);
 				}
 				else{
-					mplayer.nextTrack();
+					that.nextTrack();
 				}
 				if(mixdata == null || data == null){
-					mplayer.reportError(e);
+					that.reportError(e);
 				}
 			});
 		}
 		else{
 			eightTracks.nextTrack(this.mix_info.id, this.smart_mix_id, function(data, e){
 				if(data != null && data.set.track.hasOwnProperty("track_file_stream_url")){
-					mplayer.SET_TRACK_INFO(data.set, data.set.track);
+					that.SET_TRACK_INFO(data.set, data.set.track);
 				}
 				else{
-					mplayer.other_info.isEnd = mplayer.other_info.isLastTrack = true;
-					mplayer.nextTrack();
-					mplayer.reportError(e);
+					that.other_info.isEnd = that.other_info.isLastTrack = true;
+					that.nextTrack();
+					that.reportError(e);
 					
 				}
 			});

@@ -142,6 +142,8 @@ input[type="range"]::-webkit-slider-thumb {
 
 .player-page {
     height: 100%;
+    background-color:#000;
+    color:#eee;
 }
 
 
@@ -167,6 +169,13 @@ input[type="range"]::-webkit-slider-thumb {
 	text-align: center;
     display: inline-block;
 }
+
+.highlight-bar {
+    background-color:#222222;
+    padding:0.1em;
+    margin:0em;
+}
+
 .login-overlay .south {
     height: 20%;
 }
@@ -187,8 +196,6 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .player-page .south {
 	height: 9%;
-    background-color:#434343;
-    border-radius: 15px;
 }
 
 .player-page .north {
@@ -216,7 +223,7 @@ input[type="range"]::-webkit-slider-thumb {
 	font-size:12px;
 }
 .black {
-    color:#414141;
+    color:#222222;
 }
 .faint {
 	color:#4D4D4D;
@@ -274,7 +281,6 @@ input[type="range"]::-webkit-slider-thumb {
     /*display:none;*/
     z-index: 20;
     background-color:#313131;
-    border-radius: 5px;
     border: solid 2px #777;
 }
 
