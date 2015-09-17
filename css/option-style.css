@@ -1,3 +1,6 @@
+*:focus {
+    outline: none;
+}
 
 div::-webkit-scrollbar {
     border-radius: 10px;
@@ -46,17 +49,18 @@ img {
 table {
     margin:auto;
     overflow:scroll;
-    border:1px solid;
+    border:none;
 }
 thead {
     margin:auto;
-    background-color: rgb(130,130,130);
     overflow:hidden;
     border:1px solid;
+    font-weight:bold;
+    font-size:16px;
+    color:white;
 }
 tbody {
     margin:auto;
-    background-color: rgb(180,180,180);
     overflow:hidden;
     border:1px solid;
 }
@@ -87,7 +91,7 @@ input[type="text"], input[type="password"]{
 }
 
 ::selection {
-    background-color:Transparent;
+    background-color:rgba(0,0,0,0);
     color:#000;
 }
 
@@ -127,37 +131,44 @@ input[type="text"], input[type="password"]{
     top: 50%;
 }
 .header {
-    background-color: rgba(30,30,30, 0.9);
-    border-radius: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 1em;
+    padding-bottom: 1em;
     margin-top: 10px;
     margin-bottom: 10px;
     color:#DEDEDE;
     font-size:16px;
 }
 .normal-button {
-    background-color: rgba(40,40,40, 0.9);
-    border-radius: 5px;
     padding: 3px;
-    border: solid 2px #000;
     color:rgb(150,150,150);
+    background-color:rgba(0,0,0,0);
+    border:none;
+}
+.normal-button:hover{
+    color:white;
+}
+.normal-button:click{
+    color:yellow;
 }
 
+
 .toggle-button {
-    background-color: rgba(40,40,40, 0.9);
-    border-radius: 5px;
     padding: 3px;
-    border: solid 2px #000;
     color:rgb(150,150,150);
+    background-color:rgba(0,0,0,0);
+    border:none;
 }
 .toggle-button.down {
-    background-color: rgba(40,40,80, 0.9);
-    border-radius: 5px;
     padding: 3px;
-    border: solid 2px #EEE;
-    color:rgb(150,150,150);
-    }
+    color:rgb(150,150,255);
+    background-color:rgba(0,0,0,0);
+    border:none;
+}
+.toggle-button:hover{
+    color:white;
+}
+
+
 .icon-sm {
     width:15px; 
     display: inline-block;
@@ -182,29 +193,22 @@ input[type="text"], input[type="password"]{
 
 
 .center, .east, .west, .north, .south {
-    background-color: rgb(220,220,220);
+    background-color: rgb(0,0,0);
     text-align: center;
     display: inline-block;
 }
 
 .center{
-   background-color: rgb(30,30,30); 
-   border-radius: 15px;
+   background-color: #181818;
    padding: 15px;
 }
 .west {
-    background-color: rgb(40,40,40); 
-    width: 25%;
-    border-radius: 15px;
+    width: 10%;
     z-index: 20;
-    border: solid 2px #333;
 }
 .east {
-    background-color: rgb(40,40,40); 
     width: 25%;
-    border-radius: 15px;
     z-index: 20;
-    border: solid 2px #333;
 }
 .south, .north{
     height: 5%;
@@ -213,7 +217,7 @@ input[type="text"], input[type="password"]{
     color:#222222;
 }
 .faint {
-    color:#4D4D4D;
+    opacity:0.8;
 }
 .white{
     color:#DEDEDE;
@@ -222,6 +226,9 @@ input[type="text"], input[type="password"]{
     background-color:#418041;
 }
 
+.huge {
+    font-size: 24px;
+}
 .large {
     font-size:16px;
 }
@@ -272,8 +279,8 @@ input[type="text"], input[type="password"]{
 }
 .result-text {
 	position:relative;
-    color:#000;
-    background-color:rgba(255,255,255,0.8);
+    color:white;
+    background-color:rgba(0,0,0,0.8);
     top:-100%;
     width:100%; 
     height:100%;
@@ -288,6 +295,5 @@ input[type="text"], input[type="password"]{
     transition: all 0.5s ease;
 }
 .result-text:hover {
-    background-color:rgba(255,255,255,0.8);
     opacity:1;
 }

@@ -399,7 +399,7 @@ function OptionsInterface(){
                         $("<img/>").attr("src", starred_img_url)
                     )
 
-                    var spotify_img_url = "images/spotify-black.png";
+                    var spotify_img_url = "images/spotify.png";
 
                     if(info.spotify != null){
                         spotify_img= $("<div/>").addClass("icon-sm").append($("<a/>")
@@ -409,7 +409,7 @@ function OptionsInterface(){
                     else{
                          spotify_img= $("<div/>").addClass("icon-sm").append(
                             $("<img/>")
-                            .attr("src", "images/spotify-black.png")) 
+                            .attr("src", "images/spotify.png")) 
                     }
 
                     var buy_img = $("<div/>").addClass("icon-sm").append($("<a/>")
@@ -475,20 +475,21 @@ function OptionsInterface(){
 
 
             var html_title = $('<div/>').addClass("med").html(cmix.name);
-            var html_tags = $('<div/>').addClass("small faint").html(cmix.tag_list_cache);
-            var html_desc = $('<div/>').addClass("scrollable").html(cmix.description_html);
+            var html_tags = $('<div/>').addClass("small").html(cmix.tag_list_cache);
+            var html_desc = $('<div/>').addClass("faint scrollable").html(cmix.description_html);
             var html_badge = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", badge_image));
             var html_likes = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/heart-on.png"));
-            var html_plays = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/play-black.png"));
+            var html_plays = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/play.png"));
             var html_tracks = $('<div/>').addClass("icon-sm").append($('<img/>').attr("src", "images/music.png"));
             var html_info = $('<div/>').addClass("result-text");
 
+            var sp = "&nbsp;&nbsp;&nbsp;"
             html_info.append("<br>",
                 html_title, "<br>",
-                html_badge, "&nbsp;",
-                cmix.likes_count,html_likes,"&nbsp;", 
-                cmix.plays_count,html_plays,"&nbsp;", 
-                cmix.tracks_count, html_tracks, "<br>",
+                html_badge, sp,
+                html_likes,cmix.likes_count,sp, 
+                html_plays,cmix.plays_count,sp, 
+                html_tracks, cmix.tracks_count, "<br>",
                 html_tags, "<br>",
                 html_desc);
 

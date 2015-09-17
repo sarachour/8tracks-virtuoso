@@ -22,7 +22,7 @@
 <textarea id="clipboard" style="display:none;" width="0%" height="0px">text here</textarea>
 
 </head>
-<body bgcolor="#181818">
+<body bgcolor="black">
 <div id="export-overlay" class="view-overlay">
 	<div id="export-container" class="normal-button" 
 		style="background-color:rgb(50,50,50); width:400px; height:200px;border-radius:10px;">
@@ -47,7 +47,7 @@
 	<div id='mixes-results'class="center" style="position:absolute; top:0px; height:100%; width:100%; overflow:scroll;" data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
 	</div>
 	<div class="east" id="tracks-results" style="overflow:scroll;">
-		<table id="tracks-table" width="100%" class="text small black" style="width=100%;padding=20px;">
+		<table id="tracks-table" width="100%" class="text small white" style="width=100%;border=none;">
 		<thead>
 			<tr><td>track</td><td>artist</td><td>buy</td><td>url</td><td>star</td><td>spotify</td></tr>
 		</thead>
@@ -57,10 +57,10 @@
 		</div>
 	<div class="west white small" style="overflow-y:scroll; overflow-x:hidden;">
 		<div class="header wide text">Filter</div>
-		<button class="toggle-button wide" id="filter_starred" title="show starred tracks only">starred tracks</button>
-		<button class="toggle-button wide" id="filter_liked" title="show liked mixes only">liked mixes</button>
-		<button class="toggle-button wide" id="filter_played" title="show liked mixes only">played recently</button>
-		<button class="toggle-button wide" id="filter_keyword" title="filter by keyword">mix by keyword</button>
+		<button class="toggle-button wide" id="filter_starred" title="show starred tracks only">Starred Tracks</button>
+		<button class="toggle-button wide" id="filter_liked" title="show liked mixes only">Liked Mixes</button>
+		<button class="toggle-button wide" id="filter_played" title="show liked mixes only">Played Recently</button>
+		<button class="toggle-button wide" id="filter_keyword" title="filter by keyword">Mix by Keyword</button>
 		<div id="filter_keyword_properties" style="margin:15px;">
 			<div class="wide">Filter Mix By</div>
 			<input id="filter_keyword_text" type="text" hint="keyword">
@@ -75,7 +75,7 @@
 				<span class="wide">artist</span><br>
 			</div>
 		</div>
-		<button class="toggle-button wide" id="filter_track_keyword" title="filter by keyword">track by keyword</button>
+		<button class="toggle-button wide" id="filter_track_keyword" title="filter by keyword">Track by Keyword</button>
 		<div id="filter_track_keyword_properties" style="margin:15px;">
 			<div class="wide">Filter Track By</div> 
 			<input id="filter_track_keyword_text" type="text" hint="keyword">
@@ -87,12 +87,12 @@
 			</div>
 		</div>
 		<div class="header wide text">Export</div>
-		<button class="normal-button wide" id="export-spotify-button" title="export to spotify">export to spotify</button>
-		<button class="normal-button wide" id="export-plaintext-button" title="export to tab delimited">export to tab-delimited</button>
+		<button class="normal-button wide" id="export-spotify-button" title="export to spotify">Export to Spotify</button>
+		<button class="normal-button wide" id="export-plaintext-button" title="export to tab delimited">Export to Tab-Delim</button>
 		<div class="header wide text">Mix</div>
-		<button class="normal-button wide" id="play-mix-button" title="play mix">play mix</button>
+		<button class="normal-button wide" id="play-mix-button" title="play mix">Play Mix</button>
 		<div class="header wide text">Advanced</div>
-		<button class="normal-button wide" id="clear-data-button" title="clear data">clear mix data</button>
+		<button class="normal-button wide" id="clear-data-button" title="clear data">Clear Mix data</button>
 		<div id="dynamic">
 			<button class="dummy normal-button wide " id="template-button" title="TITLE">DUMMY</button>
 		</div>
