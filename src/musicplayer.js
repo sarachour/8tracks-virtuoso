@@ -24,6 +24,34 @@ function Toast (){
 			//setTimeout(not.close, 1500) 
 		}
 	}
+	this.pause = function(cover_url){
+		var desc = ""
+		var ic = cover_url
+		var not = new Notification("Track Paused", 
+		   {icon: ic,
+			body: desc
+			//tag: "ERROR"
+		});
+		var that = this;
+		not.onshow = function() {
+			setTimeout(function() {not.close();}, that.waitTime);
+			//setTimeout(not.close, 1500) 
+		}
+	}
+	this.resume = function(cover_url){
+		var desc = ""
+		var ic = cover_url
+		var not = new Notification("Track Resumed", 
+		   {icon: ic,
+			body: desc
+			//tag: "ERROR"
+		});
+		var that = this;
+		not.onshow = function() {
+			setTimeout(function() {not.close();}, that.waitTime);
+			//setTimeout(not.close, 1500) 
+		}
+	}
 	this.favorite = function(cover_url, liked, trackname, trackartist){
 		var desc = "unfavorited track"
 		var ic = "images/star.png"
@@ -106,18 +134,23 @@ function MusicPlayer(){
 	   this.track_info = null;
 	   this.mix_info = null;
 	   this.was_paused = this.is_paused = false;
+	   this.pause_on_idle = true;
 	   this.is_casting = false;
 	   this.playlist = new Playlist("persist_playlist", true);
 	   var that = this;
 
+	   chrome.idle.setDetectionInterval(180);
+
 	   chrome.idle.onStateChanged.addListener(function(kind){
 	   	console.log("changed state:",kind, that.was_paused);
-	   	if(kind == "locked" || kind == "idle"){
+	   	if(kind == "locked" || (kind == "idle") && that.pause_on_idle){
 	   		that.was_paused = that.is_paused;
 	   		that.pause();
+	   		toast.pause(that.mix_info.cover_urls.sq56);
 	   	}
-	   	else if(kind == "active" && that.was_paused == false){
+	   	if(kind == "active" && (that.was_paused == false && that.is_paused == true)){
 	   		that.resume();
+	   		toast.resume(that.mix_info.cover_urls.sq56);
 	   	}
 	   })
 
@@ -205,6 +238,12 @@ function MusicPlayer(){
 			  else if(request.action == "resume"){
 			  		that.resume();
 			  }
+			  else if(request.action == "set-idle"){
+			  		that.pause_on_idle = request.value;
+			  }
+			  else if(request.action == "get-idle"){
+			  		sendResponse(that.pause_on_idle);
+			  }
 			  else if(request.action == "pause"){
 			  		that.pause();
 			  }
@@ -249,9 +288,9 @@ function MusicPlayer(){
 			  		sendResponse({"playlist": that.playlist.getObject()});
 			  }
 			});
-		this.player.bind("ended", function () {
-	        that.nextTrack();
-	    });
+			this.player.bind("ended", function () {
+		        that.nextTrack();
+		   });
 	}
 	this.cast = function(obj){
 		this.is_casting = !this.is_casting;

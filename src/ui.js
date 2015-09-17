@@ -259,6 +259,16 @@ function SetupLogin(){
   else{
     $('#login-lastfm-perm').addClass('red-button');
   }
+  var pon = $("#enable_pause_on_idle");
+  pon.change(function(){
+    var newv = pon.is(':checked');
+    console.log("change to:",newv);
+    chrome.extension.sendMessage({action: "set-idle", value: newv})
+  })
+  chrome.extension.sendMessage({action: "get-idle"}, function(v){
+    pon.prop('checked', v);
+  })
+
   
 }
 function SetupLayout(){
@@ -284,6 +294,8 @@ function SetupLayout(){
     console.log(top)
     e.css({top:top,position:"relative"})
   })
+
+
 }
 
 
