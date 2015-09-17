@@ -262,9 +262,10 @@ function SetupLogin(){
   
 }
 function SetupLayout(){
-  $('#player-controls').layout();
-  $('#player-title').layout();
+  $('#player').layout({resize:false});
+  $('#player-controls').layout({resize:false});
   $('#search-page-results').layout();
+
   $('.login-overlay, .search-overlay').layout({resize: false})
   $('.search-overlay').hide();
   $('#player_volume_controls').hide();
@@ -274,9 +275,15 @@ function SetupLayout(){
   }
   else{
     chrome.extension.sendMessage({action: "login", type: "8tracks", username: null, password:null})
-
   }
-  var outerContainer = $('.player-page').layout({resize: false});
+
+  $(".vert-middle").each(function(){
+    var e = $(this);
+    var par = e.parent();
+    var top = -(par.height() - e.height())/2;
+    console.log(top)
+    e.css({top:top,position:"relative"})
+  })
 }
 
 

@@ -1,4 +1,8 @@
 
+*:focus {
+    outline: none;
+}
+
 div::-webkit-scrollbar {
     border-radius: 10px;
     width: 0.5em;
@@ -29,8 +33,9 @@ div::-webkit-scrollbar-thumb {
 html, body {	
 	width: 100%;
 	height: 100%;
-	min-width: 400px;
-	min-height: 450px;
+    border-radius:5px;
+	min-width: 500px;
+	min-height: 260px;
 	padding: 0;
 	margin: 0;
 	overflow: hidden;
@@ -46,14 +51,14 @@ img {
 button{
     margin-left:10px;
     margin-right:10px;
-    border-radius: 10px;
+    border-radius: 2px;
     font-size:12px;
 }
 input[type="text"], input[type="password"]{
     margin-left:5px;
     margin-right:5px;
     margin-bottom:3px;
-    border-radius: 10px;
+    border-radius: 3px;
 }
 
 input[type="range"] {
@@ -78,6 +83,9 @@ input[type="range"]::-webkit-slider-thumb {
 
 .dummy {
     display:none;
+}
+.vert-middle {
+
 }
 .vert-pad{
     margin-bottom:5px;
@@ -107,37 +115,13 @@ input[type="range"]::-webkit-slider-thumb {
 
 .img-cover {
     background-color: #000000;
-    width:auto; 
-    height:100%;
+    width:100%; 
+    height:auto;
     margin:auto;
     display:block;
     border:0px solid;
-    border-radius: 15px;
 }
 
-.img-cover-text {
-	position:relative;
-    color:#f00;
-    background-color:rgba(255,255,255,0.8);
-    top:-100%;
-    left:0;
-    width:100%; 
-    height:100%;
-    border-radius: 15px;
-    margin:auto;
-    text-align: center;
-    z-index: 10;
-    opacity: 0;
-    word-wrap: break-word;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.img-cover-text:hover {
-	background-color:rgba(255,255,255,0.8);
-    opacity:1;
-}
 
 
 .player-page {
@@ -176,8 +160,14 @@ input[type="range"]::-webkit-slider-thumb {
     margin:0em;
 }
 
+.login-overlay .north {
+    height:9%;
+}
 .login-overlay .south {
     height: 20%;
+}
+.login-overlay .center {
+    height:70%;
 }
 .search-overlay .center {
 
@@ -191,15 +181,46 @@ input[type="range"]::-webkit-slider-thumb {
     height: 10%;
 }
 
-.player-page .west, .east {
-	width: 15%;
+.player-page .west {
+	width: 30%;
 }
 .player-page .south {
-	height: 9%;
+	height: 13%;
 }
 
 .player-page .north {
-	height: 40%;
+	height: 7%;
+}
+
+.player-page .east{
+    width: 0%;
+}
+.play-bar .center {
+    width:60%;
+    text-align:right;
+}
+.play-bar .west {
+    width:8%;
+}
+.play-bar .east {
+    width:20%;
+}
+
+.block {
+    display:block;
+    clear:both;
+}
+.line {
+    display:inline-block;
+    clear:both;
+}
+
+.spacey {
+    margin-right:0.2em;
+    margin-left:0.2em;
+}
+.spacey-right {
+    margin-right:2em;
 }
 
 .huge {
@@ -226,7 +247,7 @@ input[type="range"]::-webkit-slider-thumb {
     color:#222222;
 }
 .faint {
-	color:#4D4D4D;
+	opacity:0.8;
 }
 .white{
     color:#DEDEDE;
@@ -251,8 +272,8 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .search-result-text {
 	position:relative;
-    color:#000;
-    background-color:rgba(255,255,255,0.8);
+    color:#fff;
+    background-color:rgba(0,0,0,0.8);
     top:-100px;
     left:0px;
     width:100px; 
@@ -267,7 +288,6 @@ input[type="range"]::-webkit-slider-thumb {
     transition: all 0.5s ease;
 }
 .search-result-text:hover {
-	background-color:rgba(255,255,255,0.8);
     opacity:1;
 }
 
@@ -284,7 +304,10 @@ input[type="range"]::-webkit-slider-thumb {
     border: solid 2px #777;
 }
 
-
+.left-align-icon {
+    float: left;
+    padding:0.1em;
+}
 .ui-autocomplete { 
     font-style: normal;
     font-size:8pt;
@@ -292,5 +315,52 @@ input[type="range"]::-webkit-slider-thumb {
     cursor: default;
     z-index:1000 !important;
 }
+#mix-tags {
+    padding-top:0.5em;
+    padding-bottom:0.7em;
+}
 
 
+#track-actions {
+    margin-bottom:0.2em;
+    padding:1em;
+}
+
+#player  {
+    width:100%;
+    height:100%;
+}
+#player-controls {
+    width:100%;
+}
+
+#player_prog_slider {
+    margin-top:1.0em;
+
+    width:100%;
+}
+#player_prog_duration {
+    z-index: 9999;
+}
+#mix-stats {
+    margin-top:0.3em;
+}
+
+#login-text-8tracks,#login-text-lastfm {
+    float: left;
+    margin-bottom:1em;
+    margin-top:1em;
+}
+#login-lastfm-perm{
+    float:left;
+    padding-right:2em;
+    background-color:#000;
+    border-color:white;
+    margin-left:2em;
+    color:white;
+}
+#player_log_in {
+    color:white;
+    background-color:#000;
+    border-color:white;
+}

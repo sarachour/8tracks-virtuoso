@@ -24,12 +24,12 @@
   <div class="north">
     <label class="medium text white vert-pad">search by</label>
     <select id="search-type" class="vert-pad">
-      <option value="liked">liked</option>
-      <option value="listened" selected>listened to</option>
+      <option value="liked" selected>liked</option>
+      <option value="listened">listened to</option>
       <option value="recommended">recommended</option>
-      <option value="all">all mixes</option> 
+      <!--<option value="keyword">keyword</option> -->
       <option value="tags">tag</option> 
-      <option value="keyword">keyword</option> 
+      <option value="all">all mixes</option> 
     </select>
      <label class="medium text white vert-pad" for="search-sort">sorted by</label>
      <select class="vert-pad" id="search-sort" name="select">
@@ -48,12 +48,14 @@
     <div class="search-result-text">
       <div id="name"></div>
       <div><img id="badge-icon" class="icon-sm image-bronze"></img></div>
-      <span id="nlikes-text">nlikes</span>
       <img id="nlikes-icon" class="icon-tiny" src="images/heart-on.png"></img>
-      <span id="nplays-text">ntimes</span>
+      <span id="nlikes-text">nlikes</span>
+
       <img id="nplays-icon" class="icon-tiny" src="images/play-black.png"></img>
-      <span id="ntracks-text">ntracks</span>
+      <span id="nplays-text">ntimes</span>
+
       <img id="ntracks-icon" class="icon-tiny" src="images/music.png"></img>
+      <span id="ntracks-text">ntracks</span>
       <div id="tags"></div>
     </div>
   </div>
@@ -68,29 +70,33 @@
 </div>
 
 <div id='login-page' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="login-overlay" >
-  <div class="huge text north">
-  Login Info:
-  </div>
+  <div class="north"></div>
   <div class="center">
-    <div id="login-8tracks" style="margin-bottom:20px;">
-      <div id="login-text" class="text large white">
+    <div id="login-8tracks">
+      <div id="login-text-8tracks" class="text large white block">
         <div title="is logged in" class="icon-med">
             <img id="login-indicator" src="images/dot-err.png"/>
          </div>
          8Tracks Login
-      </div><br>
-      <input class="text small" placeholder="username" type="text" id="login_username" name="username" /><br>
-      <input class="text small" placeholder="password" type="password" id="login_password" name="password" /><br>
-      <button class="text" id="player_log_in">Log In</button>
+      </div>
+
+      <div class="block">
+        <input class="text small" placeholder="username" type="text" id="login_username" name="username" />
+        <input class="text small" placeholder="password" type="password" id="login_password" name="password" />
+        <button class="text" id="player_log_in">Log In</button>
+      </div>
     </div>
+
     <div id="login-lastfm">
-      <div id="login-text" class="text large white">
+      <div id="login-text-lastfm" class="text large white block">
         <div title="is logged in" class="icon-med">
             <img id="login-lastfm-indicator" src="images/dot-err.png"/>
          </div>
          LastFM Login
-      </div><br>
-      <button class="small text" id="login-lastfm-perm">Authenticate</button>
+      </div>
+      <div class="block">
+        <button class="small text" id="login-lastfm-perm">Authenticate</button>
+      </div>
     </div>
   </div>
   <div id="login-status" class="south text medium">
@@ -103,103 +109,104 @@
   </div>
 </div>
 
-<div id='player' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="player-page">
-  <div id='player-title' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="north">
-    <div class="north" class="highlight-bar">
-      
-      <div title="search for mix" id="player_search" class="icon-sm" style="position:absolute; top:5px; left:5px;">
-        <img src="images/search.png"/>
-      </div>
-      <div title="cast" id="player_cast" class="dummy" style="position:absolute; top:5px; right:70px;">
-        <img src="images/chromecast-on.png"/>
-      </div>
-      <div title="play open mix in browser" id="player_sync" class="icon-sm" style="position:absolute; top:5px; right:50px;">
-        <img src="images/sync.png"/>
-      </div>
-      <div title="login" id="player_login" class="icon-sm" style="position:absolute; top:5px; right:30px;">
-        <img src="images/login.png"/>
-      </div>
-      <div title="open settings" id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:10px;">
-        <a href="options.html" target="_blank"><img src="images/cog.png"/></a>
-      </div>
-      
+<div id='player' data-layout='{"type": "border", "hgap": 8, "vgap": 3}' class="player-page">
+  <div id='player-controls' class="north highlight-bar">
+    <div title="search for mix" id="player_search" class="icon-sm left-align-icon">
+      <img src="images/search.png"/>
     </div>
-    <div class="west">
-       <div title="like mix" class="icon-med" style="position:absolute; top:5px; left:15px;">
-          <img id="player_like_mix" src="images/heart.png"/>
-       </div>
-       <div title="star track" class="icon-med" style="position:absolute; bottom:5px; left:15px;">
-          <img id="player_star_track" src="images/star.png"/>
-       </div>
+    <div title="cast" id="player_cast" class="dummy">
+      <img src="images/chromecast-on.png"/>
     </div>
-    <div class="center">
+    <div title="login" id="player_login" class="icon-sm" style="position:absolute; top:5px; right:30px;">
+      <img src="images/login.png"/>
+    </div>
+    <div title="open settings" id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:10px;">
+      <a href="options.html" target="_blank"><img src="images/cog.png"/></a>
+    </div>  
+  </div>
+
+  <div id='player-cover' class="center">
       <b id="mix-title" class="text large">{ No Mix }</b>
       <div style="margin:auto;" id="track-title" class="text medium">No Mix Found</div>
       <div style="margin:auto;font-style:italic;" id="track-artist" class="text medium">
         Open 8Tracks Mix in Browser
       </div>
-    </div>
-    <div class="east icon-med">
-      <div title="open mix in browser" class="icon-med" style="position:absolute; top:5px; right:15px;">
-        <img id="player_goto" src="images/goto.png"/>
+
+      <div id="mix-stats" class="block">
+        <div class="spacey-right line">
+          <div title="mix gold/bronze/silver medal" class="icon-sm left-align-icon"><img id="mix_rank" src="images/no-rank.png"/></div>
+        </div>
+
+        <div class="spacey-right line">
+          <div title="number of likes" class="icon-sm"><img src="images/heart-on.png"/></div>
+          <font class="text small" id="mix-likes">likes</font>
+        </div>
+
+        <div class="spacey-right line">
+          <div title="number of listens" class="icon-sm"><img src="images/play.png"/></div>
+          <font class="text small"  id="mix-plays">plays</font>
+        </div>
+
+        <div class="spacey-right line">
+          <div title="number of tracks" class="icon-sm"><img src="images/music.png"/></div>
+          <font class="text small"  id="mix-tracks">tracks</font>
+        </div>
       </div>
-      <div title="buy track" class="icon-med" style="position:absolute; bottom:5px; right:15px;">
-        <img id="player_purchase" src="images/buy.png"/>
-      </div>
-    </div>
-  </div>
-  <div id='player-cover' class="center" style="margin-top:15px; margin-bottom:15px;">
-    <img class="img-cover" id="albumart"></img>
-    <div class="img-cover-text">
-      <div>
-        <div title="mix gold/bronze/silver medal" class="icon-sm" style="position:absolute; top:5px; left:5px;"><img id="mix_rank" src="images/no-rank.png"/></div>
-        <font class="text small black" id="mix-likes" style="padding-left:10px;">likes</font>
-        <div title="number of likes" class="icon-sm"><img src="images/heart-on.png"/></div>
-        <font class="text small black"  id="mix-plays" style="padding-left:10px;">plays</font>
-        <div title="number of listens" class="icon-sm"><img src="images/play-black.png"/></div>
-        <font class="text small black"  id="mix-tracks" style="padding-left:10px;">tracks</font>
-        <div title="number of tracks" class="icon-sm"><img src="images/music.png"/></div>
-      </div>
-      <div class="text small faint" id="mix-tags">tag 1, tag 2, tag 3</div>
-      <br>
-      <font class="text small faint" id="mix-description">description here</font>
-    </div>
-  </div>
-  <div class="east">
-    
+      <div class="text small block" id="mix-tags">tag 1, tag 2, tag 3</div>
+      <div><font class="text small block faint" id="mix-description">description here</font></div>
   </div>
   <div class="west">
-    
-  </div>
-  <div id='player-controls' class="south horizontal highlight-bar">
-      <div class="icon-lg" style="position:absolute; top:0px; left: 15px;">
-        <img id="player_play" src="images/pause.png"/>
-      </div>
-      <div style="position:absolute; top:15px; left: 55px; right: 115px; display: inline-block;height:25px;text-align: right;" id="player_prog">
-        <input id="player_prog_slider" style="width:100%;" min="0" max="100" step="1" type="range"/>
-        <font class="text small white" style="z-index:999;" id="player_prog_duration">
-          0:00
-        </font>
-      </div>
-      
-      <div class="icon-med" style="position:absolute; top:10px; right: 25px;">
-        <img id="player_volume" class="image-icon" src="images/highvolume.png"/>
-      </div>
-      <div class="icon-med" style="position:absolute; top:10px; right: 55px;">
-        <img title="next mix" id="player_next_mix" class="image-icon" src="images/ffwd-mix.png"/>
-      </div>
-      <div class="icon-med" style="position:absolute; top:10px; right: 85px;">
-        <img title="next track" id="player_skip" class="image-icon" src="images/ffwd.png"/>
-      </div>
-      
-      <!--
-      
-      -->
+    <img class="img-cover" id="albumart"></img>
+    <div id="track-actions" class="block">
+
+        <div title="like mix" class="icon-sm left-align-icon spacey" >
+            <img id="player_like_mix" src="images/heart.png"/>
+        </div>
+        <div title="star track" class="icon-sm left-align-icon spacey">
+          <img id="player_star_track" src="images/star.png"/>
+        </div>
+        
+        <div title="play open mix in browser" id="player_sync" class="icon-sm left-align-icon spacey">
+          <img src="images/sync.png"/>
+        </div>
+        <div title="open mix in browser" class="icon-sm left-align-icon spacey">
+          <img id="player_goto" src="images/goto.png"/>
+        </div>
+        <div title="buy track" class="icon-sm left-align-icon spacey">
+          <img id="player_purchase" src="images/buy.png"/>
+        </div> 
     </div>
+
+  </div>
+  <div id="player-controls" data-layout='{"type": "border", "hgap": 3, "vgap": 3}'  class="south play-bar block highlight-bar">
+      <div class="west vert-middle">
+        <div class="icon-med left-align-icon">
+          <img id="player_play" src="images/pause.png"/>
+        </div>
+      </div>
+      <div id="player_prog" class="center">
+          <input id="player_prog_slider" min="0" max="100" step="1" type="range"/>
+          <font id="player_prog_duration" class="text small white">
+            0:00
+          </font>
+      </div>
+      <div class="east vert-middle">
+          <div class="icon-med">
+            <img id="player_volume" class="image-icon" src="images/highvolume.png"/>
+          </div>
+          <div class="icon-med">
+            <img title="next track" id="player_skip" class="image-icon" src="images/ffwd.png"/>
+          </div>
+          <div class="icon-med">
+            <img title="next mix" id="player_next_mix" class="image-icon" src="images/ffwd-mix.png"/>
+          </div>
+      </div>
+      
     
   </div>
   <div id="player_volume_controls" class="sound-controls black">
     <div  style="left:30%; top:10%; height:80%;" id="player_volume_slider"></div>
   </div>
+</div>
 </body>
 </html>
