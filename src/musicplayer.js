@@ -99,35 +99,28 @@ toast = new Toast();
 function MusicPlayer(){
 	this.init = function(){
 		this.player = $('<audio>', {
-	      autoPlay : 'autoplay',
-	      controls : 'controls',
-	      id : "player"
-	    });
-	    this.track_info = null;
-	    this.mix_info = null;
-	    this.is_paused = false;
-	    this.is_casting = false;
-	    this.playlist = new Playlist("persist_playlist", true);
-	    var that = this;
+	     autoPlay : 'autoplay',
+	     controls : 'controls',
+	     id : "player"
+	   });
+	   this.track_info = null;
+	   this.mix_info = null;
+	   this.was_paused = this.is_paused = false;
+	   this.is_casting = false;
+	   this.playlist = new Playlist("persist_playlist", true);
+	   var that = this;
 
-		chrome.runtime.onSuspend.addListener(function(){
-			var currentdate = new Date();
-			var datetime = "Suspend: " + currentdate.getDay() + "/"+currentdate.getMonth() 
-			console.log(this)
+	   chrome.idle.onStateChanged.addListener(function(kind){
+	   	console.log("changed state:",kind, that.was_paused);
+	   	if(kind == "locked" || kind == "idle"){
+	   		that.was_paused = that.is_paused;
+	   		that.pause();
+	   	}
+	   	else if(kind == "active" && that.was_paused == false){
+	   		that.resume();
+	   	}
+	   })
 
-		})
-		chrome.runtime.onSuspend.addListener(function(){
-			var currentdate = new Date();
-			var datetime = "Suspend Cancelled: " + currentdate.getDay() + "/"+currentdate.getMonth() 
-			console.log(this)
-
-		})
-		chrome.runtime.onStartup.addListener(function(){
-			var currentdate = new Date();
-			var datetime = "Startup: " + currentdate.getDay() + "/"+currentdate.getMonth() 
-			console.log(this)
-
-		})
 
 		this.player.error(function(e) { 
                console.log("Logging playback error: ", e); 

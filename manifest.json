@@ -10,7 +10,8 @@
      "tabs",
      "clipboardWrite",
      "notifications",
-     "*://*/*"
+     "*://*/*",
+     "idle"
 	],
   "content_scripts": [
     {
