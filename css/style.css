@@ -189,7 +189,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .player-page .north {
-	height: 7%;
+	height: 9%;
 }
 
 .player-page .east{
@@ -307,6 +307,10 @@ input[type="range"]::-webkit-slider-thumb {
 .left-align-icon {
     float: left;
     padding:0.1em;
+}
+#player_search {
+    margin-left:0.15em;
+    margin-top:0.15em;
 }
 .ui-autocomplete { 
     font-style: normal;

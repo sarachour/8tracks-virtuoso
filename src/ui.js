@@ -361,12 +361,18 @@ function SetupPlayer(){
     })
     
     $("#player_volume").click(function () {
+        var ctrl = $("#player_volume_controls");
         var pos = $("#player_volume").offset();
-        var w= $("#player_volume_controls").width();
-        var h= $("#player_volume_controls").height();
-        $("#player_volume_controls").css('top',pos.top-h-10);
-        $("#player_volume_controls").css('left',pos.left);
-        $("#player_volume_controls").fadeIn();
+        var w= ctrl.width();
+        var h= ctrl.height();
+        ctrl.css('top',pos.top-h-10);
+        ctrl.css('left',pos.left);
+        if(ctrl.css("display") == "none"){
+          ctrl.fadeIn();
+        }
+        else{
+          ctrl.fadeOut();
+        }
         return false;
     });
     $( "#player_volume_slider" ).slider({
