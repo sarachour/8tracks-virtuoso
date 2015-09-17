@@ -142,7 +142,6 @@ function MusicPlayer(){
 	   chrome.idle.setDetectionInterval(180);
 
 	   chrome.idle.onStateChanged.addListener(function(kind){
-	   	console.log("changed state:",kind, that.was_paused);
 	   	if(kind == "locked" || (kind == "idle") && that.pause_on_idle){
 	   		that.was_paused = that.is_paused;
 	   		that.pause();
