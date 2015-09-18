@@ -60,7 +60,6 @@
     "scripts": [
       "lib/jquery-1.10.2.js", 
       "lib/jquery.jplayer.js", 
-      /*"lib/cast_sender.js",*/
       "lib/md5.js",
       "src/spotify.js", 
       "src/playlist.js", 

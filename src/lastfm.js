@@ -25,11 +25,9 @@ function LastFM()	{
 		return hash;
 	}
 	this._permission = function(cbk){
-		if(this.token == null) return;
 		var url="http://www.last.fm/api/auth?";
 		var args={
-			api_key: this.api_key,
-			token: this.token
+			api_key: this.api_key
 		}
 		args.api_sig = this.gen_sig(args);
 		for(var arg in args){
@@ -47,6 +45,22 @@ function LastFM()	{
 	this._auth = function(cbk){
 		var that = this;
 		var url = "https://ws.audioscrobbler.com/2.0/"
+		var auth_key = function(){
+			var url = "https://www.last.fm/api";
+			var args = {
+				api_key : that.api_key,
+				token : that.token
+			};
+			$.get(
+				url,
+				args,
+				function(data){
+					console.log("lastfm: authorized key ");
+					if(cbk != undefined) cbk(data);
+				}
+
+			)
+		}
 		var args = {
 				method:"auth.getToken",
 				api_key: this.api_key,
@@ -59,7 +73,8 @@ function LastFM()	{
 			args,
 			function(data){
 				that.token = data.token;
-				if(cbk != undefined) cbk(data);
+				console.log("lastfm: retrieved key ",that.token);
+				auth_key();
 			})
 
 	}
@@ -95,18 +110,43 @@ function LastFM()	{
 				if(cbk != undefined) cbk(data);
 			})
 		.fail(function(e){ 
-			console.log(e);
+			console.log("lastfm: failed to authorize session",e);
 			if(cbk != undefined) cbk(null, e);
 		});	
 
 	}
 	this.auth = function(){
 		var that = this;
-		this._auth(function(){
-			that._permission(function(){
-				console.log("opened permission.");
-			})
-		});
+		//test if the account already authenticated the app
+		if(this.session_key == null){
+			if(this.token == null){
+				this._auth(function(data){
+					//if the account has not authenticated 
+					if(that.token == null || that.token == undefined){
+						console.log("lastfm: not authenticated. spawning permission.");
+						that._permission();
+					}
+					//if the account has already authenticated the app
+					else{
+						console.log("lastfm: already authenticated. Getting session key.")
+						that.session(function(s){
+							if(s == null){
+								console.log("lastfm: session key retrieval failed. spawning permission.");
+								that.token = null;
+								that._permission();
+							}
+						});
+					}
+				});
+			}
+			else{
+				console.log("already authenticated. Getting session key.")
+				that.session();
+			}
+		}
+		else {
+			console.log("already has session key");
+		}
 	}
     this.scrobble = function(track, artist){
 		//http://www.last.fm/api/show/track.love
