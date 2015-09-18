@@ -126,11 +126,7 @@ toast = new Toast();
 
 function MusicPlayer(){
 	this.init = function(){
-		this.player = $('<audio>', {
-	     autoPlay : 'autoplay',
-	     controls : 'controls',
-	     id : "player"
-	   });
+		this.player = new Player();
 	   this.track_info = null;
 	   this.mix_info = null;
 	   this.was_paused = this.is_paused = false;
@@ -153,8 +149,8 @@ function MusicPlayer(){
 	   	}
 	   })
 
-
-		this.player.error(function(e) { 
+	   //this.player.error
+	   this.player.onError(function(e) { 
                console.log("Logging playback error: ", e); 
                console.log("     ", that.player[0].error);
                console.log(that.player[0].src);
@@ -287,7 +283,9 @@ function MusicPlayer(){
 			  		sendResponse({"playlist": that.playlist.getObject()});
 			  }
 			});
-			this.player.bind("ended", function () {
+
+			//this.player.bind("ended", function () {
+			this.player.on("ended", function() {
 		        that.nextTrack();
 		   });
 	}
@@ -358,25 +356,23 @@ function MusicPlayer(){
 		data.track_album = this.track_info.release_name;
 		data.track_buy = this.track_info.buy_link;
 		data.track_favorite = this.track_info.faved_by_current_user;
-		data.track_duration = this.player[0].duration;
-		data.track_time = this.player[0].currentTime;
+		data.track_duration = this.player.getDuration();
+		data.track_time = this.player.getTime();
 		data.skip_ok = this.other_info.isSkipOk;
 		data.is_paused = this.is_paused;
-		data.player_volume = this.player[0].volume;
+		data.player_volume = this.player.getVolume();
 		//data.player = this.player;
 		return data;
 	}
 	this.play = function(src){
 		var that = this;
-		this.player.attr("src", src);
-		$("#player").trigger("play", function(){
+		this.player.load(src);
+		this.player.play(function(){
 			if(!this.player.hasOwnProperty('duration')){
 				console.log("the source appears to be null. loading next.");
 				that.nextTrack();
 			}
 		});
-		//$("#player").play();
-		//this.player.play();
 	}
 	this.SET_MIX_INFO = function(mixdata){
 		this.mix_info = mixdata;
@@ -470,11 +466,13 @@ function MusicPlayer(){
 		});
 	}
 	this.resume = function(){
-		this.player.trigger("play");
+		//this.player.trigger("play");
+		this.player.play();
 		this.is_paused = false;
 	}
 	this.pause = function(){
-		this.player.trigger("pause");
+		//this.player.trigger("pause");
+		this.player.pause();
 		this.is_paused = true;
 	}
 	this.likeMix = function(){
@@ -575,16 +573,20 @@ function MusicPlayer(){
 		toast.error(status, msg);
 	}
 	this.setVolume = function(pct){
-		this.player[0].volume = pct;
+		//this.player[0].volume = pct;
+		this.player.setVolume(pct);
 	}
 	this.setTime = function(pct){
-		newtime = pct*parseFloat(this.player[0].duration);
+		//newtime = pct*parseFloat(this.player[0].duration);
+		newtime = pct*parseFloat(this.player.getDuration());
 		this.pause();
-		this.player[0].currentTime = newtime
+		//this.player[0].currentTime = newtime
+		this.player.setTime(newtime);
 		this.resume();
 	}
 	this.isWellPlayed = function(){
-		var played = this.player[0].played;
+		//var played = this.player[0].played;
+		var played = this.player.getPlayedSegments();
 		var total = 0;
 		for(var i=0; i < played.length; i++){
 			total += played.end(i) - played.start(i);

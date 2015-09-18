@@ -65,6 +65,7 @@
       "src/playlist.js", 
       "src/8tracks.js", 
       "src/lastfm.js", 
+      "src/player.js",
       "src/musicplayer.js",
       "src/chromecast.js"
       ],
