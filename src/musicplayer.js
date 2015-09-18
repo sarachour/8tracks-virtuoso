@@ -142,7 +142,7 @@ function MusicPlayer(){
 	   chrome.idle.setDetectionInterval(180);
 
 	   chrome.idle.onStateChanged.addListener(function(kind){
-	   	if(kind == "locked" || (kind == "idle") && that.pause_on_idle){
+	   	if(kind == "locked" || (kind == "idle" && that.pause_on_idle) ){
 	   		that.was_paused = that.is_paused;
 	   		that.pause();
 	   		toast.pause(that.mix_info.cover_urls.sq56);
