@@ -8,7 +8,9 @@ var Player = function(){
 
       this.ctx = new AudioContext();
       this.gain = this.ctx.createGain();
-      //this.src = this.ctx.createMediaElementSource(this.elem[0]);
+      this.analyze = 
+      this.src = this.ctx.createMediaElementSource(this.elem[0]);
+      this.src.connect(this.ctx.destination);
    }
    this.setTime = function(time){
       this.elem[0].currentTime = time;
@@ -38,6 +40,9 @@ var Player = function(){
    }
    this.pause = function(){
       this.elem.trigger("pause");
+   }
+   this.getPlayedSegments = function(){
+      return this.elem[0].played;
    }
 
    this.init();
