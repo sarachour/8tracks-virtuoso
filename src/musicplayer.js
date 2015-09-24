@@ -129,23 +129,31 @@ function MusicPlayer(){
 		this.player = new Player();
 	   this.track_info = null;
 	   this.mix_info = null;
-	   this.was_paused = this.is_paused = false;
+	   this.idle_pause = this.is_paused = false;
 	   this.pause_on_idle = true;
 	   this.is_casting = false;
 	   this.playlist = new Playlist("persist_playlist", true);
 	   var that = this;
 
-	   chrome.idle.setDetectionInterval(180);
+	   var time_to_wait = 60*3;
+	   var time_to_wait = 20;
+	   chrome.idle.setDetectionInterval(time_to_wait);
 
 	   chrome.idle.onStateChanged.addListener(function(kind){
-	   	if(kind == "locked" || (kind == "idle" && that.pause_on_idle) ){
-	   		that.was_paused = that.is_paused;
+	   	//is not paused and is presently not idle.
+	   	console.log(kind);
+	   	if(that.is_paused == false && that.idle_pause == false && 
+	   		(kind == "locked" || (kind == "idle" && that.pause_on_idle) )
+	   		){
+	   		that.idle_pause = true;
 	   		that.pause();
 	   		toast.pause(that.mix_info.cover_urls.sq56);
 	   	}
-	   	if(kind == "active" && (that.was_paused == false && that.is_paused == true)){
+	   	//if we are pausing on idle
+	   	if(that.idle_pause && kind == "active"){
 	   		that.resume();
 	   		toast.resume(that.mix_info.cover_urls.sq56);
+	   		that.idle_pause = false;
 	   	}
 	   })
 

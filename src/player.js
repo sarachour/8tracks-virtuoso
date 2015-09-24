@@ -8,7 +8,6 @@ var Player = function(){
 
       this.ctx = new AudioContext();
       this.gain = this.ctx.createGain();
-      this.analyze = 
       this.src = this.ctx.createMediaElementSource(this.elem[0]);
       this.src.connect(this.ctx.destination);
    }
@@ -23,6 +22,9 @@ var Player = function(){
    }
    this.getVolume = function(){
       return this.elem[0].volume;
+   }
+   this.setVolume = function(v){
+      this.elem[0].volume = v;
    }
    this.onError = function(cbk){
       this.elem.error(cbk);
