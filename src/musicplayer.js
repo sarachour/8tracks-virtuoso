@@ -136,12 +136,10 @@ function MusicPlayer(){
 	   var that = this;
 
 	   var time_to_wait = 60*3;
-	   var time_to_wait = 20;
 	   chrome.idle.setDetectionInterval(time_to_wait);
 
 	   chrome.idle.onStateChanged.addListener(function(kind){
 	   	//is not paused and is presently not idle.
-	   	console.log(kind);
 	   	if(that.is_paused == false && that.idle_pause == false && 
 	   		(kind == "locked" || (kind == "idle" && that.pause_on_idle) )
 	   		){
