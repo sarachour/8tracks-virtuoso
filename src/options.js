@@ -289,7 +289,13 @@ function GridInputHandler(selector){
 
 function displayMessage(msg){
     $("#export-status").fadeIn(300);
-    $("#export-status").html(msg).delay(2000).fadeOut(500);
+    $("#export-status").html(msg).click(function(){
+        $("#export-status").fadeOut(500);
+        console.log("fading out...")
+    });
+    setTimeout(function(){
+        $("#export-status").fadeOut(500);
+    },2000)
     $("#clipboard").css('display', 'none');
 }
 function OptionsInterface(){
@@ -331,6 +337,9 @@ function OptionsInterface(){
                 }
             }
         }
+
+        this.setClipboard(str, "Copied to Spotify tracks clipboard. Now paste into Spotify playlist.");
+        /*
         if(dat.length <= 100){
             var that = this;
             this.spotify.createTrackset("8tracks-export", dat, function(){
@@ -341,6 +350,7 @@ function OptionsInterface(){
         else{
             this.setClipboard(str, "Copied to clipboard. Now paste into Spotify playlist.");
         }
+        */
     }
     
     this.exportTabDelim = function(){

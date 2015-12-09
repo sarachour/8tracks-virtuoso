@@ -297,3 +297,13 @@ input[type="text"], input[type="password"]{
 .result-text:hover {
     opacity:1;
 }
+#export-status {
+    position:absolute;
+    width:100%;
+    height:25%;
+    top:37%;
+    padding-top:5%;
+    text-align:center;
+    font-size:3em;
+    z-index:100;
+}
