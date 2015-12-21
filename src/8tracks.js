@@ -61,8 +61,7 @@ function EightTracks(){
 				},
 				function(data){
 					that.play_token = data.play_token;
-					console.log("token", that.play_token);
-					cbk();
+					cbk(data);
 				}
 			)
 	}

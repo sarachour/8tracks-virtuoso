@@ -67,7 +67,7 @@ function upd_login_lastfm(isloggedin){
 function SetupLogin(){
   var ns = $("#login-8tracks")
 
-  $("#login",ns).click(function(){
+  $("#login",ns).click(function(ns){ return function(){
     var uname = $('#username',ns).val();
     var pass = $('#password',ns).val();
     var that = this;
@@ -78,14 +78,16 @@ function SetupLogin(){
       fail($("#status",ns).html(msg));
       return;
     }
-    disp_status("Logging into 8Tracks", "Logging into 8Tracks as: "+uname,"pending")
+    var msg = "Logging into 8Tracks as: "+uname
+    disp_status("Logging into 8Tracks", msg,"pending")
+    pend($("#status",ns).html(msg))
     chrome.extension.sendMessage({
         action: "login", 
         type: "8tracks", 
         username: uname, 
         password:pass
       })
-  });
+  }}(ns));
   upd_login_8tracks(isLoggedOn8Tracks(), true);
   
 
@@ -139,7 +141,6 @@ function SetupGeneral(){
     var n = "#idlepause";
     $("#isset",$(n)).change(function(){
         var newv = $(this).is(':checked');
-        console.log(newv);
         chrome.extension.sendMessage({action: "set-pref", value:newv, key:map.to[n]},
             handle_resp("Updated Pause on Idle", "successfully "+enabled(newv)+" pause on idle")
         )
@@ -199,6 +200,7 @@ function SetupCallbacks(){
                     disp_status("8Tracks Login", "Successfully logged into 8Tracks", "success")
                 }
                 else {
+                    console.log(request);
                     disp_status("8Tracks Login", "Failed to Login to 8Tracks", status.responseJSON.errors)
                 }
                 upd_login_8tracks(data != null, false, status.responseJSON.errors)
@@ -206,7 +208,7 @@ function SetupCallbacks(){
             else if(request.type == "lastfm"){
 
             }
-            console.log("request");
+            console.log("request",request);
         }
         else{
             console.log("UNKNOWN REQUEST:", request);
@@ -247,5 +249,6 @@ document.addEventListener('DOMContentLoaded', function() {
     SetupLogin();
     SetupGeneral();
     SetupExport();
+    SetupCallbacks();
 
 });

@@ -140,8 +140,8 @@ toast = new Toast();
 function MusicPlayer(){
 	this.init_prefs = function(){
 		var that = this;
-		if(localStorage.hasOwnProperty("preferences")){
-			this.default_pref = localStorage["preferences"];
+		if(localStorage.hasOwnProperty("prefs")){
+			this.default_pref = JSON.parse(localStorage["prefs"]);
 		}
 		else{
 			this.default_pref = {};
@@ -149,9 +149,10 @@ function MusicPlayer(){
 			this.default_pref["toast-notify"] = true;
 			this.default_pref["time-to-wait"] = 180;
 			this.default_pref["is-casting"] = false;
-			localStorage["preferences"] = this.default_pref;
+			var str = JSON.stringify(this.default_pref);
+			console.log(str);
+			localStorage["prefs"] = str;
 		}
-	   
 	   this.prefs = {};
 	   this.prefs["idle-pause"] = {};
 	   this.prefs["idle-pause"].val = this.default_pref["idle-pause"];
@@ -373,7 +374,7 @@ function MusicPlayer(){
 			this.prefs[k].val = v;
 			this.prefs[k].set_val(v);
 			/* save local copy of preferences. */
-			localStorage["preferences"] = this.get_prefs();
+			localStorage["prefs"] = JSON.stringify(this.get_prefs());
 			return {status:"success"};
 		}
 		else {
@@ -392,8 +393,12 @@ function MusicPlayer(){
 		if(info.type == "lastfm"){
 			if(info.stage == "auth"){
 				lastFm.auth(function(data, status){
-					console.log("authed in");
-					
+					chrome.extension.sendMessage({
+						action: "login-client", 
+						type:"lastfm",
+						stage:"auth",
+						data:data, 
+						status:status});
 				});
 			}
 			else if(info.stage == "session"){
@@ -414,15 +419,15 @@ function MusicPlayer(){
 				if(data != null){
 					eightTracks.createPlaybackStream(function(data, status){
 						if(data != null){
-							chrome.extension.sendMessage({action: "login-client", type:"8tracks", "data":data, "status":status});
+							chrome.extension.sendMessage({action: "login-client", message:"success",type:"8tracks", "data":data, "status":status});
 						}
 						else {
-							chrome.extension.sendMessage({action: "login-client", type:"8tracks", "data":data, "status":status});
+							chrome.extension.sendMessage({action: "login-client", message:"logged-in",type:"8tracks", "data":data, "status":status});
 						}
 					});
 				}
 				else{
-					chrome.extension.sendMessage({action: "login-client", type:"8tracks", data:data, status:status});
+					chrome.extension.sendMessage({action: "login-client", message:"failed to login",type:"8tracks", data:data, status:status});
 				}
 			});
 
