@@ -139,35 +139,26 @@ input[type="text"], input[type="password"]{
     font-size:16px;
 }
 .normal-button {
-    padding: 3px;
-    color:rgb(150,150,150);
-    background-color:rgba(0,0,0,0);
-    border:none;
+    padding: 0.5em;
+    padding-top:0.2em;
+    padding-bottom:0.4em;
+    color:#ecf0f1;
+    background-color:#3498db;
+    border-style:solid;
+    border-width:2px;
+    border-radius:5px;
+    border-color:#2980b9;
+    margin:0.3em;
+}
+.fixed-button {
+    width: 25%;
 }
 .normal-button:hover{
-    color:white;
+    background-color:#2980b9;
 }
 .normal-button:click{
-    color:yellow;
+    background-color:#1abc9c;
 }
-
-
-.toggle-button {
-    padding: 3px;
-    color:rgb(150,150,150);
-    background-color:rgba(0,0,0,0);
-    border:none;
-}
-.toggle-button.down {
-    padding: 3px;
-    color:rgb(150,150,255);
-    background-color:rgba(0,0,0,0);
-    border:none;
-}
-.toggle-button:hover{
-    color:white;
-}
-
 
 .icon-sm {
     width:15px; 
@@ -179,6 +170,14 @@ input[type="text"], input[type="password"]{
     width:32px; 
     display: inline-block;
     height:32px;
+    padding-right:0.4em;
+    padding-left:0.4em;
+}
+.icon-large {
+    width:48px; 
+    display: inline-block;
+    height:48px;
+    padding-right:0.4em;
 }
 
 .text-overlay{
@@ -228,6 +227,10 @@ input[type="text"], input[type="password"]{
 .urgent {
     background-color:gray;
 }
+.text-field {
+    padding-top:0.4em;
+    padding-bottom:0.2em;
+}
 
 .huge {
     font-size: 24px;
@@ -235,9 +238,10 @@ input[type="text"], input[type="password"]{
 .large {
     font-size:16px;
 }
-.medium {
-    font-size:14px;
+.medium, .med {
+    font-size:20px;
 }
+
 .small {
     font-size:12px;
 }
@@ -258,7 +262,7 @@ input[type="text"], input[type="password"]{
 .view {
     position: relative;
     left: 33%;
-    width: 33%;
+    width: 50%;
 }
 .title {
     position: relative;
@@ -271,6 +275,9 @@ input[type="text"], input[type="password"]{
     padding-top: 0.5em;
     text-align:left;
 }
+#isval {
+    width:5em;
+}
 .header {
     color: #DEDEDE;
     text-align:left;
@@ -282,6 +289,20 @@ input[type="text"], input[type="password"]{
     font-size:1.5em;
 }
 
+.float-left {
+    float: left;
+}
+#status {
+    position:relative;
+    padding:0.4em;
+    margin-bottom:1em;
+    height:50px;
+}
+#text {
+    display: inline-block;
+    line-height:48px;
+
+}
 
 #status-popup {
     position:absolute;
@@ -291,6 +312,9 @@ input[type="text"], input[type="password"]{
     text-align:center;
     font-size:3em;
     z-index:100;
+}
+.grp {
+    padding-bottom:0.5em;
 }
 .success {
     background-color: #27ae60;

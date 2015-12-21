@@ -291,11 +291,10 @@ function displayMessage(msg){
     $("#export-status").fadeIn(300);
     $("#export-status").html(msg).click(function(){
         $("#export-status").fadeOut(500);
-        console.log("fading out...")
     });
     setTimeout(function(){
         $("#export-status").fadeOut(500);
-    },2000)
+    },5000)
     $("#clipboard").css('display', 'none');
 }
 function OptionsInterface(){
@@ -328,17 +327,22 @@ function OptionsInterface(){
         var sel = this.selector.getSelectionFromHTML();
         var dat = [];
         var str = "";
+        var ntracks = 0;
         for(var artist in sel){
             for(var track in sel[artist]){
                 var msel = sel[artist][track];
                 if(msel.hasOwnProperty("spotify")){
                     dat.push(msel.spotify.track_id);
                     str += msel.spotify.track_id + "\n";
+                    ntracks += 1;
                 }
             }
         }
 
-        this.setClipboard(str, "Copied to Spotify tracks clipboard. Now paste into Spotify playlist.");
+        this.setClipboard(str, 
+            "<h3>Copied Spotify Tracks to Clipboard</h3>"+
+            "Copied over "+ntracks+" songs. "+
+            "Paste (Ctrl+P) into new Spotify playlist.<br><br><span class='faded'>click here to continue...</span>");
         /*
         if(dat.length <= 100){
             var that = this;
@@ -356,6 +360,7 @@ function OptionsInterface(){
     this.exportTabDelim = function(){
         var sel = this.selector.getSelectionFromHTML();
         var dat = [];
+        var ntracks = 0;
         dat.push(['track-name', 'track-artist', 'track-starred', 
             'track-url', 'track-buy','track-spotify-url',
             'mix-name','mix-tags','mix-loved','mix-url']);
@@ -387,9 +392,15 @@ function OptionsInterface(){
             for(var j=0; j < dat[i].length; j++){
                 text += dat[i][j] + "\t";
             }  
+            ntracks += 1;
             text += "\n";
         }
-        this.setClipboard(text, "Copied to clipboard. Paste into spreadsheet.");
+        ntracks -= 1;
+        this.setClipboard(text, 
+            "<h3>Copied to Tab-Delimited Data Clipboard</h3>"+
+            "Copied "+ntracks+" songs. "+
+            "Paste (Ctrl+P) into new spreadsheet.<br><br><span class='faded'>click here to continue...</span>");
+
     }
     this.updateTracklist = function(){
         var that = this;

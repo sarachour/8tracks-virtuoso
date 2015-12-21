@@ -217,7 +217,7 @@ function MusicPlayer(){
 	   		toast.disabled = false;
 	   	}
 	   	else {
-	   		toast.disabled = !that.get_pref("toast_notify");
+	   		toast.disabled = !that.get_pref("toast-notify");
 	   	}
 
 	   	if(that.is_paused == false && that.idle_pause == false && 

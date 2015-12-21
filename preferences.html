@@ -37,39 +37,58 @@
 
    <div class="center" id="prefs" style="overflow:scroll;">
       <div class="general view">
-         <h1 class="header">General Settings</h1>
+         <h1 class="header">
+         <img class="icon-med " src="images/cog.png"></img> 
+         General Settings</h1>
          <div class="option" id="toastnot">
             <input id="isset" type="checkbox"></input>
             enable toast notifications 
          </div>
-         <div class="option" id="idlepause">
+         <div class="option">
+            <span id="idlepause">
             <input id="isset" type="checkbox"></input>
-            automatically pause on idle
+            <span> automatically pause on idle<span>
+            </span>
+
+            <span id="idlepausedur">
+            <span>after</span>
+            <input id="isval" type="number" min="15" max="3600"></input>
+            <span> seconds</span>
+            </span>
+
          </div>
       </div>
 
       <div class="login view">
-         <h1 class="header">8Tracks Login</h1>
+         <h1 class="header">
+         <img class="icon-med " src="images/login.png"></img> 
+         8Tracks Login</h1>
          <div id="login-8tracks" class="option">
-               
-              <div class="med">
-              Username 
+              <div class="medium" id="status">
+                  <div class="icon-large float-left"><img id="indic" src="images/dot-err.png"/></div>
+                  <span id="text" class="float-left">awaiting response.</span>
               </div>
-              <div>
-               <input class="med" placeholder="username" type="text" id="username" name="username" /></div>
-              <div class="med">
-              Password 
-              </div>
-              <div>
-               <input class="med" placeholder="password" type="password" id="password" name="password" /></div>
-              <button class="med" id="login">Log In</button>
               
-              <div>
-                  <div title="is logged in" class="icon-sm">
-                     <img id="indic" src="images/dot-err.png"/>
-                  </div>
-                  <span class="small" id="status">awaiting response.</span>
-               </div>
+              <div class="grp">
+                <div class="grp">
+                <div class="medium">Username </div>
+                <div class="text-field">
+                 <input class="med" placeholder="username" type="text" id="username" name="username" />
+                </div>
+                </div>
+                
+                <div class="grp">
+                <div class="med">
+                Password 
+                </div>
+                <div class="text-field">
+                 <input class="med" placeholder="password" type="password" id="password" name="password" /></div>
+                </div>
+                </div>
+
+              <div><button class="normal-button fixed-button" id="login">Log In</button></div>
+              
+              
 
          </div>
 
@@ -90,9 +109,12 @@
 
       </div>
       <div class="export view">
-         <h1 class="header">Export Data</h1>
-         <div id="to_spotify" class="option">To Spotify</div>
-         <div id="to_text" class="option ">To Text File</div>
+         <h1 class="header">
+         <img class="icon-med " src="images/record.png"></img> Virtuoso Mix Manager
+         </h1>
+         <div class="option">
+         <a href="options.html" target="_blank">
+         <button class="normal-button wide" id="mixmgr">Open Mix Manager</button></a></div>
          
       </div>
 
