@@ -155,6 +155,7 @@ function UserInterface(){
 					that.sync();
 				return;
 			}
+			$("#mix_prompt").hide();
 
 	    	$("#mix-title").html(data.mix_name);
 			$("#track-title").html(data.track_name);

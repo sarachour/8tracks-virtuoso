@@ -226,7 +226,14 @@ function SetupLayout(){
   if(localStorage.hasOwnProperty("user_token") == false){
     // TODO: Open Settings
     chrome.extension.sendMessage({action: "login", type: "8tracks", username: null, password:null})
+
   }
+  else {
+    $("#login_prompt").hide();
+  }
+  $("#mixprompt_search").click(function(){
+    ShowSearch();
+  })
 
   $(".vert-middle").each(function(){
     var e = $(this);

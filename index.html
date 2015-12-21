@@ -20,6 +20,32 @@
   <script src="src/ui.js"></script>
 </head>
 <body>
+<div id='login_prompt' class="prompt login">
+  <div class="prompt_text">
+  <div>Login to 8Tracks Virtuoso</div>
+  <br>
+  <div class="large">Please login using one of the following, then open this page again:</div>
+  <br>
+  <div class="large"><span><a href="preferences.html" target="_blank"><img class="icon-med" src="images/cog.png"/> preferences page</a></span></div>
+  <div class="large"><span><a href="http://www.8tracks.com" target="_blank"><img class="icon-med" src="images/music.png"/> 8tracks website</a></span></div>
+  </div>
+</div>
+
+<div id='mix_prompt' class='prompt mix'>
+  <div class="prompt_text">
+  <div>Select a Mix</div>
+  <br>
+  <div class="large">Please select a mix using one of the following methods:</div>
+  <br>
+  <div class="large"><span id="mixprompt_search" class="fake-link"><img class="icon-med" src="images/search.png"/> search for mix in Virtuoso</span></div>
+  <div class="large"><span><a href="http://www.8tracks.com" target="_blank"><img class="icon-med" src="images/music.png"/> 
+  open mix on 8tracks website</a></span></div>
+  <div class="large"><span><a href="options.html" target="_blank"><img class="icon-med" src="images/record.png"/> 
+  past mix in Virtuoso mix manager</a></span></div>
+  </div>
+</div>
+
+
 <div id='search-page' data-layout='{"type": "border", "hgap": 3, "vgap": 3}'  class="search-overlay">
   <div class="north">
     <label class="medium text white vert-pad">search by</label>

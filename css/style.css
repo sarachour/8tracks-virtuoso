@@ -136,7 +136,7 @@ input[type="range"]::-webkit-slider-thumb {
     width: 95%;
 	background-color:rgba(0,0,0,1.0);
 	color:#fff;
-    opacity:0.85;
+    opacity:1.0;
 	top:0;
     left:0;
     text-align: center;
@@ -324,7 +324,9 @@ input[type="range"]::-webkit-slider-thumb {
     padding-bottom:0.7em;
 }
 
-
+a:visited { text-decoration: none; color:#8e44ad; }
+a { text-decoration: none; color:#3498db } /* Globally */
+.fake-link {cursor: pointer; color:#3498db;}
 #track-actions {
     margin-bottom:0.2em;
     padding:1em;
@@ -350,21 +352,26 @@ input[type="range"]::-webkit-slider-thumb {
     margin-top:0.3em;
 }
 
-#login-text-8tracks,#login-text-lastfm {
-    float: left;
-    margin-bottom:1em;
-    margin-top:1em;
-}
-#login-lastfm-perm{
-    float:left;
-    padding-right:2em;
-    background-color:#000;
-    border-color:white;
-    margin-left:2em;
-    color:white;
-}
-#player_log_in {
+.prompt {
+    position:absolute;
+    width:100%;
+    height:100%;
     color:white;
     background-color:#000;
+    z-index:1000;
     border-color:white;
+}
+.prompt.login {
+    z-index: 900;
+}
+.prompt.mix {
+    z-index: 500;
+}
+
+.prompt_text {
+    position:relative;
+    top:10%;
+    left:15%;
+    width:65%;
+    font-size:2em;
 }

@@ -149,8 +149,9 @@ function MusicPlayer(){
 			this.default_pref["toast-notify"] = true;
 			this.default_pref["time-to-wait"] = 180;
 			this.default_pref["is-casting"] = false;
+			this.default_pref["8tracks-user"] = null
+			this.default_pref["curr-mix"] = {id:null, smart_id:null}
 			var str = JSON.stringify(this.default_pref);
-			console.log(str);
 			localStorage["prefs"] = str;
 		}
 	   this.prefs = {};
@@ -178,6 +179,21 @@ function MusicPlayer(){
 	   	chrome.idle.setDetectionInterval(x);
 	   }
 
+	   this.prefs["curr-mix"] = {};
+	   this.prefs["curr-mix"].val = this.default_pref["curr-mix"];
+	   this.prefs["curr-mix"].set_val =function(x){
+	   	if(x.id != null && x.smart_id != null && 
+	   		(that.curr_mix_id != x.id || that.smart_mix_id != x.smart_id)) {
+	   		that.mix(x.id, x.smart_id);
+	   	}
+	   }
+
+	   this.prefs["8tracks-user"] = {};
+	   this.prefs["8tracks-user"].val = this.default_pref["8tracks-user"];
+	   this.prefs["8tracks-user"].set_val = function(x){
+
+	   }
+
 	   for(k in this.prefs){
 	   	this.prefs[k].set_val(this.prefs[k].val)
 	   }
@@ -201,7 +217,7 @@ function MusicPlayer(){
 	   		toast.disabled = false;
 	   	}
 	   	else {
-	   		toast.disabled = !this.get_pref("toast_notify");
+	   		toast.disabled = !that.get_pref("toast_notify");
 	   	}
 
 	   	if(that.is_paused == false && that.idle_pause == false && 
@@ -304,10 +320,14 @@ function MusicPlayer(){
 			  		that.resume();
 			  }
 			  else if(request.action == "set-pref"){
+			  		console.log("set",request)
 			  		sendResponse(that.set_pref(request.key, request.value));
 			  }
 			  else if(request.action == "get-prefs"){
 			  		sendResponse(that.get_prefs());
+			  }
+			  else if(request.action == "get-pref"){
+			  		sendResponse(that.get_pref(request.key));
 			  }
 			  else if(request.action == "pause"){
 			  		that.pause();
@@ -389,6 +409,10 @@ function MusicPlayer(){
 		}
 		console.log("cast",this.is_casting);
 	}
+	this.set_user = function(name,email,icon){
+		this.set_pref("8tracks-user", {name:name,email:email,icon:icon});
+	}
+
 	this.login = function(info){
 		if(info.type == "lastfm"){
 			if(info.stage == "auth"){
@@ -415,14 +439,21 @@ function MusicPlayer(){
 		else if(info.type == "8tracks"){
 			var username = info.username;
 			var passwd = info.password;
+			var that = this;
 			eightTracks.login(username, passwd, function(data, status){
+				console.log(data,status);
 				if(data != null){
+					var user = data.user.login;
+					var icon = data.user.avatar_urls.sq56;
+					var email = data.user.email;
+
+					that.set_user(user,email,icon);
 					eightTracks.createPlaybackStream(function(data, status){
 						if(data != null){
-							chrome.extension.sendMessage({action: "login-client", message:"success",type:"8tracks", "data":data, "status":status});
+							chrome.extension.sendMessage({action: "login-client", message:"success",user:user, icon:icon, email:email, type:"8tracks", "data":data, "status":status});
 						}
 						else {
-							chrome.extension.sendMessage({action: "login-client", message:"logged-in",type:"8tracks", "data":data, "status":status});
+							chrome.extension.sendMessage({action: "login-client", message:"logged-in",user:user, icon:icon, email:email, type:"8tracks", "data":data, "status":status});
 						}
 					});
 				}
@@ -532,6 +563,9 @@ function MusicPlayer(){
 	this.mix = function(mixid, smartmixid){
 		var that = this;
 		this.smart_mix_id = smartmixid;
+		this.curr_mix_id = mixid;
+		that.set_pref("curr-mix",{smart_id:smartmixid, id:mixid})
+		
 		eightTracks.getMix(mixid, function(data, e){
 			if(data != null){
 				that.SET_MIX_INFO(data.mix);

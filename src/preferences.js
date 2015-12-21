@@ -31,24 +31,28 @@ function pend(e){
     e.removeClass("success failure").addClass("pending")
 }
 
-function upd_login_8tracks(isloggedin,attemptlogin,errmsg){
+function upd_login_8tracks(attemptlogin,errmsg){
   var ns = $("#login-8tracks")
-  if(isloggedin){
-    $("#indic",ns).attr("src", "images/dot-ok.png");
-    succ($("#status",ns).html("logged onto 8Tracks"))
-  }
-  else{
-    if(attemptlogin){
-        $("#indic",ns).attr("src", "images/dot-err.png");
-        chrome.extension.sendMessage({action: "login", type: "8tracks", username: null, password:null});
-        pend($("#status",ns).html("attempting to auto-login from open 8Tracks session."))
-    }
-    $('#indic').attr('src', 'images/dot-err.png');
-    if(errmsg == undefined || errmsg == null){
-        errmsg = "not logged in to 8tracks.";
-    }
-    fail($("#status",ns).html(errmsg))
-  }
+  console.log("getting a preference.");
+  chrome.extension.sendMessage({action: "get-pref", key:"8tracks-user"}, function(uinfo){
+        console.log("USER",uinfo);
+        if(uinfo != null){
+            $("#indic",ns).attr("src", "images/dot-ok.png");
+            succ($("#status",ns).html("logged onto 8Tracks as "+uinfo.name))
+        }
+        else{
+            if(attemptlogin){
+                $("#indic",ns).attr("src", "images/dot-err.png");
+                chrome.extension.sendMessage({action: "login", type: "8tracks", username: null, password:null});
+                pend($("#status",ns).html("attempting to auto-login from open 8Tracks session."))
+            }
+            $('#indic').attr('src', 'images/dot-err.png');
+            if(errmsg == undefined || errmsg == null){
+                errmsg = "not logged in to 8tracks.";
+            }
+            fail($("#status",ns).html(errmsg))
+        }
+  })
 
 }
 
@@ -88,8 +92,7 @@ function SetupLogin(){
         password:pass
       })
   }}(ns));
-  upd_login_8tracks(isLoggedOn8Tracks(), true);
-  
+  upd_login_8tracks(false);
 
   var ns = $("#login-lastfm")
   $('#login',ns).click(function(){
@@ -139,20 +142,20 @@ function SetupGeneral(){
     }
 
     var n = "#idlepause";
-    $("#isset",$(n)).change(function(){
+    $("#isset",$(n)).change(function(n){return function(){
         var newv = $(this).is(':checked');
         chrome.extension.sendMessage({action: "set-pref", value:newv, key:map.to[n]},
             handle_resp("Updated Pause on Idle", "successfully "+enabled(newv)+" pause on idle")
         )
-    })
+    }}(n))
 
     var n = '#toastnot';
-    $("#isset",$(n)).change(function(){
+    $("#isset",$(n)).change(function(n){ return function(){
         var newv = $(this).is(':checked');
         chrome.extension.sendMessage({action: "set-pref", value:newv, key:map.to[n]}, 
             handle_resp("Updated Pause on Idle", "successfully "+enabled(newv)+" toast notifications")
         )
-    })
+    }}(n))
 
     var upd_pref = function(n,k,v){
         /*update true or false*/
@@ -198,17 +201,16 @@ function SetupCallbacks(){
             if(request.type == "8tracks"){
                 if(data != null){
                     disp_status("8Tracks Login", "Successfully logged into 8Tracks", "success")
+                    upd_login_8tracks(false)
                 }
                 else {
-                    console.log(request);
-                    disp_status("8Tracks Login", "Failed to Login to 8Tracks", status.responseJSON.errors)
+                    disp_status("8Tracks Login", status.responseJSON.errors, "failure")
+                    upd_login_8tracks(false, status.responseJSON.errors)
                 }
-                upd_login_8tracks(data != null, false, status.responseJSON.errors)
             }
             else if(request.type == "lastfm"){
 
             }
-            console.log("request",request);
         }
         else{
             console.log("UNKNOWN REQUEST:", request);
