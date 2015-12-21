@@ -226,7 +226,7 @@ input[type="text"], input[type="password"]{
     color:#DEDEDE;
 }
 .urgent {
-    background-color:#418041;
+    background-color:gray;
 }
 
 .huge {
@@ -282,13 +282,25 @@ input[type="text"], input[type="password"]{
     font-size:1.5em;
 }
 
-#export-status {
+
+#status-popup {
     position:absolute;
     width:100%;
-    height:25%;
+    height:35%;
     top:37%;
-    padding-top:5%;
     text-align:center;
     font-size:3em;
     z-index:100;
+}
+.success {
+    background-color: #27ae60;
+    color:white;
+}
+.failure {
+    background-color: #c0392b;
+    color:white;
+}
+.pending {
+    background-color: #2980b9;
+    color:white;
 }

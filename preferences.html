@@ -16,12 +16,19 @@
 <script src="lib/jlayout/jquery.jlayout.js"></script>
 
 <script src="src/spotify.js"></script>
+<script src="src/lastfm.js"></script>
 <script src="src/8tracks.js"></script>
 <script src="src/preferences.js"></script>
 <textarea id="clipboard" style="display:none;" width="0%" height="0px">text here</textarea>
 
 </head>
 <body bgcolor="black">
+
+
+<div id="status-popup" class="text white medium status">
+   <h1 id="title" class="category"></h1>
+   <div id="message" class="category"></div>
+</div>
 
 <div id="prefs" data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
    <div class="north white huge text" style="text-align:left;">
@@ -48,19 +55,19 @@
               Username 
               </div>
               <div>
-               <input class="text med" placeholder="username" type="text" id="login_username" name="username" /></div>
+               <input class="med" placeholder="username" type="text" id="username" name="username" /></div>
               <div class="med">
               Password 
               </div>
               <div>
-               <input class="text med" placeholder="password" type="password" id="login_password" name="password" /></div>
-              <button class="text med" id="player_log_in">Log In</button>
+               <input class="med" placeholder="password" type="password" id="password" name="password" /></div>
+              <button class="med" id="login">Log In</button>
               
-              <div id="status">
+              <div>
                   <div title="is logged in" class="icon-sm">
-                     <img id="ind" src="images/dot-err.png"/>
+                     <img id="indic" src="images/dot-err.png"/>
                   </div>
-                  <span class="small" id="status-text">successfully logged in</span>
+                  <span class="small" id="status">successfully logged in</span>
                </div>
 
          </div>
@@ -68,14 +75,12 @@
          <h1 class="header">Lastfm Login</h1>
           <div id="login-lastfm" class="option">
             
-            <div class="block">
-              <button class="small text" id="login-lastfm-perm">Authenticate</button>
-            </div>
-            <div id="status">
+            <button class="med" id="login">Authenticate</button>
+            <div>
                <div title="is logged in" class="icon-sm">
-                  <img id="ind" src="images/dot-err.png"/>
+                  <img id="indic" src="images/dot-err.png"/>
                </div>
-               <span class="small" id="status-text">successfully logged in</span>
+               <span class="small" id="status">successfully logged in</span>
             </div>
 
           </div>

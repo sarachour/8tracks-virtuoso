@@ -185,16 +185,9 @@ chrome.extension.onMessage.addListener(
           var data = request.data;
           var status = request.status;
           if(request.type == "8tracks"){
-            console.log("logging in");
             if(data != null){
-              $("#login-indicator").attr("src", "images/dot-ok.png");
-              $("#login-page").fadeOut(200);
               if(userInterface.data == null)
                 userInterface.sync();
-            }
-            else{
-              console.log("Error", status);
-              $("#login-status").html(status.responseJSON.errors);
             }
           }
         }
@@ -208,82 +201,23 @@ function doSetup(){
   searchController.setup();
 }
 
-function ShowLogin(){
-  $('#login-page').fadeIn(200);
-  
-}
+
 function ShowSearch(){
   $('#search-page').fadeIn(200);
   
 }
-function SetupLogin(){
-  $("#login-page").click(function(e){
-    if(e.target !== this)
-      return;
-    $("#login-page").fadeOut(200);
-  })
-  $("#player_log_in").click(function(){
-    var uname = $('#login_username').val();
-    var pass = $('#login_password').val();
-    var that = this;
-    if(uname == "" || pass == ""){
-      $("#login-status").html("Login failed: username or password is blank.");
-      return;
-    }
-    chrome.extension.sendMessage({
-        action: "login", 
-        type: "8tracks", 
-        username: uname, 
-        password:pass
-      })
-  });
-  $('#login-back').click(function(){
-      $("#login-page").fadeOut(200);
-  })
-  $('#login-lastfm-perm').click(function(){
-      chrome.extension.sendMessage({
-        action: "login", 
-        type: "lastfm",
-        stage: "auth"
-      }, 
-      function(d, e){
-        alert("logged in")
-        console.log(d,e);
-      }
-    );
-  })
-  if(lastFm.isLoggedIn()){
-    $('#login-lastfm-perm').addClass('green-button');
-    $("#login-lastfm-indicator").attr("src", "images/dot-ok.png");
-  }
-  else{
-    $('#login-lastfm-perm').addClass('red-button');
-  }
-  var pon = $("#enable_pause_on_idle");
-  pon.change(function(){
-    var newv = pon.is(':checked');
-    console.log("change to:",newv);
-    chrome.extension.sendMessage({action: "set-idle", value: newv})
-  })
-  chrome.extension.sendMessage({action: "get-idle"}, function(v){
-    pon.prop('checked', v);
-  })
 
-  
-}
 function SetupLayout(){
   $('#player').layout({resize:false});
   $('#player-controls').layout({resize:false});
   $('#search-page-results').layout();
 
-  $('.login-overlay, .search-overlay').layout({resize: false})
+  $('.search-overlay').layout({resize: false})
   $('.search-overlay').hide();
   $('#player_volume_controls').hide();
-  if(localStorage.hasOwnProperty("user_token")){
-    $('#login-page').hide();
-    $("#login-indicator").attr("src", "images/dot-ok.png");
-  }
-  else{
+
+  if(localStorage.hasOwnProperty("user_token") == false){
+    // TODO: Open Settings
     chrome.extension.sendMessage({action: "login", type: "8tracks", username: null, password:null})
   }
 
@@ -353,9 +287,6 @@ function SetupPlayer(){
     $("#player_sync").click(function(){
       userInterface.sync();
     })
-    $("#player_login").click(function(){
-      ShowLogin();
-    })
     $("#player_next_mix").click(function(){
       chrome.extension.sendMessage({action: "next-mix"})
     })
@@ -396,7 +327,6 @@ function SetupPlayer(){
 document.addEventListener('DOMContentLoaded', function() {
   SetupLayout();
   SetupPlayer();  
-  SetupLogin();
   SetupSearch();
   userInterface.updateView();
 })
