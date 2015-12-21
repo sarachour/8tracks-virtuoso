@@ -1,18 +1,24 @@
+
+
 function Toast (){
 	this.waitTime = 5000;
+	this.disabled = false;
 	this.nextTrack = function(){
+		if(this.disabled) return;
 		var ic = "images/ffwd-track.png"
 		var not = new Notification("Next Track", 
 		   {icon: ic, //"images/play.png"
 			body: "skipping to the next track.", 
 		});
 		var that = this;
+
 		not.onshow = function() {
 			setTimeout(function() {not.close();}, that.waitTime);
 			//setTimeout(not.close, 1500) 
 		}
 	}
 	this.nextMix = function(){
+		if(this.disabled) return;
 		var ic = "images/ffwd-mix.png"
 		var not = new Notification("Next Mix", 
 		   {icon: ic, //"images/play.png"
@@ -25,6 +31,7 @@ function Toast (){
 		}
 	}
 	this.pause = function(cover_url){
+		if(this.disabled) return;
 		var desc = ""
 		var ic = cover_url
 		var not = new Notification("Track Paused", 
@@ -39,6 +46,7 @@ function Toast (){
 		}
 	}
 	this.resume = function(cover_url){
+		if(this.disabled) return;
 		var desc = ""
 		var ic = cover_url
 		var not = new Notification("Track Resumed", 
@@ -53,6 +61,7 @@ function Toast (){
 		}
 	}
 	this.favorite = function(cover_url, liked, trackname, trackartist){
+		if(this.disabled) return;
 		var desc = "unfavorited track"
 		var ic = "images/star.png"
 		if(liked){
@@ -72,6 +81,7 @@ function Toast (){
 		}
 	}
 	this.like = function(cover_url, liked, mixname){
+		if(this.disabled) return;
 		var desc = "unliked mix"
 		var ic = "images/heart.png"
 		if(liked){
@@ -92,6 +102,7 @@ function Toast (){
 
 	}
 	this.error = function(status, message){
+		if(this.disabled) return;
 		var not = new Notification(status, 
 		   {icon: "images/error.png", //"images/play.png"
 			body: message, 
@@ -107,6 +118,7 @@ function Toast (){
 	}
 
 	this.track = function(icon, track, artist){
+		if(this.disabled) return;
 		var not = new Notification(track, 
 		   {icon: icon, //"images/play.png"
 			body: artist, 
@@ -124,22 +136,73 @@ function Toast (){
 }
 toast = new Toast();
 
+
 function MusicPlayer(){
+	this.init_prefs = function(){
+		var that = this;
+		if(localStorage.hasOwnProperty("preferences")){
+			this.default_pref = localStorage["preferences"];
+		}
+		else{
+			this.default_pref = {};
+			this.default_pref["idle-pause"] = false;
+			this.default_pref["toast-notify"] = true;
+			this.default_pref["time-to-wait"] = 180;
+			this.default_pref["is-casting"] = false;
+			localStorage["preferences"] = this.default_pref;
+		}
+	   
+	   this.prefs = {};
+	   this.prefs["idle-pause"] = {};
+	   this.prefs["idle-pause"].val = this.default_pref["idle-pause"];
+	   this.prefs["idle-pause"].set_val = function(x){
+	   	that.pause_on_idle = x;
+	   };
+
+	   this.prefs["toast-notify"] = {};
+	   this.prefs["toast-notify"].val = this.default_pref["toast-notify"];
+	   this.prefs["toast-notify"].set_val = function(x){
+	   	toast.disabled = !x
+	   };
+
+	   this.prefs["is-casting"] = {};
+	   this.prefs["is-casting"].val = this.default_pref["is-casting"];
+	   this.prefs["is-casting"].set_val = function(x){
+	   	that.is_casting = x;
+	   }
+
+	   this.prefs["time-to-wait"] = {};
+	   this.prefs["time-to-wait"].val = this.default_pref["time-to-wait"];
+	   this.prefs["time-to-wait"].set_val = function(x){
+	   	chrome.idle.setDetectionInterval(x);
+	   }
+
+	   for(k in this.prefs){
+	   	this.prefs[k].set_val(this.prefs[k].val)
+	   }
+	   
+
+	}
+
 	this.init = function(){
 		this.player = new Player();
 	   this.track_info = null;
 	   this.mix_info = null;
 	   this.idle_pause = this.is_paused = false;
-	   this.pause_on_idle = true;
-	   this.is_casting = false;
+
+	   this.init_prefs();
 	   this.playlist = new Playlist("persist_playlist", true);
 	   var that = this;
 
-	   var time_to_wait = 60*3;
-	   chrome.idle.setDetectionInterval(time_to_wait);
-
 	   chrome.idle.onStateChanged.addListener(function(kind){
 	   	//is not paused and is presently not idle.
+	   	if(kind == "active"){
+	   		toast.disabled = false;
+	   	}
+	   	else {
+	   		toast.disabled = !this.get_pref("toast_notify");
+	   	}
+
 	   	if(that.is_paused == false && that.idle_pause == false && 
 	   		(kind == "locked" || (kind == "idle" && that.pause_on_idle) )
 	   		){
@@ -239,11 +302,11 @@ function MusicPlayer(){
 			  else if(request.action == "resume"){
 			  		that.resume();
 			  }
-			  else if(request.action == "set-idle"){
-			  		that.pause_on_idle = request.value;
+			  else if(request.action == "set-pref"){
+			  		sendResponse(that.set_pref(request.key, request.value));
 			  }
-			  else if(request.action == "get-idle"){
-			  		sendResponse(that.pause_on_idle);
+			  else if(request.action == "get-prefs"){
+			  		sendResponse(that.get_prefs());
 			  }
 			  else if(request.action == "pause"){
 			  		that.pause();
@@ -295,6 +358,29 @@ function MusicPlayer(){
 		        that.nextTrack();
 		   });
 	}
+	this.get_pref = function(k){
+		return this.prefs[k].val;
+	}
+	this.get_prefs = function(){
+		var ps = {};
+		for(p in this.prefs){
+			ps[p] = this.prefs[p].val;
+		}
+		return ps;
+	}
+	this.set_pref = function(k,v){
+		if(k in this.prefs){
+			this.prefs[k].val = v;
+			this.prefs[k].set_val(v);
+			/* save local copy of preferences. */
+			localStorage["preferences"] = this.get_prefs();
+			return {status:"success"};
+		}
+		else {
+			return {status:"failure", msg:"preference doesn't exist."}
+		}
+	}
+
 	this.cast = function(obj){
 		this.is_casting = !this.is_casting;
 		if(this.is_casting){

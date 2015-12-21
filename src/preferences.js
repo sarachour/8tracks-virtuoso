@@ -113,6 +113,63 @@ function SetupLogin(){
 }
 
 function SetupGeneral(){
+    var map = {
+        to: {"#idlepause":"idle-pause", "#toastnot":"toast-notify"},
+        from: {}
+    }
+    for(k in map.to){
+        map.from[map.to[k]] = k;
+    }
+    var handle_resp =  function(t,sm){
+        return function(x){
+            if(x.status == "success"){
+                disp_status(t, sm, "success")
+            }
+            else{
+                disp_status(t, x.message, "failure");
+            }
+        }
+    }
+    
+    var enabled = function(x){
+        if(x){return "enabled"}
+        else {return "disabled"}
+    }
+
+    var n = "#idlepause";
+    $("#isset",$(n)).change(function(){
+        var newv = $(this).is(':checked');
+        console.log(newv);
+        chrome.extension.sendMessage({action: "set-pref", value:newv, key:map.to[n]},
+            handle_resp("Updated Pause on Idle", "successfully "+enabled(newv)+" pause on idle")
+        )
+    })
+
+    var n = '#toastnot';
+    $("#isset",$(n)).change(function(){
+        var newv = $(this).is(':checked');
+        chrome.extension.sendMessage({action: "set-pref", value:newv, key:map.to[n]}, 
+            handle_resp("Updated Pause on Idle", "successfully "+enabled(newv)+" toast notifications")
+        )
+    })
+
+    var upd_pref = function(n,k,v){
+        /*update true or false*/
+        if(v == true || v == false){
+            $("#isset",$(n)).prop("checked",v)
+        }
+    }
+    chrome.extension.sendMessage({action: "get-prefs"}, function(v){
+        console.log("PREFS",v);
+        for(key in v){
+            if(key in map.from){
+                n = map.from[key];
+                var val = v[key];
+                upd_pref(n,key,val);
+            }
+        }
+    })
+
     /*
   var pon = $("#enable_pause_on_idle");
   pon.change(function(){
