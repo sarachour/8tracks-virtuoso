@@ -112,7 +112,11 @@ SearchController = function(){
         for(var i=0; i < mixes.length; i++){
           var nh = $("#search-element-template").clone();
           $("#name",nh).html(mixes[i].name);
-          $("#badge-icon", nh).attr('src',resource[mixes[i].certification]);
+          var cert = mixes[i].certification;
+          if(cert in resource == false){
+            cert = null;
+          }
+          $("#badge-icon", nh).attr('src',resource[cert]);
           $("#cover", nh).attr('src',mixes[i].cover_urls.sq100);
           $("#ntracks-text",nh).html(mixes[i].tracks_count);
           $("#nlikes-text",nh).html(mixes[i].plays_count);
@@ -188,6 +192,9 @@ chrome.extension.onMessage.addListener(
             if(data != null){
               if(userInterface.data == null)
                 userInterface.sync();
+            }
+            else {
+              $("#preferences").click();
             }
           }
         }
