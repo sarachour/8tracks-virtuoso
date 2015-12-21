@@ -69,50 +69,7 @@
   </div>
 </div>
 
-<div id='login-page' data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="login-overlay" >
-  <div class="north"></div>
-  <div class="center">
-    <div id="login-8tracks">
-      <div id="login-text-8tracks" class="text large white block">
-        <div title="is logged in" class="icon-med">
-            <img id="login-indicator" src="images/dot-err.png"/>
-         </div>
-         8Tracks Login
-      </div>
 
-      <div class="block">
-        <input class="text small" placeholder="username" type="text" id="login_username" name="username" />
-        <input class="text small" placeholder="password" type="password" id="login_password" name="password" />
-        <button class="text" id="player_log_in">Log In</button>
-      </div>
-    </div>
-
-    <div id="login-lastfm" class="dummy">
-      <div id="login-text-lastfm" class="text large white block">
-        <div title="is logged in" class="icon-med">
-            <img id="login-lastfm-indicator" src="images/dot-err.png"/>
-         </div>
-         LastFM Login
-      </div>
-      <div class="block">
-        <button class="small text" id="login-lastfm-perm">Authenticate</button>
-      </div>
-
-      <div id="pon" class="block">
-        <span><input id="enable_pause_on_idle" type="checkbox"></input>Pause when Idle</span>
-      </div>
-
-    </div>
-  </div>
-  <div id="login-status" class="south text medium">
-    Status info here.
-  </div>
-  
-  
-  <div id="login-back" title="return to player" style="position:absolute; top:10px;left:10px;" class="icon-med">
-    <img src="images/back-white.png"/>
-  </div>
-</div>
 
 <div id='player' data-layout='{"type": "border", "hgap": 8, "vgap": 3}' class="player-page">
   <div id='player-controls' class="north">
@@ -122,13 +79,10 @@
     <div title="cast" id="player_cast" class="dummy">
       <img src="images/chromecast-on.png"/>
     </div>
-    <div title="login" id="player_login" class="icon-sm" style="position:absolute; top:5px; right:30px;">
-      <img src="images/login.png"/>
-    </div>
     <div title="open manager" id="preferences" class="icon-sm" style="position:absolute; top:5px; right:10px;">
       <a href="preferences.html" target="_blank"><img src="images/cog.png"/></a>
     </div>  
-    <div title="open settings" id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:50px;">
+    <div title="open settings" id="player_settings" class="icon-sm" style="position:absolute; top:5px; right:30px;">
       <a href="options.html" target="_blank"><img src="images/record.png"/></a>
     </div>  
   </div>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head><title>8Tracks Player Preferences</title>
+
+<link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css" />
+<link rel="stylesheet" href="css/prefs-style.css" />
+
+
+<script src="lib/jquery-1.10.2.js"></script>
+<script src="lib/jquery-ui-1.10.4.min.js"></script>
+<script src="lib/hotkeys.js"></script>
+<script src="lib/fold_to_ascii.js"></script>
+
+<script src="lib/jlayout/jquery.sizes.js"></script>
+<script src="lib/jlayout/jlayout.border.js"></script>
+<script src="lib/jlayout/jquery.jlayout.js"></script>
+
+<script src="src/spotify.js"></script>
+<script src="src/8tracks.js"></script>
+<script src="src/preferences.js"></script>
+<textarea id="clipboard" style="display:none;" width="0%" height="0px">text here</textarea>
+
+</head>
+<body bgcolor="black">
+
+<div id="prefs" data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
+   <div class="north white huge text" style="text-align:left;">
+      <div class="title">8Tracks Virtuoso Preferences</div>
+   </div>
+
+   <div class="center" id="prefs" style="overflow:scroll;">
+      <div class="general view">
+         <h1 class="header">General Settings</h1>
+         <div class="option" id="toast">
+            <input type="checkbox"></input>
+            enable toast notifications 
+         </div>
+         <div class="option" id="idle">
+            <input type="checkbox"></input>
+            automatically pause on idle
+         </div>
+      </div>
+      <div class="login view">
+         <h1 class="header">8Tracks Login</h1>
+         <div id="login-8tracks" class="option">
+               
+              <div class="med">
+              Username 
+              </div>
+              <div>
+               <input class="text med" placeholder="username" type="text" id="login_username" name="username" /></div>
+              <div class="med">
+              Password 
+              </div>
+              <div>
+               <input class="text med" placeholder="password" type="password" id="login_password" name="password" /></div>
+              <button class="text med" id="player_log_in">Log In</button>
+              
+              <div id="status">
+                  <div title="is logged in" class="icon-sm">
+                     <img id="ind" src="images/dot-err.png"/>
+                  </div>
+                  <span class="small" id="status-text">successfully logged in</span>
+               </div>
+
+         </div>
+
+         <h1 class="header">Lastfm Login</h1>
+          <div id="login-lastfm" class="option">
+            
+            <div class="block">
+              <button class="small text" id="login-lastfm-perm">Authenticate</button>
+            </div>
+            <div id="status">
+               <div title="is logged in" class="icon-sm">
+                  <img id="ind" src="images/dot-err.png"/>
+               </div>
+               <span class="small" id="status-text">successfully logged in</span>
+            </div>
+
+          </div>
+
+      </div>
+      <div class="export view">
+         <h1 class="header">Export Data</h1>
+         <div id="to_spotify" class="option">To Spotify</div>
+         <div id="to_text" class="option ">To Text File</div>
+         
+      </div>
+
+   </div>
+   <div class="dummy">
+   <div class="west white small dummy" style="overflow-y:scroll; overflow-x:hidden;">
+      <div id="general" class="category">General</div>
+      <div id="login" class="category">Login</div>
+      <div id="export" class="category">Export</div>
+   </div>
+   </div>
+
+</div>
+
+</body>
+</html>

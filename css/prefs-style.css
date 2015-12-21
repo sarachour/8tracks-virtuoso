@@ -1,0 +1,294 @@
+*:focus {
+    outline: none;
+}
+
+div::-webkit-scrollbar {
+    border-radius: 10px;
+    width: 0.5em;
+    height: 0.5em;
+    background: rgba(20,20,20,0.1); 
+    opacity: 0.0;
+}
+div::-webkit-scrollbar:hover {
+    opacity: 0.3;
+}
+div::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(50,50,50); 
+    border-radius: 10px;
+    
+}
+div::-webkit-scrollbar-corner {
+    opacity: 0;
+}
+
+div::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 3px rgba(100,100,100, 0.3); 
+    background: rgba(250,250,250,0.5); 
+    
+}
+
+
+html, body {    
+    width: 100%;
+    height: 100%;
+    min-width: 400px;
+    min-height: 450px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+img {
+    max-width:100%; 
+    max-height:100%;
+    margin:auto;
+    display:block;
+    border:0px solid;
+}
+
+table {
+    margin:auto;
+    overflow:scroll;
+    border:none;
+}
+thead {
+    margin:auto;
+    overflow:hidden;
+    border:1px solid;
+    font-weight:bold;
+    font-size:16px;
+    color:white;
+}
+tbody {
+    margin:auto;
+    overflow:hidden;
+    border:1px solid;
+}
+input[type="text"], input[type="password"]{
+    margin-left:10px;
+    margin-right:10px;
+    border-radius: 5px;
+}
+
+.dummy{
+    display:none;
+}
+
+.view-overlay {
+    position:absolute;
+    background-color: rgba(0,0,0, 1);
+    top:0;
+    width:100%; 
+    height:100%;
+    z-index: 30;
+    word-wrap: break-word;
+    text-align:center;
+}
+
+::-moz-selection{
+    background-color:Transparent;
+    color:#000;
+}
+
+::selection {
+    background-color:rgba(0,0,0,0);
+    color:#000;
+}
+
+.selected {
+    border:3px solid #BBBB13;
+}
+
+.ul {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.ll {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+.ur {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.lr {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.wide {
+    width: 100%;
+}
+.centered {
+    position:absolute;
+    left: 50%;
+    top: 50%;
+}
+.header {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color:#DEDEDE;
+    font-size:16px;
+}
+.normal-button {
+    padding: 3px;
+    color:rgb(150,150,150);
+    background-color:rgba(0,0,0,0);
+    border:none;
+}
+.normal-button:hover{
+    color:white;
+}
+.normal-button:click{
+    color:yellow;
+}
+
+
+.toggle-button {
+    padding: 3px;
+    color:rgb(150,150,150);
+    background-color:rgba(0,0,0,0);
+    border:none;
+}
+.toggle-button.down {
+    padding: 3px;
+    color:rgb(150,150,255);
+    background-color:rgba(0,0,0,0);
+    border:none;
+}
+.toggle-button:hover{
+    color:white;
+}
+
+
+.icon-sm {
+    width:15px; 
+    display: inline-block;
+    height:15px;
+}
+
+.icon-med {
+    width:32px; 
+    display: inline-block;
+    height:32px;
+}
+
+.text-overlay{
+    background-color: rgba(10,10,10, 0.9);
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.layout-outer {
+    height: 100%;
+}
+
+
+.center, .east, .west, .north, .south {
+    background-color: rgb(0,0,0);
+    text-align: center;
+    display: inline-block;
+}
+
+.center{
+   background-color: #181818;
+   padding: 15px;
+}
+.west {
+    width: 10%;
+    z-index: 20;
+}
+.east {
+    width: 35%;
+    z-index: 20;
+}
+.south{
+    height: 5%;
+}
+.north{
+    height: 10%;
+}
+.black {
+    color:#222222;
+}
+.faint {
+    opacity:0.8;
+}
+.white{
+    color:#DEDEDE;
+}
+.urgent {
+    background-color:#418041;
+}
+
+.huge {
+    font-size: 24px;
+}
+.large {
+    font-size:16px;
+}
+.medium {
+    font-size:14px;
+}
+.small {
+    font-size:12px;
+}
+.text {
+    margin: auto; 
+    font-family:"Lucida Grande";
+    font-variant:small-caps;
+}
+.scrollable {
+    overflow: scroll;
+    height: 50%;
+
+}
+
+.hide {
+    display: none;
+}
+.view {
+    position: relative;
+    left: 33%;
+    width: 33%;
+}
+.title {
+    position: relative;
+    font-size: 2em;
+    left: 33%;
+}
+.option {
+    color: #DEDEDE;
+    font-size: 1.5em;
+    padding-top: 0.5em;
+    text-align:left;
+}
+.header {
+    color: #DEDEDE;
+    text-align:left;
+    font-size: 2.5em;
+    padding-top:0.8em;
+    padding-bottom: 0.2em;
+}
+.category {
+    font-size:1.5em;
+}
+
+#export-status {
+    position:absolute;
+    width:100%;
+    height:25%;
+    top:37%;
+    padding-top:5%;
+    text-align:center;
+    font-size:3em;
+    z-index:100;
+}
