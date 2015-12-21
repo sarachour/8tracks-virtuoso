@@ -23,6 +23,18 @@
 
 </head>
 <body bgcolor="black">
+<div id="mixes-hint" class="hint-page">
+	<h3>You Have Played no Mixes with Virtuoso</h3>
+	<div>Mixes are added to the Mix Manager when they have been played using Virtuoso.
+	Please listen to a few mixes before using the Mix Manager.</div>
+	<div>Once you have listened to a few mixes, you may do any of the following:</div>
+	<ul>
+	<li>Export selections of tracks to spotify / text file</li>
+	<li>Filter songs by artist or title keyword, starred, loved</li>
+	<li>Play mix, open tracks in 8tracks or purchase tracks</li>
+	</ul>
+</div>
+
 <div id="export-overlay" class="view-overlay">
 	<div id="export-container" class="normal-button" 
 		style="background-color:rgb(50,50,50); width:400px; height:200px;border-radius:10px;">
@@ -44,9 +56,28 @@
 	<div class="north white huge text" style="text-align:left;">
 		<div style="padding-left:20px;padding-top:5px;">Mix Manager</div>
 	</div>
-	<div id='mixes-results'class="center" style="position:absolute; top:0px; height:100%; width:100%; overflow:scroll;" data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
+
+	<div class="center" id="mixes-results" style="position:absolute; top:0px; height:100%; width:100%; overflow:scroll;"
+		data-layout='{"type": "flexGrid", "hgap": 3, "vgap": 3}'>
+
+
 	</div>
 	<div class="east" id="tracks-results" style="overflow:scroll;">
+		<div id="tracks-hint" class="hint-page">
+			<h3>You Have no Tracks Selected</h3>
+			<div> Select a Mix by:</div>
+			<ul>
+			<li>Clicking on an album to view the tracks.</li>
+			<li>Holding shift + click to select multiple albums</li>
+			<li>Press Ctrl+A to select all albums</li>
+			<li>Click outside albums to clear selection</li>
+			</ul>
+			<div> If you have selected mixes and don't see tracks:</div>
+			<ul>
+			<li> Ensure the applied filters are correct.</li>
+			</ul>
+		</div>
+
 		<table id="tracks-table" width="100%" class="text small white" style="width=100%;border=none;">
 		<thead>
 			<tr><td>track</td><td>artist</td><td>buy</td><td>url</td><td>star</td><td>spotify</td></tr>

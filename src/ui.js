@@ -190,11 +190,12 @@ chrome.extension.onMessage.addListener(
           var status = request.status;
           if(request.type == "8tracks"){
             if(data != null){
+              $("#login_prompt").hide();
               if(userInterface.data == null)
                 userInterface.sync();
             }
             else {
-              $("#preferences").click();
+              $("#login_prompt").show();
             }
           }
         }

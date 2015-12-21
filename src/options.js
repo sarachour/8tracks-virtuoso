@@ -315,6 +315,10 @@ function OptionsInterface(){
         });
 
     }
+    this.clearSelection = function(){
+        this.selector.clear();
+        this.updateTracklist();
+    }
     this.setClipboard = function(text, msg){
         $("#clipboard").css('display', 'block');
         $("#clipboard").text(text);
@@ -407,6 +411,7 @@ function OptionsInterface(){
         var selection = this.selector.getSelection();
         var grid = $("#tracks-table-body");
         grid.empty();
+        var nrows = 0;
         for(var artist in selection){
             for(var track in selection[artist]){
                 var info = selection[artist][track];
@@ -455,17 +460,25 @@ function OptionsInterface(){
                     .append($("<td>").html(starred_img))
                     .append($("<td>").html(spotify_img))
                     .data("track", selection[artist][track]);
+                    nrows += 1;
                     grid.append(row)
                     
                 }
             }
         }
-        that.filter.filterTracks();
+        if(nrows == 0 && $("#mixes-hint").is(':hidden')){
+            $("#tracks-hint").show();
+        }
+        else{
+            $("#tracks-hint").hide();
+            that.filter.filterTracks();
+        }
     }
 	this.updateGrid = function(){
         var grid = $("#mixes-results");
         grid.empty();
         var that = this;
+        var nmixes = 0;
         for(var mix in this.data){
             var cmix = this.data[mix];
             star_count=0;
@@ -540,12 +553,22 @@ function OptionsInterface(){
                 return function(){
                     that.selector.select(myelem);
                     that.updateTracklist();
+                    return false;
                 } 
               }(html_div));
             html_div.data("mix", cmix);
             grid.append(html_div);
+            nmixes += 1;
         }
-    
+        console.log(nmixes);
+        if(nmixes == 0){
+            $("#mixes-hint").show();
+            $("#tracks-results").hide();
+        }
+        else{
+            $("#mixes-hint").hide();
+            $("#tracks-results").show();
+        }
 
 	}
 	this.updateView = function(){
@@ -566,7 +589,10 @@ chrome.extension.onMessage.addListener(
 )
 
 function SetupLayout(){
-    $('#mixes-results').layout();
+    $('#mixes-results').layout().click(function(){
+        optionsInterface.clearSelection();
+        console.log("clearing...");
+    });
     var outerContainer = $('#options').layout({resize: false});
     function layout() {
         outerContainer.layout({resize: false});

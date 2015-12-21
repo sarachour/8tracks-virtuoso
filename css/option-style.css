@@ -301,6 +301,23 @@ input[type="text"], input[type="password"]{
 .result-text:hover {
     opacity:1;
 }
+
+.hint-page{
+    position:absolute;
+    background-color:black;
+    width:90%;
+    height:100%;
+    color:grey;
+    font-size:1.5em;
+    padding-top:5em;
+    padding:1em;
+    z-index:1000;
+    text-align:left;
+}
+#mixes-hint{
+   background-color: #181818;
+
+}
 #export-status {
     position:absolute;
     width:100%;
