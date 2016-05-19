@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>8Tracks Player Preferences</title>
+<head><title>8Tracks Mix Manager</title>
 
 <link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css" />
 <link rel="stylesheet" href="css/option-style.css" />
@@ -15,6 +15,10 @@
 <script src="lib/jlayout/jlayout.border.js"></script>
 <script src="lib/jlayout/jquery.jlayout.js"></script>
 
+<script src="src/util.js"></script>
+<script src="src/globals.js"></script>
+<script src="oauth/spotify_auth.js"></script>
+<script src="oauth/8tracks_auth.js"></script>
 <script src="src/spotify.js"></script>
 <script src="src/8tracks.js"></script>
 <script src="src/options.js"></script>
@@ -35,22 +39,86 @@
 	</ul>
 </div>
 
-<div id="export-overlay" class="view-overlay">
-	<div id="export-container" class="normal-button" 
-		style="background-color:rgb(50,50,50); width:400px; height:200px;border-radius:10px;">
-		<div style="height:10%;"></div>
-		<div class="text large white" style="padding:10px;"> choose how you want to copy the selection </div>
-		<button id="export-spotify" class="normal-button text large" style="width:60%; padding:10px; margin:5px;">
-			Copy to Spotify
-		</button><br>
-		<button id="export-text" class="normal-button text large" style="width:60%; padding:10px; margin:5px;">
-			Copy as PlainText
-		</button>
+<div id="export-spotify-overlay" class="view-overlay white">
+		<div class="text large spotify-element dialog-title"> 
+			Successfully exported the selected tracks to spotify. 
+		</div>
+		<div id="select-spotify" class="spotify-element section">
+			<div class="spotify-element row">
+				<span class="spotify-element update">+ <span id="ntracks">#</span> tracks</span>
+				<span class="spotify-element title">The Spotify-Select Playlist</span>
+				<button id="open" class="normal-button text large open spotify-element">
+					<img class="icon-sm" src="images/spotify-on.png"/>
+					View in Spotify
+				</button>
+			</div>
+			<div id="dups" class="spotify-element duplicate-info">
+				<span id="ndups">#</span> of the <span id="total">#</span> selected tracks were duplicates, and not exported.
+			</div>
+			<div class="spotify-element desc">
+			a playlist of the currently selected tracks.
+			</div>
+		</div>
+		<div id="session-spotify" class="spotify-element section">
+			<div class="spotify-element row">
+				<span class="spotify-element update">+ <span id="ntracks">#</span> tracks</span>
+				<span class="spotify-element title">The Spotify-Session Playlist</span>
+				<button id="open" class="normal-button text large open spotify-element" >
+					<img class="icon-sm" src="images/spotify-on.png"/>
+					View in Spotify
+				</button>
+			</div>
+			<div id="dups" class="spotify-element duplicate-info">
+				<span id="ndups">#</span> of the <span id="total">#</span> selected tracks were duplicates, and not exported.
+			</div>
+			<div class="spotify-element desc">
+			a playlist of the currently selected tracks.
+			</div>
+		</div>
+		<div id="all-spotify" class="spotify-element section">
+			<div class="spotify-element row">
+				<span class="spotify-element update">+ <span id="ntracks">#</span> tracks</span>
+				<span class="spotify-element title">The Spotify-All Playlist</span>
+				<button id="open" class="normal-button text large open spotify-element" >
+					<img class="icon-sm" src="images/spotify-on.png"/>
+					View in Spotify
+				</button>
+			</div>
+			<div id="dups" class="spotify-element duplicate-info">
+				<span id="ndups">#</span> of the <span id="total">#</span> selected tracks were duplicates, and not exported.
+			</div>
+			<div class="spotify-element desc">
+				a playlist of all the tracks ever exported from virtuoso.
+			</div>
+		</div>
 
-	</div>
+			<button id="close" class="view-overlay-element normal-button close">Close</button>
+		
 </div>
 
-<div id="export-status" class="white huge urgent"></div>
+
+<div id="export-plaintext-overlay" class="view-overlay white">
+	<div class="plaintext-element dialog-title"> 
+				Successfully exported <span class=" plaintext-element update"> <span id="ntracks">#</span> tracks </span>
+		to clipboard. 
+	</div>
+	<div class="plaintext-element row">
+		<div class="plaintext-element title"> 
+				Open a spreadsheet editor and paste (ctrl+p) into the spreadsheet to export the data. The list of tracks
+				below are the tracks you have exported. Click "copy" to copy the data to your clipboard.
+		</div>
+	</div>
+	<div id="copied_text" class="plaintext-element row copied">
+
+	</div>
+	<div class="plaintext-element row">
+		<button id="copy_button" class="plaintext-element huge normal-button">Copy to Clipboard</button>
+	</div>
+	<button id="close" class="view-overlay-element normal-button close">Close</button>
+</div>
+
+
+<div id="alert-status" class="white huge urgent"></div>
 
 <div id="options" data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="layout-outer">
 	<div class="north white huge text" style="text-align:left;">
@@ -117,6 +185,7 @@
 				<span class="wide">artist</span><br>
 			</div>
 		</div>
+		<button class="normal-button wide" id="select_all" title="select all mixes">Select All</button>
 		<div class="header wide text">Export</div>
 		<button class="normal-button wide" id="export-spotify-button" title="export to spotify">Export to Spotify</button>
 		<button class="normal-button wide" id="export-plaintext-button" title="export to tab delimited">Export to Tab-Delim</button>
@@ -127,6 +196,7 @@
 		<div id="dynamic">
 			<button class="dummy normal-button wide " id="template-button" title="TITLE">DUMMY</button>
 		</div>
+
 	</div>
 </div>
 

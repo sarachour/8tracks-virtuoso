@@ -15,9 +15,11 @@
 <script src="lib/jlayout/jlayout.border.js"></script>
 <script src="lib/jlayout/jquery.jlayout.js"></script>
 
-<script src="src/spotify.js"></script>
-<script src="src/lastfm.js"></script>
-<script src="src/8tracks.js"></script>
+
+<script src="src/util.js"></script>
+<script src="src/globals.js"></script>
+<script src="oauth/spotify_auth.js"></script>
+<script src="oauth/8tracks_auth.js"></script>
 <script src="src/preferences.js"></script>
 <textarea id="clipboard" style="display:none;" width="0%" height="0px">text here</textarea>
 
@@ -45,11 +47,17 @@
             enable toast notifications 
          </div>
          <div class="option">
+            <span id="autoplay">
+            <input id="isset" type="checkbox"></input>
+            <span> autoplay on browser start<span>
+            </span>
+            
+         </div>
+         <div class="option">
             <span id="idlepause">
             <input id="isset" type="checkbox"></input>
             <span> automatically pause on idle<span>
             </span>
-
             <span id="idlepausedur">
             <span>after</span>
             <input id="isval" type="number" min="15" max="3600"></input>
@@ -68,7 +76,8 @@
                   <div class="icon-large float-left"><img id="indic" src="images/dot-err.png"/></div>
                   <span id="text" class="float-left">awaiting response.</span>
               </div>
-              
+
+              <div id="login-panel">
               <div class="grp">
                 <div class="grp">
                 <div class="medium">Username </div>
@@ -86,32 +95,37 @@
                 </div>
                 </div>
 
-              <div><button class="normal-button fixed-button" id="login">Log In</button></div>
+                <div><button class="normal-button fixed-button" id="login">Login</button></div>
+                <div><button class="normal-button fixed-button" id="autologin">Auto-Login</button></div>
+              </div>
               
-              
+              <div id="logout-panel" class="dummy">
+                <div><button class="normal-button fixed-button" id="logout">Log Out</button></div>
+              </div>
 
          </div>
 
-         <div class="dummy">
-         <h1 class="header">Lastfm Login</h1>
-          <div id="login-lastfm" class="option">
-            
-            <button class="med" id="login">Authenticate</button>
-            <div>
-               <div title="is logged in" class="icon-sm">
-                  <img id="indic" src="images/dot-err.png"/>
-               </div>
-               <span class="small" id="status">successfully logged in</span>
+          <h1 class="header">Spotify Login</h1>
+          <div id="login-spotify" class="option">
+            <div class="medium" id="status">
+                  <div class="icon-large float-left"><img id="indic" src="images/dot-err.png"/></div>
+                  <span id="text" class="float-left">awaiting response.</span>
+              </div>
+            <div id="login-panel" >
+              <button class="normal-button fixed-button" id="login">Log In</button>
             </div>
 
+          <div id="logout-panel" class="dummy">
+              <div><button class="normal-button fixed-button" id="logout">Log Out</button></div>
           </div>
           </div>
-
+          
       </div>
       <div class="export view">
          <h1 class="header">
          <img class="icon-med " src="images/record.png"></img> Virtuoso Mix Manager
          </h1>
+         <div class="option">View previously played mixes, view and filter tracks, and export track lists to spotify using the mix manager.</div>
          <div class="option">
          <a href="options.html" target="_blank">
          <button class="normal-button wide" id="mixmgr">Open Mix Manager</button></a></div>

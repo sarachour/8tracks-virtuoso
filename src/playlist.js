@@ -7,6 +7,7 @@ function Playlist(name, isPersistant){
 		this.load();
 	}
 
+
 	this.save = function(){
 		if(this.isPersistant){
 			localStorage.setItem(this.name, JSON.stringify(this.data));
@@ -60,10 +61,11 @@ function Playlist(name, isPersistant){
 		if(!ldata[artist].hasOwnProperty(name)){
 			ldata[artist][name] = {};
 		}
+		var el = ldata[artist][name]
 		
 		for(var p in props){
 			if(props.hasOwnProperty(p)){
-				ldata[artist][name][p] = props[p];
+				el[p] = props[p];
 			}
 		}
 		if(this.isPersistant){
@@ -71,20 +73,22 @@ function Playlist(name, isPersistant){
 			ldata[artist]._IS_NEW = true;
 			ldata[artist][name]._IS_NEW = true;
 		}
+		return el
 	}
 	this.addMix = function(mix, props, callback){
 		this._insert_mix(mix, props);
 		if(callback != null) callback();
 	}
 	this.addTrack = function(mix, artist, name, props, callback){
-		this._insert_track(mix, artist, name, props)
+		insert_to = this._insert_track(mix, artist, name, props)
 		this.save();
 
 		var that = this;
 		this.spotify.search(artist, name, function(data){
-			if(data.tracks.length > 0){
-				var link = data.tracks[0].href;
-				that.data[mix].tracks[artist][name].spotify = {track_id: link};
+			if(data.tracks.items.length > 0){
+				var track = data.tracks.items[0]
+				var link = track.href;
+				insert_to.spotify = {track_url:track.href,track_id:track.id,track_uri:track.uri};
 				/*plist.spotify.createTrackset("8tracks", plist._getSpotify(plist.local), function(){});*/
 				that.save();
 			}
@@ -99,7 +103,7 @@ function Playlist(name, isPersistant){
 			for(var artist in data[mix].tracks){
 				for(var track in data[mix].tracks[artist]){
 					if(data[mix].tracks[artist][track].hasOwnProperty("spotify")){
-						playlist.push(data[artist][track].spotify.track_id);
+						playlist.push(data[artist][track].spotify);
 					}
 				}
 			}

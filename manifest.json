@@ -11,14 +11,20 @@
      "clipboardWrite",
      "notifications",
      "*://*/*",
-     "idle"
+     "idle",
+     "identity"
 	],
+  "web_accessible_resources": [
+    "oauth/spotify_auth.html"
+  ],
+  /*
   "content_scripts": [
     {
       "matches": ["http://www.last.fm/api/grantaccess"],
-      "js": ["src/lastfmAuth.js"]
+      "js": ["src/lastfm_auth.js"]
     }
   ],
+  */
   "commands" : {
     "next-track": {
       "suggested_key" : {
@@ -61,12 +67,22 @@
       "lib/jquery-1.10.2.js", 
       "lib/jquery.jplayer.js", 
       "lib/md5.js",
+      //oauth
+      "src/globals.js",
+      "oauth/8tracks_auth.js",
+      "oauth/spotify_auth.js",
+      // api hooks
+      "src/util.js", 
+      "src/globals.js", 
       "src/spotify.js", 
-      "src/playlist.js", 
       "src/8tracks.js", 
-      "src/lastfm.js", 
-      "src/player.js",
-      "src/musicplayer.js",
+      //"src/lastfm.js", 
+      // playlist
+      "src/playlist.js", 
+      // players
+      "src/player_model.js",
+      "src/player_toast.js",
+      "src/player_interface.js",
       "src/chromecast.js"
       ],
     "persistent": true

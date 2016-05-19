@@ -1,4 +1,9 @@
 
+var AUTHS = {}
+AUTHS.tracks8 = new Tracks8Auth(GLOBALS["8tracks-api-key"]);
+AUTHS.spotify = new SpotifyAuth(GLOBALS["spotify-api-key"],GLOBALS["spotify-api-secret"],GLOBALS["spotify-scope"])
+
+
 SearchController = function(){
   this.init = function(){
     this.loading = false;
@@ -59,7 +64,7 @@ SearchController = function(){
   }
   this.tag_searchbox = function(){
     var tag_cbk = function(term, cbk){
-      eightTracks.getTags(term, function(data){
+      tracks8.getTags(term, function(data){
         availableTags = [];
         for(var i=0; i< data.tag_cloud.tags.length; i++){
           var tag = data.tag_cloud.tags[i];
@@ -89,7 +94,7 @@ SearchController = function(){
     if(that.loading) return;
 
     that.loading = true;
-    eightTracks.search(this.type, this.term, this.sort, this.n, function(data){
+    tracks8.search(this.type, this.term, this.sort, this.n, function(data){
       if(data == null){
         that.loading = false;
         return;
@@ -185,20 +190,6 @@ chrome.extension.onMessage.addListener(
         if(request.action == "update"){
             userInterface.updateView();
         }
-        if(request.action == "login-client"){
-          var data = request.data;
-          var status = request.status;
-          if(request.type == "8tracks"){
-            if(data != null){
-              $("#login_prompt").hide();
-              if(userInterface.data == null)
-                userInterface.sync();
-            }
-            else {
-              $("#login_prompt").show();
-            }
-          }
-        }
         else{
           console.log("UNKNOWN REQUEST:", request);
         }
@@ -224,14 +215,7 @@ function SetupLayout(){
   $('.search-overlay').hide();
   $('#player_volume_controls').hide();
 
-  if(localStorage.hasOwnProperty("user_token") == false){
-    // TODO: Open Settings
-    chrome.extension.sendMessage({action: "login", type: "8tracks", username: null, password:null})
 
-  }
-  else {
-    $("#login_prompt").hide();
-  }
   $("#mixprompt_search").click(function(){
     ShowSearch();
   })
@@ -339,9 +323,15 @@ function SetupPlayer(){
       }
     });
 }
+function InitPlayer(){
+  if(AUTHS.tracks8.isLoggedIn()){
+    $("#login_prompt").hide();
+  }
+}
 document.addEventListener('DOMContentLoaded', function() {
   SetupLayout();
   SetupPlayer();  
   SetupSearch();
   userInterface.updateView();
+  InitPlayer();
 })

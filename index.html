@@ -14,9 +14,13 @@
   <script src="lib/jlayout/jquery.jlayout.js"></script>
 
   <script src="lib/md5.js"></script>
+  <script src="src/globals.js"></script>
+  <script src="oauth/8tracks_auth.js"></script>
+  <script src="oauth/spotify_auth.js"></script>
+
   <script src="src/8tracks.js"></script>
-  <script src="src/lastfm.js"></script>
-  <script src="src/userInterface.js"></script>
+
+  <script src="src/user_interface.js"></script>
   <script src="src/ui.js"></script>
 </head>
 <body>
@@ -43,6 +47,10 @@
   <div class="large"><span><a href="options.html" target="_blank"><img class="icon-med" src="images/record.png"/> 
   past mix in Virtuoso mix manager</a></span></div>
   </div>
+
+    <div title="open manager" id="preferences_prompt" class="icon-sm" style="position:absolute; top:5px; right:10px;">
+      <a href="preferences.html" target="_blank"><img src="images/cog.png"/></a>
+    </div>  
 </div>
 
 

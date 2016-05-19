@@ -1,142 +1,4 @@
 
-
-function Toast (){
-	this.waitTime = 5000;
-	this.disabled = false;
-	this.nextTrack = function(){
-		if(this.disabled) return;
-		var ic = "images/ffwd-track.png"
-		var not = new Notification("Next Track", 
-		   {icon: ic, //"images/play.png"
-			body: "skipping to the next track.", 
-		});
-		var that = this;
-
-		not.onshow = function() {
-			setTimeout(function() {not.close();}, that.waitTime);
-			//setTimeout(not.close, 1500) 
-		}
-	}
-	this.nextMix = function(){
-		if(this.disabled) return;
-		var ic = "images/ffwd-mix.png"
-		var not = new Notification("Next Mix", 
-		   {icon: ic, //"images/play.png"
-			body: "skipping to the next mix.", 
-		});
-		var that = this;
-		not.onshow = function() {
-			setTimeout(function() {not.close();}, that.waitTime);
-			//setTimeout(not.close, 1500) 
-		}
-	}
-	this.pause = function(cover_url){
-		if(this.disabled) return;
-		var desc = ""
-		var ic = cover_url
-		var not = new Notification("Track Paused", 
-		   {icon: ic,
-			body: desc
-			//tag: "ERROR"
-		});
-		var that = this;
-		not.onshow = function() {
-			setTimeout(function() {not.close();}, that.waitTime);
-			//setTimeout(not.close, 1500) 
-		}
-	}
-	this.resume = function(cover_url){
-		if(this.disabled) return;
-		var desc = ""
-		var ic = cover_url
-		var not = new Notification("Track Resumed", 
-		   {icon: ic,
-			body: desc
-			//tag: "ERROR"
-		});
-		var that = this;
-		not.onshow = function() {
-			setTimeout(function() {not.close();}, that.waitTime);
-			//setTimeout(not.close, 1500) 
-		}
-	}
-	this.favorite = function(cover_url, liked, trackname, trackartist){
-		if(this.disabled) return;
-		var desc = "unfavorited track"
-		var ic = "images/star.png"
-		if(liked){
-			desc = "favorited track"
-			ic = "images/star-on.png"
-		}
-		var not = new Notification(trackname, 
-		   {icon: ic, //"images/play.png"
-			body: trackartist, 
-			tag: "STAR"
-			//tag: "ERROR"
-		});
-		var that = this;
-		not.onshow = function() {
-			setTimeout(function() {not.close();}, that.waitTime);
-			//setTimeout(not.close, 1500) 
-		}
-	}
-	this.like = function(cover_url, liked, mixname){
-		if(this.disabled) return;
-		var desc = "unliked mix"
-		var ic = "images/heart.png"
-		if(liked){
-			desc = "liked mix"
-			ic = "images/heart-on.png"
-		}
-		var not = new Notification(mixname, 
-		   {icon: ic, //"images/play.png"
-			body: "", 
-			tag: "LIKE"
-			//tag: "ERROR"
-		});
-		var that = this;
-		not.onshow = function() {
-			setTimeout(function() {not.close();}, that.waitTime);
-			//setTimeout(not.close, 1500) 
-		}
-
-	}
-	this.error = function(status, message){
-		if(this.disabled) return;
-		var not = new Notification(status, 
-		   {icon: "images/error.png", //"images/play.png"
-			body: message, 
-			tag: message
-			//tag: "ERROR"
-		});
-		var that = this;
-		not.onshow = function() {
-			setTimeout(function() {not.close();}, that.waitTime);
-			//setTimeout(not.close, 1500) 
-		}
-
-	}
-
-	this.track = function(icon, track, artist){
-		if(this.disabled) return;
-		var not = new Notification(track, 
-		   {icon: icon, //"images/play.png"
-			body: artist, 
-			//tag: "TRACK"
-		});
-		var that = this;
-		not.onshow = function() {
-			setTimeout(function() {not.close();}, that.waitTime);
-			//setTimeout(not.close, 1500) 
-		}
-	}
-
-
-
-}
-toast = new Toast();
-
-
 function MusicPlayer(){
 	this.init_prefs = function(){
 		var that = this;
@@ -146,14 +8,23 @@ function MusicPlayer(){
 		else{
 			this.default_pref = {};
 			this.default_pref["idle-pause"] = false;
+			this.default_pref["autoplay"] = false;
 			this.default_pref["toast-notify"] = true;
 			this.default_pref["time-to-wait"] = 180;
 			this.default_pref["is-casting"] = false;
-			this.default_pref["8tracks-user"] = null
 			this.default_pref["curr-mix"] = {id:null, smart_id:null}
 			var str = JSON.stringify(this.default_pref);
 			localStorage["prefs"] = str;
 		}
+
+		this.prefs = {};
+	   this.prefs["autoplay"] = {};
+	   this.prefs["autoplay"].val = this.default_pref["autoplay"];
+	   this.prefs["autoplay"].set_val = function(x){
+	   	that.autoplay = x;
+	   };
+
+
 	   this.prefs = {};
 	   this.prefs["idle-pause"] = {};
 	   this.prefs["idle-pause"].val = this.default_pref["idle-pause"];
@@ -186,12 +57,6 @@ function MusicPlayer(){
 	   		(that.curr_mix_id != x.id || that.smart_mix_id != x.smart_id)) {
 	   		that.mix(x.id, x.smart_id);
 	   	}
-	   }
-
-	   this.prefs["8tracks-user"] = {};
-	   this.prefs["8tracks-user"].val = this.default_pref["8tracks-user"];
-	   this.prefs["8tracks-user"].set_val = function(x){
-
 	   }
 
 	   for(k in this.prefs){
@@ -241,7 +106,7 @@ function MusicPlayer(){
                console.log("     ", that.player[0].error);
                console.log(that.player[0].src);
                toast.error("Playback Error", "the streaming link is broken.")
-               eightTracks.reportError(that.track_info.id, function(){
+               tracks8.reportError(that.track_info.id, function(){
                		that.nextTrack();
                })
 		})
@@ -302,9 +167,7 @@ function MusicPlayer(){
 			}
 		});
 
-		eightTracks.createPlaybackStream(function(data){
-			console.log("created playback stream.");
-		});
+		
 		chrome.extension.onMessage.addListener(
 		  function(request, sender, sendResponse) {
 			  if(request.action == "play"){
@@ -312,9 +175,6 @@ function MusicPlayer(){
 			  }
 			  else if(request.action == "cast"){
 			  		that.cast(request);
-			  }
-			  else if(request.action == "login"){
-			  		that.login(request);
 			  }
 			  else if(request.action == "resume"){
 			  		that.resume();
@@ -395,10 +255,10 @@ function MusicPlayer(){
 			this.prefs[k].set_val(v);
 			/* save local copy of preferences. */
 			localStorage["prefs"] = JSON.stringify(this.get_prefs());
-			return {status:"success"};
+			return {action:"set-pref-status",status:"success"};
 		}
 		else {
-			return {status:"failure", msg:"preference doesn't exist."}
+			return {action:"set-pref-status",status:"failure", msg:"preference doesn't exist."}
 		}
 	}
 
@@ -409,61 +269,8 @@ function MusicPlayer(){
 		}
 		console.log("cast",this.is_casting);
 	}
-	this.set_user = function(name,email,icon){
-		this.set_pref("8tracks-user", {name:name,email:email,icon:icon});
-	}
 
-	this.login = function(info){
-		if(info.type == "lastfm"){
-			if(info.stage == "auth"){
-				lastFm.auth(function(data, status){
-					chrome.extension.sendMessage({
-						action: "login-client", 
-						type:"lastfm",
-						stage:"auth",
-						data:data, 
-						status:status});
-				});
-			}
-			else if(info.stage == "session"){
-				lastFm.session(function(data, status){
-					chrome.extension.sendMessage({
-						action: "login-client", 
-						type:"lastfm",
-						stage:"session",
-						data:data, 
-						status:status});
-				});
-			}
-		}
-		else if(info.type == "8tracks"){
-			var username = info.username;
-			var passwd = info.password;
-			var that = this;
-			eightTracks.login(username, passwd, function(data, status){
-				console.log(data,status);
-				if(data != null){
-					var user = data.user.login;
-					var icon = data.user.avatar_urls.sq56;
-					var email = data.user.email;
 
-					that.set_user(user,email,icon);
-					eightTracks.createPlaybackStream(function(data, status){
-						if(data != null){
-							chrome.extension.sendMessage({action: "login-client", message:"success",user:user, icon:icon, email:email, type:"8tracks", "data":data, "status":status});
-						}
-						else {
-							chrome.extension.sendMessage({action: "login-client", message:"logged-in",user:user, icon:icon, email:email, type:"8tracks", "data":data, "status":status});
-						}
-					});
-				}
-				else{
-					chrome.extension.sendMessage({action: "login-client", message:"failed to login",type:"8tracks", data:data, status:status});
-				}
-			});
-
-		}
-	}
 	this.getTrackInfo = function(){
 		if(this.mix_info == null || this.track_info == null){
 			return null;
@@ -523,17 +330,10 @@ function MusicPlayer(){
 			"\'"+this.track_info.name+"\' by "+ this.track_info.performer);
 		this.play(this.track_info.track_file_stream_url );
 		this.UPDATE_TRACK_INFO();
-		if(lastFm.isLoggedIn()){
-			if(this.track_info.faved_by_current_user){
-				lastFm.love(this.track_info.name, this.track_info.performer, function(data, status){
-
-				});
-			}
-			
-		}
 		if(this.is_casting){ // cast next track.
 			chromeCaster.play({mix:this.mix_info, track:this.track_info});
 		}
+		
 		
 	}
 	this.UPDATE_TRACK_INFO = function(){
@@ -545,7 +345,7 @@ function MusicPlayer(){
 	this.nextMix = function(){
 		var that = this;
 
-		eightTracks.playNextMix(that.mix_info.id, that.smart_mix_id, function(mixdata, data, e){
+		tracks8.playNextMix(that.mix_info.id, that.smart_mix_id, function(mixdata, data, e){
 			if(mixdata == null || data == null){
 				that.reportError(e);
 				return;
@@ -566,10 +366,10 @@ function MusicPlayer(){
 		this.curr_mix_id = mixid;
 		that.set_pref("curr-mix",{smart_id:smartmixid, id:mixid})
 		
-		eightTracks.getMix(mixid, function(data, e){
+		tracks8.getMix(mixid, function(data, e){
 			if(data != null){
 				that.SET_MIX_INFO(data.mix);
-				eightTracks.playMix(mixid, function(data, e){
+				tracks8.playMix(mixid, function(data, e){
 					if(data != null){
 						console.log(data);
 						that.SET_TRACK_INFO(data.set, data.set.track);
@@ -587,7 +387,7 @@ function MusicPlayer(){
 	}
 	this.skip = function(){
 		var that = this;
-		eightTracks.skipTrack(this.mix_info.id, function(data, e){
+		tracks8.skipTrack(this.mix_info.id, function(data, e){
 			if(data != null){
 				that.SET_TRACK_INFO(data.set, data.set.track);
 			}
@@ -608,7 +408,7 @@ function MusicPlayer(){
 	}
 	this.likeMix = function(){
 		var that = this;
-		eightTracks.likeMix(that.mix_info.id, function(data){
+		tracks8.likeMix(that.mix_info.id, function(data){
 			that.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
 			that.UPDATE_MIX_INFO();
 		});
@@ -616,7 +416,7 @@ function MusicPlayer(){
 	}
 	this.unlikeMix = function(){
 		var that = this;
-		eightTracks.unlikeMix(that.mix_info.id, function(data){
+		tracks8.unlikeMix(that.mix_info.id, function(data){
 			that.mix_info.liked_by_current_user = data.mix.liked_by_current_user;
 			that.UPDATE_MIX_INFO();
 		});
@@ -624,35 +424,25 @@ function MusicPlayer(){
 	}
 	this.favoriteTrack = function(){
 		var that = this;
-		eightTracks.favoriteTrack(that.track_info.id, function(data){
+		tracks8.favoriteTrack(that.track_info.id, function(data){
 			that.track_info.faved_by_current_user = data.track.faved_by_current_user;
 			that.UPDATE_TRACK_INFO();
 
 		})
-		if(lastFm.isLoggedIn()){
-			lastFm.love(this.track_info.name, this.track_info.performer, function(data, status){
-
-			});
-		}
 	}
 	this.unfavoriteTrack = function(){
 		var that = this;
-		eightTracks.unfavoriteTrack(that.track_info.id, function(data){
+		tracks8.unfavoriteTrack(that.track_info.id, function(data){
 			that.track_info.faved_by_current_user = data.track.faved_by_current_user;
 			that.UPDATE_TRACK_INFO();
 
 		})
-		if(lastFm.isLoggedIn()){
-			lastFm.unlove(this.track_info.name, this.track_info.performer, function(data, status){
-
-			});
-		}
 	}
 	this.nextTrack = function(){
 		var that = this;
 		if(this.isWellPlayed()){
 			//report if song has been played
-			eightTracks.report(that.mix_info.id, that.track_info.id, function(data, status){
+			tracks8.report(that.mix_info.id, that.track_info.id, function(data, status){
 				if(data != null){
 					console.log("REPORT: ", data);
 				}
@@ -660,14 +450,9 @@ function MusicPlayer(){
 					console.log("REPORT ERROR: ", data)
 				}
 			});
-			if(lastFm.isLoggedIn()){
-				lastFm.scrobble(that.track_info.name, that.track_info.performer, function(data, status){
-
-				});
-			}
 		}
 		if(that.other_info.isEnd == true || that.other_info.isLastTrack == true){
-			eightTracks.playNextMix(that.mix_info.id, that.smart_mix_id, function(mixdata, data, e){
+			tracks8.playNextMix(that.mix_info.id, that.smart_mix_id, function(mixdata, data, e){
 				that.SET_MIX_INFO(mixdata.next_mix);
 				if(data != null  && data.set.track.hasOwnProperty("track_file_stream_url")){
 					that.SET_TRACK_INFO(data.set, data.set.track);
@@ -681,7 +466,7 @@ function MusicPlayer(){
 			});
 		}
 		else{
-			eightTracks.nextTrack(this.mix_info.id, this.smart_mix_id, function(data, e){
+			tracks8.nextTrack(this.mix_info.id, this.smart_mix_id, function(data, e){
 				if(data != null && data.set.track.hasOwnProperty("track_file_stream_url")){
 					that.SET_TRACK_INFO(data.set, data.set.track);
 				}

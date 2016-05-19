@@ -4,6 +4,7 @@ function Filter(){
     this.FILTER_STARRED = false;
     this.FILTER_RECENT = false;
     this.FILTER_KEYWORD = false;
+    this.FILTER_NONE = false;
     this.FILTER_TRACK_KEYWORD = false;
     this.FILTER_KEYWORD_PROPS = {
         keyword: "", 
@@ -15,7 +16,9 @@ function Filter(){
         onTrackTitle: true,
         onTrackArtist: true
     };
-
+    this.setFilterNone = function(v){
+        this.FILTER_NONE = v;
+    }
     this.setFilterLiked = function(filterLiked){
         this.FILTER_LIKED = filterLiked;
         this.filter();
@@ -95,6 +98,9 @@ function Filter(){
                 }
             }
         }
+        if(this.FILTER_NONE){
+            return true;
+        }
         if(( (this.FILTER_STARRED && star_count > 0)  || !this.FILTER_STARRED) && 
                ((this.FILTER_LIKED && cmix.liked_by_current_user) || !this.FILTER_LIKED) &&
                ((this.FILTER_RECENT && cmix._IS_NEW) || !this.FILTER_RECENT) &&
@@ -105,6 +111,9 @@ function Filter(){
             return false;
     }
     this.filterTrack = function(tr){
+        if(this.FILTER_NONE){
+            return true;
+        }
         if(
             ((this.FILTER_STARRED && tr.faved_by_current_user) || !this.FILTER_STARRED)&&
             ((this.FILTER_RECENT && tr._IS_NEW) || !this.FILTER_RECENT) &&
@@ -262,6 +271,31 @@ function Selector(){
     
 }
 
+var AlertHandler = function(){
+
+
+    this._display = function(msg){
+        this.rt = $("#alert-status")
+        this.rt.fadeIn(300);
+        var that = this;
+        this.rt.html(msg).click(function(){
+            that.rt.fadeOut(500);
+        });
+        setTimeout(function(){
+            that.rt.fadeOut(500);
+        },5000)
+    }
+    this.status =function(msg){
+        this.rt = $("#alert-status").addClass("status").removeClass("error")
+        this._display(msg);
+    }
+    this.error =function(error){
+        this.rt = $("#alert-status").removeClass("status").addClass("error")
+        this._display(error);
+    }
+}
+var alerts = new AlertHandler();
+
 
 function GridInputHandler(selector){
     this.selector = selector;
@@ -276,6 +310,7 @@ function GridInputHandler(selector){
     $(document).bind('keydown', 'ctrl+a meta+a', function(){
         that.selector.selectPattern(".result");
         optionsInterface.updateTracklist();
+        return false;
     });
     $(document).bind('keydown', 'ctrl+c meta+c', function(){
         $("#export-status").hide();
@@ -287,28 +322,215 @@ function GridInputHandler(selector){
     
 }
 
-function displayMessage(msg){
-    $("#export-status").fadeIn(300);
-    $("#export-status").html(msg).click(function(){
-        $("#export-status").fadeOut(500);
-    });
-    setTimeout(function(){
-        $("#export-status").fadeOut(500);
-    },5000)
-    $("#clipboard").css('display', 'none');
+
+
+function SpotifyExporter(){
+    this.init = function(){
+        this.select = "8tracks-select";
+        this.session = "8tracks-session";
+        this.all = "8tracks-all";
+        this.spotify = new Spotify();
+        this.playlist_ids = null;
+        this.storage_key = "option.html$spotify_playlist_ids";
+        this.user_key = "option.html$spotify_username";
+        this.load_playlist_ids();
+        this.SESSION_CLEARED = false;
+        if(this.spotify.oauth.isLoggedIn()){
+            this.get_playlists(function(){})
+        }
+
+    }
+    this.refresh_tracks = function(keys){
+
+    }
+    this.refresh_all_tracks = function(){
+        this.refresh_tracks([this.select,this.session,this.all])
+    }
+    this.save_playlist_ids = function(){
+        localStorage[this.storage_key] = JSON.stringify(this.playlist_ids);
+        localStorage[this.user_key] = this.spotify.oauth.getUserInfo().user;
+    }
+    this.load_playlist_ids = function(){
+        if(this.spotify.oauth.isLoggedIn() && 
+            this.user_key in localStorage &&
+            this.storage_key in localStorage &&
+            this.spotify.oauth.getUserInfo().user == localStorage[this.user_key]){
+
+            this.playlist_ids = JSON.parse(localStorage[this.storage_key]);
+
+        }
+        else {
+            localStorage.removeItem(this.storage_key)
+            localStorage.removeItem(this.user_key)
+        }
+    }
+    this.get_playlists = function(cbk){
+        if(this._PENDING || this.playlist_ids != null){
+            return;
+        }
+        var that = this;
+        var playlist_ids = {};
+        playlist_ids[this.select] = null;
+        playlist_ids[this.session] = null;
+        playlist_ids[this.all] = null;
+        this._PENDING = true;
+        var upd = function(pl,id){
+            if(pl.name == id){
+                playlist_ids[id] = {};
+                playlist_ids[id].id = pl.id;
+                playlist_ids[id].href = pl.href;
+                playlist_ids[id].uri = pl.uri;
+                playlist_ids[id].name = pl.name;
+                console.log("found-id",id)
+                return 1;
+            }
+            return 0;
+        }
+
+        if(this.spotify.oauth.isLoggedIn() == false){
+            alerts.error("Virtuoso cannot retrieve Spotify playlists. "+
+                "Please log in via the <a href='preferences.html' target='_blank'>preferences</a> page.");
+            return;
+        }
+
+        this.spotify.getPlaylists(function(lists){
+            var N_FOUND = 0;
+            console.log("playlists",lists)
+            for(idx in lists){
+                var pl = lists[idx];
+                
+                N_FOUND += upd(pl,that.select);
+                N_FOUND += upd(pl,that.all);
+                N_FOUND += upd(pl,that.session);
+            }
+            var N_TO_CREATE = 3-N_FOUND;
+            var N_CREATED = 0;
+            console.log("need to create",N_TO_CREATE)
+            for(id in playlist_ids){
+                if(playlist_ids[id] == null){
+                    console.log("create",id);
+                    that.spotify.makePlaylist(id,function(id){return function(data,error){
+                        if(data == null){
+                            cbk(null,error);
+                            return;
+                        }
+                        upd(data,id);
+                        N_CREATED += 1;
+                        if(N_CREATED == N_TO_CREATE){
+                            that.playlist_ids = playlist_ids;
+                            that._PENDING = false;
+                            cbk(data);
+                        }
+                    }}(id))
+                }
+            }
+            if(N_TO_CREATE <= 0){
+                console.log("done creating.. setting property.");
+                that.playlist_ids = playlist_ids;
+                that.save_playlist_ids();
+                cbk();
+            }
+        })
+    }
+    this.export = function(tracklist,cbk){
+        var that = this;
+        if(this.spotify.oauth.isLoggedIn() == false){
+            alerts.error("Virtuoso cannot retrieve Spotify playlists. "+
+                "Please log in via the <a href='preferences.html' target='_blank'>preferences</a> page.");
+            return;
+        }
+        if(this.playlist_ids == null){
+            var msg = "Export Failed. Virtuoso is still retrieving playlists from spotify."
+            alerts.error(msg)
+            this.get_playlists(function(){
+                alerts.status("Successfully loaded playlists from Spotify.");
+            })
+        }
+        else{
+            var exists_in = function(v,array){
+                for(idx in array){
+                    var el = array[idx];
+                    if(v == el.track.uri){
+                        return true;
+                    }
+                }
+                return false;
+            }
+            var difference = function(tracklist,tracks){
+                var to_add = [];
+                for(idx in tracklist){
+                    var track = tracklist[idx];
+                    if(!exists_in(track,tracks)){
+                        to_add.push(track)
+                    }
+                }
+                return to_add;
+            }
+            var add_new = function(kind,playlist,tracklist,tracks,err){
+                var to_add = difference(tracklist,tracks);
+                var dups = tracklist.length - to_add.length;
+                if(to_add.length == 0){
+                    cbk({kind:kind,playlist:playlist,tracks:to_add,
+                        dups:dups,
+                        total:tracklist.length,
+                        tracklist:tracks,"data":null},err)
+                    return;
+                }
+
+                that.spotify.addTracksToPlaylist(playlist.id, to_add, function(data,err){
+                    cbk({kind:kind,playlist:playlist,tracks:to_add,
+                        dups:dups,total:tracklist.length,tracklist:tracks,"data":null},err)
+                })
+            }
+            var replace_tracks = function(kind,playlist,tracklist){
+                that.spotify.replaceTracksInPlaylist(playlist.id,tracklist, function(data,err){
+                    cbk({kind:kind,playlist:playlist,tracks:tracklist,tracklist:tracklist,"data":data},err)
+                })
+            };
+                
+            
+            var playlist = that.playlist_ids[that.select]
+            replace_tracks("select",playlist,tracklist,[])
+
+            var playlist = that.playlist_ids[that.session];
+            that.spotify.getTracksInPlaylist(playlist.id, function(playlist){return function(tracks,err){
+                //only add unadded
+                if(that.SESSION_CLEARED == false){
+                    replace_tracks("session",playlist,tracklist)
+                    that.SESSION_CLEARED =true;
+                }
+                else{
+                    add_new("session",playlist,tracklist,tracks,err)
+                }
+                
+            }}(playlist))
+            
+            
+            var playlist = that.playlist_ids[that.all];
+            that.spotify.getTracksInPlaylist(playlist.id, function(playlist){return function(tracks,err){
+                    add_new("all",playlist,tracklist,tracks,err)
+            }}(playlist))
+            
+        }
+    }
+    this.init();
+
 }
+var spotifyExporter = new SpotifyExporter();
+
 function OptionsInterface(){
     this.selector = new Selector();
     this.inputHandler = new GridInputHandler(this.selector);
     this.filter = new Filter();
-    this.spotify = new Spotify();
-    eightTracks.createPlaybackStream(function(){});
 	this.init = function(){
 		this.updateView();
 	}
     this.updateData = function(){
         var that = this;
         chrome.extension.sendMessage({action: "playlist-get", type:"obj"}, function(resp){
+            if(resp == null || resp == undefined){
+                return;
+            }
             that.data = resp.playlist;
             that.selector.update();
             that.updateView();
@@ -324,41 +546,100 @@ function OptionsInterface(){
         $("#clipboard").text(text);
         $("#clipboard").select();
         document.execCommand('copy',true);
-        displayMessage(msg);
+        $("#clipboard").hide();
+        alerts.status(msg);
 
+    }
+    this.showSpotifyDialog = function(){
+        this.closeDialogs();
+        var rt= $("#export-spotify-overlay").show();
+    }
+    this.showPlaintextDialog = function(){
+        this.closeDialogs();
+        var rt= $("#export-plaintext-overlay").show();
+    }
+    this.updateSpotifyPlaylistInfo = function(name,data,tracks,newtracks,stats){
+        var rt= $("#export-spotify-overlay").show();
+        var dv = $("#"+name+"-spotify",rt);
+        console.log(data);
+        var that = this;
+        $("#open",dv).click(function(data){return function(){
+            spotifyExporter.spotify.openPlaylist(data.uri);
+        }}(data))
+        $("#ntracks",dv).html(newtracks.length);
+        $("#total",dv).html(tracks.length)
+        if(stats.dups != undefined && stats.dups > 0 && stats.total > 0){
+            var dups = $("#dups",dv).show()
+            $("#ndups",dups).html(stats.dups);
+            $("#total",dups).html(stats.total);
+        }
+        else{
+            $("#dups",dv).hide();
+        }
+    }
+    this.updatePlaintextInfo = function(n,text,dat){
+        var rt = $("#export-plaintext-overlay");
+        var area = $("#copied_text",rt);
+        var ntracks = $("#ntracks",rt)
+        var that = this;
+
+        var table = $("<table/>");
+        var hdr = $("<tr/>")
+        for(var j=0; j < dat[0].length; j++){
+            var col = $("<th/>").html(dat[0][j]);
+            hdr.append(col);
+        }  
+        table.append(hdr);
+        for(var i=1; i < dat.length; i++){
+            var row = $("<tr/>")
+            for(var j=0; j < dat[i].length; j++){
+                var col = $("<td/>").html(dat[i][j]);
+                row.append(col);
+            }  
+            table.append(row);
+        }
+        area.html(table);
+        ntracks.html(n)
+        $("#copy_button",rt).click(function(){
+            that.setClipboard(text, 
+            "copied "+n+" songs. "+
+            "Paste (Ctrl+P) into new spreadsheet.");
+        })
+
+    }
+    this.hideSpotifyDialog = function(){
+        var rt = $("#export-spotify-overlay").hide();
+    }
+    this.hidePlaintextDialog = function(){
+        var rt = $("#export-plaintext-overlay").hide();
+    }
+    this.closeDialogs = function(){
+        this.hidePlaintextDialog();
+        this.hideSpotifyDialog();
     }
     this.exportSpotify = function(){
         var sel = this.selector.getSelectionFromHTML();
         var dat = [];
         var str = "";
         var ntracks = 0;
+        var that = this;
         for(var artist in sel){
             for(var track in sel[artist]){
                 var msel = sel[artist][track];
                 if(msel.hasOwnProperty("spotify")){
-                    dat.push(msel.spotify.track_id);
-                    str += msel.spotify.track_id + "\n";
+                    dat.push(msel.spotify.track_uri);
                     ntracks += 1;
                 }
             }
         }
+        spotifyExporter.export(dat,function(data,err){
+            that.showSpotifyDialog();
+            if(data != null){
+                that.updateSpotifyPlaylistInfo(data.kind,data.playlist,data.tracklist,data.tracks,data)
+            }
+            console.log("Handler",data,err);
 
-        this.setClipboard(str, 
-            "<h3>Copied Spotify Tracks to Clipboard</h3>"+
-            "Copied over "+ntracks+" songs. "+
-            "Paste (Ctrl+P) into new Spotify playlist.<br><br><span class='faded'>click here to continue...</span>");
-        /*
-        if(dat.length <= 100){
-            var that = this;
-            this.spotify.createTrackset("8tracks-export", dat, function(){
-               
-            })
-            that.setClipboard(str, "Created Playlist. Open Spotify.");
-        }
-        else{
-            this.setClipboard(str, "Copied to clipboard. Now paste into Spotify playlist.");
-        }
-        */
+        });
     }
     
     this.exportTabDelim = function(){
@@ -401,9 +682,12 @@ function OptionsInterface(){
         }
         ntracks -= 1;
         this.setClipboard(text, 
-            "<h3>Copied to Tab-Delimited Data Clipboard</h3>"+
-            "Copied "+ntracks+" songs. "+
-            "Paste (Ctrl+P) into new spreadsheet.<br><br><span class='faded'>click here to continue...</span>");
+            "copied "+ntracks+" songs. "+
+            "Paste (Ctrl+P) into new spreadsheet.");
+
+
+        this.showPlaintextDialog();
+        this.updatePlaintextInfo(ntracks,text,dat)
 
     }
     this.updateTracklist = function(){
@@ -426,16 +710,16 @@ function OptionsInterface(){
                     )
 
                     var spotify_img_url = "images/spotify.png";
-
                     if(info.spotify != null){
                         spotify_img= $("<div/>").addClass("icon-sm").append($("<a/>")
-                            .attr("href", info.spotify.track_id)
                             .append($("<img/>").attr("src", "images/spotify-on.png")))
+                        spotify_img.click(function(info){ return function(){
+                            spotifyExporter.spotify.openTrack(info.spotify.track_uri)
+                        }}(info))
                     }
                     else{
-                         spotify_img= $("<div/>").addClass("icon-sm").append(
-                            $("<img/>")
-                            .attr("src", "images/spotify.png")) 
+                        spotify_img= $("<div/>").addClass("icon-sm").append($("<a/>")
+                            .append($("<img/>").attr("src", "images/spotify.png")))
                     }
 
                     var buy_img = $("<div/>").addClass("icon-sm").append($("<a/>")
@@ -591,6 +875,7 @@ chrome.extension.onMessage.addListener(
 function SetupLayout(){
     $('#mixes-results').layout().click(function(){
         optionsInterface.clearSelection();
+        optionsInterface.closeDialogs();
         console.log("clearing...");
     });
     var outerContainer = $('#options').layout({resize: false});
@@ -630,9 +915,7 @@ jQuery.fn.center = function () {
 }
 
 function SetupUI(){
-    $("#export-container").center();
-    $("#export-overlay").hide();
-    $("#export-status").hide();
+    $("#alert-status").hide();
     $("#filter_keyword_properties").hide();
     $("#filter_track_keyword_properties").hide();
 
@@ -670,14 +953,22 @@ function SetupUI(){
     	})
     })
 
-    $("#export-spotify").click(function(){
-    	optionsInterface.exportSpotify();
-        $("#export-overlay").fadeOut(600);
+    $(".view-overlay").hide();
+    $("#close",$("#export-spotify-overlay")).click(function(){
+    	optionsInterface.hideSpotifyDialog();
     })
-    $("#export-text").click(function(){
-    	optionsInterface.exportTabDelim();
-        $("#export-overlay").fadeOut(600);
+    $("#close",$("#export-plaintext-overlay")).click(function(){
+    	optionsInterface.hidePlaintextDialog();
     })
+    
+
+     $("#export-spotify-button").click(function(){
+        optionsInterface.exportSpotify();
+    })
+    $("#export-plaintext-button").click(function(){
+        optionsInterface.exportTabDelim();
+    })
+
     $("#filter_keyword").click(function(){
         if($("#filter_keyword").hasClass("down")){
             optionsInterface.filter.setFilterKeyword(true);
@@ -712,12 +1003,17 @@ function SetupUI(){
         optionsInterface.selector.update();
         optionsInterface.updateTracklist();
     });
-     $("#filter_artist").change(function() {
+    
+    $("#filter_artist").change(function() {
         optionsInterface.filter.setFilterKeywordProp("onArtist", this.checked);
         optionsInterface.selector.update();
         optionsInterface.updateTracklist();
     });
-     $("#filter_track_keyword").click(function(){
+    $("#select_all").click(function() {
+        optionsInterface.selector.selectPattern(".result");
+        optionsInterface.updateTracklist();
+    });
+    $("#filter_track_keyword").click(function(){
         if($("#filter_track_keyword").hasClass("down")){
             optionsInterface.filter.setFilterTrackKeyword(true);
             optionsInterface.selector.update();
@@ -743,12 +1039,6 @@ function SetupUI(){
         optionsInterface.filter.setFilterKeywordProp("onTrackArtist", this.checked);
         optionsInterface.selector.update();
     });
-     $("#export-spotify-button").click(function(){
-        optionsInterface.exportSpotify();
-    })
-    $("#export-plaintext-button").click(function(){
-        optionsInterface.exportTabDelim();
-    })
     $("#play-mix-button").click(function(){
         console.log("playing mix");
         var sel = $(".selected");

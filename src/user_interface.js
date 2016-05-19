@@ -14,7 +14,7 @@ function UserInterface(){
 	    	mixname = tabarr[tabarr.length-1];
 	    	artistname = tabarr[tabarr.length-2];
 	    	console.log("URL:", tablink);
-	    	eightTracks.getMixByName(artistname, mixname, function(data){
+	    	tracks8.getMixByName(artistname, mixname, function(data){
 				console.log(artistname, mixname, data);
 				if(data != null && data.hasOwnProperty("mix")){
 					var id = data.mix.id;
@@ -62,7 +62,7 @@ function UserInterface(){
 			var mix = mixes[key];
 			max++;
 			console.log("getting: "+mix.name);
-			eightTracks.getMix(mix.name, mix.artist, function(data){
+			tracks8.getMix(mix.name, mix.artist, function(data){
 				console.log(data);
 				if(data.hasOwnProperty("mix")){
 					info.push(data.mix);

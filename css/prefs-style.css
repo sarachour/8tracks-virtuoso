@@ -1,6 +1,4 @@
-*:focus {
-    outline: none;
-}
+
 
 div::-webkit-scrollbar {
     border-radius: 10px;
@@ -85,19 +83,7 @@ input[type="text"], input[type="password"]{
     text-align:center;
 }
 
-::-moz-selection{
-    background-color:Transparent;
-    color:#000;
-}
 
-::selection {
-    background-color:rgba(0,0,0,0);
-    color:#000;
-}
-
-.selected {
-    border:3px solid #BBBB13;
-}
 
 .ul {
     position: absolute;

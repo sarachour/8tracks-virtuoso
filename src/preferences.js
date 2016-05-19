@@ -15,12 +15,7 @@ function disp_status(title, msg, status) {
     }, 2000)
 }
 
-function isLoggedOn8Tracks(){ 
-   return localStorage.hasOwnProperty("user_token");
-}
-function isLoggedOnLastFm(){
-   return lastFm.isLoggedIn();
-}
+
 function succ(e){
     e.addClass("success").removeClass("failure pending")
 }
@@ -31,111 +26,136 @@ function pend(e){
     e.removeClass("success failure").addClass("pending")
 }
 
-function upd_login_8tracks(attemptlogin,errmsg){
-  var ns = $("#login-8tracks")
-  console.log("getting a preference.");
-  chrome.extension.sendMessage({action: "get-pref", key:"8tracks-user"}, function(uinfo){
-        console.log("USER",uinfo);
-        if(uinfo != null){
-            var ic = uinfo.icon;
-            $("#indic",ns).attr("src", ic);
-            succ($("#status",ns))
-            $("#text",$("#status",ns)).html("logged in as "+uinfo.name)
+var AUTHS = {}
+AUTHS.tracks8 = new Tracks8Auth(GLOBALS["8tracks-api-key"]);
+AUTHS.spotify = new SpotifyAuth(GLOBALS["spotify-api-key"],GLOBALS["spotify-api-secret"],GLOBALS["spotify-scope"])
+
+
+function upd_login_8tracks(msg){
+    var ns = $("#login-8tracks")
+    var uinfo = AUTHS.tracks8.getUserInfo();
+    if(AUTHS.tracks8.isLoggedIn()){
+        var ic = uinfo.icon;
+        $("#indic",ns).attr("src", ic);
+        succ($("#status",ns))
+        $("#text",$("#status",ns)).html("logged in as "+uinfo.user)
+        $("#logout-panel",ns).removeClass("dummy")
+        $("#login-panel",ns).addClass("dummy")
+    }
+    else{
+        $('#indic').attr('src', 'images/error.png');
+        if(msg == undefined || msg == null){
+            msg = "not logged in to 8tracks.";
         }
-        else{
-            if(attemptlogin){
-                msg = "attempting to auto-login from open 8Tracks session."; 
-                $("#indic",ns).attr("src", "images/error.png");
-                chrome.extension.sendMessage({action: "login", type: "8tracks", username: null, password:null});
-                pend($("#status",ns))
-                $("#text",$("#status",ns)).html(msg);
-            }
-            $('#indic').attr('src', 'images/error.png');
-            if(errmsg == undefined || errmsg == null){
-                errmsg = "not logged in to 8tracks.";
-            }
-            fail($("#status",ns))
-            $("#text",$("#status",ns)).html(errmsg);
-        }
-  })
+        fail($("#status",ns))
+        $("#text",$("#status",ns)).html(msg);
+        $("#login-panel",ns).removeClass("dummy")
+        $("#logout-panel",ns).addClass("dummy")
+    }
+  
+ 
 
 }
+function autologin_8tracks(){
+    var ns = $("#login-8tracks")
+    msg = "attempting to auto-login from open 8Tracks session."; 
 
-function upd_login_lastfm(isloggedin){
-  var ns = $("#login-lastfm")
-  if(isloggedin){
-    $("#indic", ns).attr("src", "images/dot-ok.png");
-    succ($("#status",ns))
-    $("#text",$("#status",ns)).html("logged onto LastFM");
-  }
-  else{
-    fail($("#status",ns))
-    $('#indic', ns).attr('src', 'images/error.png');
-    $("#text",$("#status",ns)).html("logged onto LastFM");
-  }
+    $("#indic",ns).attr("src", "images/error.png");
+    pend($("#status",ns))
+
+    $("#text",$("#status",ns)).html(msg);
+        AUTHS.tracks8.login(null,null,function(){
+        upd_login_8tracks();
+    })
+}
+
+function upd_login_spotify(msg){
+    var ns = $("#login-spotify");
+    if(AUTHS.spotify.isLoggedIn()){
+        var uinfo = AUTHS.spotify.getUserInfo();
+        succ($("#status",ns))
+        if(uinfo.icon == undefined){
+            uinfo.icon = "images/login.png"
+        }
+        $("#indic", ns).attr("src", uinfo.icon);
+        $("#text",$("#status",ns)).html("logged in as "+uinfo.user+"");
+        $("#logout-panel",ns).removeClass("dummy")
+        $("#login-panel",ns).addClass("dummy")
+    }
+    else{
+        $('#indic',ns).attr('src', 'images/error.png');
+        if(msg == undefined || msg == null){
+            msg = "not logged in to spotify.";
+        }
+        fail($("#status",ns))
+        $("#text",$("#status",ns)).html(msg);
+        $("#login-panel",ns).removeClass("dummy")
+        $("#logout-panel",ns).addClass("dummy")
+    }
+
 }
 
 function SetupLogin(){
   var ns = $("#login-8tracks")
-
+  //setup login
   $("#login",ns).click(function(ns){ return function(){
     var uname = $('#username',ns).val();
     var pass = $('#password',ns).val();
     var that = this;
     if(uname == "" || pass == "" || uname == undefined || pass == undefined){
-      var msg = "username or password is blank.";
-      var title = "Login Failed"
-      disp_status(title,msg,"failure");
-      fail($("#status",ns));
-      $('#indic', ns).attr('src', 'images/error.png');
-      $("#text",$("#status",ns)).html(msg);
-
+      upd_login_8tracks("login failed. username or password field blank.")
       return;
     }
     var msg = "Logging into 8Tracks as: "+uname
-    disp_status("Logging into 8Tracks", msg,"pending")
-    pend($("#status",ns).html(msg))
-    chrome.extension.sendMessage({
-        action: "login", 
-        type: "8tracks", 
-        username: uname, 
-        password:pass
-      })
+    upd_login_8tracks("logging into 8tracks as <"+uname+">");
+    AUTHS.tracks8.login(uname,pass,function(d,e){
+        upd_login_8tracks(e)
+    })
   }}(ns));
+  $("#autologin",ns).click(function(ns){return function(){
+    upd_login_8tracks("automatically logging into 8tracks using browser cookies.");
+    AUTHS.tracks8.login(null,null,function(d,e){
+        upd_login_8tracks(e)
+    })
+  }}(ns))
   $("#password",ns).keyup(function(ns){return function(e){
     if(e.keyCode == 13){
         $("#login", ns).click();  
-        console.log("logging.");  
     }
   }}(ns));
-  upd_login_8tracks(false);
+  $("#logout",ns).click(function(ns){return function(){
+    console.log("logging out")
+    AUTHS.tracks8.logout();
+    upd_login_8tracks("logged out of 8tracks.");
+  }}(ns))
+  upd_login_8tracks();
 
-  var ns = $("#login-lastfm")
-  $('#login',ns).click(function(){
-      chrome.extension.sendMessage({
-        action: "login", 
-        type: "lastfm",
-        stage: "auth"
-      }, 
-      function(d, e){
-        var title = "Authentication Pending"
-        var msg = "Launched LastFm instance. pending authentication from lastfm."
-        console.log(d,e);
-        disp_status(title,msg,"pending");
-        pend($("#status",ns).html(msg));
-      }
-    );
-  })
-  upd_login_lastfm(isLoggedOnLastFm());
-  
-  
+  //login to spotify
+  var ns = $("#login-spotify")
+  $('#login',ns).click(function(ns){return function(){
+      upd_login_spotify("launched spotify login page... pending authentication.")
+      AUTHS.spotify.unauthorize();
+      AUTHS.spotify.authorize(function(d,e){
+        upd_login_spotify(e);
+      })  
+  }}(ns))
+  $("#logout",ns).click(function(ns){return function(){
+    AUTHS.spotify.unauthorize();
+    upd_login_spotify("logged out of spotify.");
+  }}(ns))
+  upd_login_spotify();
 
  
 }
 
-function SetupGeneral(){
+function SetupPrefUpdates(){
     var map = {
-        to: {"#idlepause":"idle-pause", "#toastnot":"toast-notify","#idlepausedur":"time-to-wait"},
+        to: {
+            "#idlepause":"idle-pause", 
+            "#toastnot":"toast-notify",
+            "#idlepausedur":"time-to-wait",
+            "#autoplay":"autoplay"
+        },
         from: {}
     }
     for(k in map.to){
@@ -162,6 +182,14 @@ function SetupGeneral(){
         var newv = $(this).is(':checked');
         chrome.extension.sendMessage({action: "set-pref", value:newv, key:map.to[n]},
             handle_resp("Updated Pause on Idle", "successfully "+enabled(newv)+" pause on idle")
+        )
+    }}(n))
+
+    var n = "#autoplay";
+    $("#isset",$(n)).change(function(n){return function(){
+        var newv = $(this).is(':checked');
+        chrome.extension.sendMessage({action: "set-pref", value:newv, key:map.to[n]},
+            handle_resp("Updated Autoplay", "successfully "+enabled(newv)+" autoplay on browser start")
         )
     }}(n))
 
@@ -206,33 +234,6 @@ function SetupGeneral(){
 
 
 
-function SetupCallbacks(){
-
-    chrome.extension.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if(request.action == "login-client"){
-            var data = request.data;
-            var status = request.status;
-            if(request.type == "8tracks"){
-                if(data != null){
-                    disp_status("8Tracks Login", "Successfully logged into 8Tracks", "success")
-                    upd_login_8tracks(false)
-                }
-                else {
-                    disp_status("8Tracks Login", status.responseJSON.errors, "failure")
-                    upd_login_8tracks(false, status.responseJSON.errors)
-                }
-            }
-            else if(request.type == "lastfm"){
-
-            }
-        }
-        else{
-            console.log("UNKNOWN REQUEST:", request);
-        }
-    }
-    )
-}
 function SetupLayout(){
     var outerContainer = $('#prefs').layout({resize: false});
 
@@ -264,7 +265,6 @@ function SetupLayout(){
 document.addEventListener('DOMContentLoaded', function() {
     SetupLayout();
     SetupLogin();
-    SetupGeneral();
-    SetupCallbacks();
+    SetupPrefUpdates();
 
 });
