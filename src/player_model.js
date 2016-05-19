@@ -1,7 +1,6 @@
 var Player = function(){
    this.init = function(){
       this.elem = $('<audio>', {
-        autoPlay : 'autoplay',
         controls : 'controls',
         id : "player"
       });

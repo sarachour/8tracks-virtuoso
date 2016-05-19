@@ -324,8 +324,15 @@ function SetupPlayer(){
     });
 }
 function InitPlayer(){
+  AUTHS.tracks8.login(null,null,function(){
+    if(AUTHS.tracks8.isLoggedIn()){
+      $("#login_prompt").hide();
+      searchController.update();
+    }  
+  });
   if(AUTHS.tracks8.isLoggedIn()){
     $("#login_prompt").hide();
+    searchController.update();
   }
 }
 document.addEventListener('DOMContentLoaded', function() {

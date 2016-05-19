@@ -307,12 +307,16 @@ SpotifyAuth.prototype.getRequestCode = function(callback) {
     "response_type": "code",
     "state": "req-code"
   }
+  console.log("launching flow",args)
   chrome.identity.launchWebAuthFlow(
     {
       'url': to_url(url,args), 
       'interactive': true
     },
-    function(redir_resp) { 
+    function(redir_resp,err) { 
+      if(redir_resp == undefined){
+        return callback(null,"could not properly load or redirect from login page.");
+      }
       var args = $.parseURL(redir_resp);
       if(args.state == "req-code"){
         var code = args.code;

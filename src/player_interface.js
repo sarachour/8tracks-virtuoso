@@ -3,12 +3,13 @@ function MusicPlayer(){
 	this.init_prefs = function(){
 		var that = this;
 		if(localStorage.hasOwnProperty("prefs")){
+			console.log("parsing cached preferences");
 			this.default_pref = JSON.parse(localStorage["prefs"]);
 		}
 		else{
 			this.default_pref = {};
 			this.default_pref["idle-pause"] = false;
-			this.default_pref["autoplay"] = false;
+			this.default_pref["autoplay"] = true;
 			this.default_pref["toast-notify"] = true;
 			this.default_pref["time-to-wait"] = 180;
 			this.default_pref["is-casting"] = false;
@@ -23,9 +24,7 @@ function MusicPlayer(){
 	   this.prefs["autoplay"].set_val = function(x){
 	   	that.autoplay = x;
 	   };
-
-
-	   this.prefs = {};
+	   
 	   this.prefs["idle-pause"] = {};
 	   this.prefs["idle-pause"].val = this.default_pref["idle-pause"];
 	   this.prefs["idle-pause"].set_val = function(x){
@@ -55,16 +54,42 @@ function MusicPlayer(){
 	   this.prefs["curr-mix"].set_val =function(x){
 	   	if(x.id != null && x.smart_id != null && 
 	   		(that.curr_mix_id != x.id || that.smart_mix_id != x.smart_id)) {
-	   		that.mix(x.id, x.smart_id);
+	   		console.log('autoplay?',that.get_pref("autoplay"))
+	   		that.mix(x.id, x.smart_id,that.get_pref("autoplay"));
 	   	}
 	   }
+
 
 	   for(k in this.prefs){
 	   	this.prefs[k].set_val(this.prefs[k].val)
 	   }
-	   
+		
+
 
 	}
+	this.get_pref = function(k){
+		return this.prefs[k].val;
+	}
+	this.get_prefs = function(){
+		var ps = {};
+		for(p in this.prefs){
+			ps[p] = this.prefs[p].val;
+		}
+		return ps;
+	}
+	this.set_pref = function(k,v){
+		if(k in this.prefs){
+			this.prefs[k].val = v;
+			this.prefs[k].set_val(v);
+			/* save local copy of preferences. */
+			localStorage["prefs"] = JSON.stringify(this.get_prefs());
+			return {action:"set-pref-status",status:"success"};
+		}
+		else {
+			return {action:"set-pref-status",status:"failure", msg:"preference doesn't exist."}
+		}
+	}
+
 
 	this.init = function(){
 		this.player = new Player();
@@ -76,6 +101,7 @@ function MusicPlayer(){
 	   this.playlist = new Playlist("persist_playlist", true);
 	   var that = this;
 
+		
 	   chrome.idle.onStateChanged.addListener(function(kind){
 	   	//is not paused and is presently not idle.
 	   	if(kind == "active"){
@@ -239,29 +265,7 @@ function MusicPlayer(){
 		        that.nextTrack();
 		   });
 	}
-	this.get_pref = function(k){
-		return this.prefs[k].val;
-	}
-	this.get_prefs = function(){
-		var ps = {};
-		for(p in this.prefs){
-			ps[p] = this.prefs[p].val;
-		}
-		return ps;
-	}
-	this.set_pref = function(k,v){
-		if(k in this.prefs){
-			this.prefs[k].val = v;
-			this.prefs[k].set_val(v);
-			/* save local copy of preferences. */
-			localStorage["prefs"] = JSON.stringify(this.get_prefs());
-			return {action:"set-pref-status",status:"success"};
-		}
-		else {
-			return {action:"set-pref-status",status:"failure", msg:"preference doesn't exist."}
-		}
-	}
-
+	
 	this.cast = function(obj){
 		this.is_casting = !this.is_casting;
 		if(this.is_casting){
@@ -360,7 +364,7 @@ function MusicPlayer(){
 
 		});
 	}
-	this.mix = function(mixid, smartmixid){
+	this.mix = function(mixid, smartmixid,playonload){
 		var that = this;
 		this.smart_mix_id = smartmixid;
 		this.curr_mix_id = mixid;
@@ -373,6 +377,9 @@ function MusicPlayer(){
 					if(data != null){
 						console.log(data);
 						that.SET_TRACK_INFO(data.set, data.set.track);
+						if(playonload == false){
+							that.pause();
+						}
 					}
 					else{
 						that.reportError(e);
@@ -383,7 +390,6 @@ function MusicPlayer(){
 				that.reportError(e);
 			}
 		})
-		
 	}
 	this.skip = function(){
 		var that = this;
